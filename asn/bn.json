@@ -1,0 +1,141 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "4617", 
+      "c_name": "BN"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "10094", 
+      "c_name": "BN"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "10101", 
+      "c_name": "BN"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "45259", 
+      "c_name": "BN"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "58663", 
+      "c_name": "BN"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "58810", 
+      "c_name": "BN"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "131467", 
+      "c_name": "BN"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "132395", 
+      "c_name": "BN"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "133788", 
+      "c_name": "BN"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "2914", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "3549", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "3491", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "4788", 
+      "c_name": "MY"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "10026", 
+      "c_name": "HK"
+    }, 
+    {
+      "country": 4, 
+      "ASN": "7473", 
+      "c_name": "SG"
+    }
+  ], 
+  "links": [
+    {
+      "source": 6, 
+      "target": 0, 
+      "value": 6
+    }, 
+    {
+      "source": 1, 
+      "target": 0, 
+      "value": 1
+    }, 
+    {
+      "source": 1, 
+      "target": 11, 
+      "value": 4
+    }, 
+    {
+      "source": 1, 
+      "target": 10, 
+      "value": 9
+    }, 
+    {
+      "source": 1, 
+      "target": 12, 
+      "value": 7
+    }, 
+    {
+      "source": 1, 
+      "target": 14, 
+      "value": 5
+    }, 
+    {
+      "source": 2, 
+      "target": 9, 
+      "value": 1
+    }, 
+    {
+      "source": 2, 
+      "target": 11, 
+      "value": 10
+    }, 
+    {
+      "source": 2, 
+      "target": 12, 
+      "value": 2
+    }, 
+    {
+      "source": 2, 
+      "target": 6, 
+      "value": 2
+    }, 
+    {
+      "source": 2, 
+      "target": 7, 
+      "value": 8
+    }, 
+    {
+      "source": 13, 
+      "target": 5, 
+      "value": 9
+    }
+  ]
+}

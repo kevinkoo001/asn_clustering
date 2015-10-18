@@ -1,0 +1,41 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "10131", 
+      "c_name": "CK"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "4648", 
+      "c_name": "NZ"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "38456", 
+      "c_name": "AU"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "60725", 
+      "c_name": "JE"
+    }
+  ], 
+  "links": [
+    {
+      "source": 0, 
+      "target": 1, 
+      "value": 2
+    }, 
+    {
+      "source": 0, 
+      "target": 2, 
+      "value": 1
+    }, 
+    {
+      "source": 0, 
+      "target": 3, 
+      "value": 7
+    }
+  ]
+}

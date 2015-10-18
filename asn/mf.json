@@ -1,0 +1,46 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "33392", 
+      "c_name": "MF"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "40573", 
+      "c_name": "MF"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "12956", 
+      "c_name": "ES"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "23550", 
+      "c_name": "PR"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "17149", 
+      "c_name": "GP"
+    }
+  ], 
+  "links": [
+    {
+      "source": 2, 
+      "target": 0, 
+      "value": 6
+    }, 
+    {
+      "source": 4, 
+      "target": 0, 
+      "value": 1
+    }, 
+    {
+      "source": 3, 
+      "target": 0, 
+      "value": 7
+    }
+  ]
+}

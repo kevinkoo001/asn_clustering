@@ -1,0 +1,51 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "27775", 
+      "c_name": "SR"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "52398", 
+      "c_name": "SR"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "263240", 
+      "c_name": "SR"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "174", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "27800", 
+      "c_name": "TT"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "23520", 
+      "c_name": "US"
+    }
+  ], 
+  "links": [
+    {
+      "source": 3, 
+      "target": 0, 
+      "value": 7
+    }, 
+    {
+      "source": 5, 
+      "target": 0, 
+      "value": 10
+    }, 
+    {
+      "source": 4, 
+      "target": 1, 
+      "value": 9
+    }
+  ]
+}

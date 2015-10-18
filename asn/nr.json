@@ -1,0 +1,21 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "55722", 
+      "c_name": "NR"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "38456", 
+      "c_name": "AU"
+    }
+  ], 
+  "links": [
+    {
+      "source": 1, 
+      "target": 0, 
+      "value": 10
+    }
+  ]
+}

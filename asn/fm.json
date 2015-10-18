@@ -1,0 +1,61 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "10130", 
+      "c_name": "FM"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "38875", 
+      "c_name": "FM"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "45193", 
+      "c_name": "FM"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "58524", 
+      "c_name": "FM"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "11919", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "6453", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "60725", 
+      "c_name": "JE"
+    }
+  ], 
+  "links": [
+    {
+      "source": 0, 
+      "target": 5, 
+      "value": 3
+    }, 
+    {
+      "source": 1, 
+      "target": 6, 
+      "value": 6
+    }, 
+    {
+      "source": 2, 
+      "target": 6, 
+      "value": 1
+    }, 
+    {
+      "source": 4, 
+      "target": 3, 
+      "value": 3
+    }
+  ]
+}

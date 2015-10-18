@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "36939", 
+      "c_name": "KM"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "6453", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "22351", 
+      "c_name": "US"
+    }
+  ], 
+  "links": [
+    {
+      "source": 0, 
+      "target": 1, 
+      "value": 3
+    }, 
+    {
+      "source": 2, 
+      "target": 0, 
+      "value": 9
+    }
+  ]
+}

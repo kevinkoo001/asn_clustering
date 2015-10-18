@@ -1,0 +1,76 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "24757", 
+      "c_name": "ET"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37467", 
+      "c_name": "ET"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "30990", 
+      "c_name": "DJ"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "15706", 
+      "c_name": "SD"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "33771", 
+      "c_name": "KE"
+    }, 
+    {
+      "country": 4, 
+      "ASN": "33788", 
+      "c_name": "SD"
+    }, 
+    {
+      "country": 5, 
+      "ASN": "37100", 
+      "c_name": "MU"
+    }, 
+    {
+      "country": 6, 
+      "ASN": "27822", 
+      "c_name": "AR"
+    }
+  ], 
+  "links": [
+    {
+      "source": 3, 
+      "target": 0, 
+      "value": 10
+    }, 
+    {
+      "source": 0, 
+      "target": 7, 
+      "value": 3
+    }, 
+    {
+      "source": 0, 
+      "target": 2, 
+      "value": 1
+    }, 
+    {
+      "source": 0, 
+      "target": 4, 
+      "value": 10
+    }, 
+    {
+      "source": 0, 
+      "target": 5, 
+      "value": 1
+    }, 
+    {
+      "source": 0, 
+      "target": 6, 
+      "value": 1
+    }
+  ]
+}

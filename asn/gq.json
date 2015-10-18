@@ -1,0 +1,81 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "37173", 
+      "c_name": "GQ"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37337", 
+      "c_name": "GQ"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37487", 
+      "c_name": "GQ"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37512", 
+      "c_name": "GQ"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37529", 
+      "c_name": "GQ"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "24753", 
+      "c_name": "NL"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "60171", 
+      "c_name": "ES"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "5511", 
+      "c_name": "FR"
+    }, 
+    {
+      "country": 4, 
+      "ASN": "174", 
+      "c_name": "US"
+    }
+  ], 
+  "links": [
+    {
+      "source": 8, 
+      "target": 0, 
+      "value": 8
+    }, 
+    {
+      "source": 0, 
+      "target": 7, 
+      "value": 1
+    }, 
+    {
+      "source": 1, 
+      "target": 4, 
+      "value": 9
+    }, 
+    {
+      "source": 5, 
+      "target": 2, 
+      "value": 4
+    }, 
+    {
+      "source": 3, 
+      "target": 4, 
+      "value": 8
+    }, 
+    {
+      "source": 4, 
+      "target": 6, 
+      "value": 4
+    }
+  ]
+}

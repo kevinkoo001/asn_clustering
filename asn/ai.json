@@ -1,0 +1,56 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "2740", 
+      "c_name": "AI"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "32338", 
+      "c_name": "AI"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "393410", 
+      "c_name": "AI"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "6939", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "174", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "5580", 
+      "c_name": "NL"
+    }
+  ], 
+  "links": [
+    {
+      "source": 4, 
+      "target": 0, 
+      "value": 3
+    }, 
+    {
+      "source": 4, 
+      "target": 1, 
+      "value": 6
+    }, 
+    {
+      "source": 1, 
+      "target": 5, 
+      "value": 8
+    }, 
+    {
+      "source": 1, 
+      "target": 3, 
+      "value": 6
+    }
+  ]
+}

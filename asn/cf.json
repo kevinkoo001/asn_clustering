@@ -1,0 +1,46 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "37086", 
+      "c_name": "CF"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37460", 
+      "c_name": "CF"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "5511", 
+      "c_name": "FR"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "36912", 
+      "c_name": "CM"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "21392", 
+      "c_name": "NL"
+    }
+  ], 
+  "links": [
+    {
+      "source": 4, 
+      "target": 0, 
+      "value": 4
+    }, 
+    {
+      "source": 1, 
+      "target": 2, 
+      "value": 2
+    }, 
+    {
+      "source": 3, 
+      "target": 1, 
+      "value": 1
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "37033", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37281", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37322", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37409", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37451", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37463", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37481", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37500", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37548", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37550", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "37573", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "327743", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "327829", 
+      "c_name": "CG"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "12491", 
+      "c_name": "IL"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "60725", 
+      "c_name": "JE"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "2905", 
+      "c_name": "ZA"
+    }, 
+    {
+      "country": 4, 
+      "ASN": "6774", 
+      "c_name": "BE"
+    }, 
+    {
+      "country": 5, 
+      "ASN": "1273", 
+      "c_name": "EU"
+    }, 
+    {
+      "country": 6, 
+      "ASN": "57731", 
+      "c_name": "IL"
+    }, 
+    {
+      "country": 7, 
+      "ASN": "3491", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 8, 
+      "ASN": "9498", 
+      "c_name": "IN"
+    }, 
+    {
+      "country": 9, 
+      "ASN": "6453", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 10, 
+      "ASN": "16637", 
+      "c_name": "ZA"
+    }, 
+    {
+      "country": 11, 
+      "ASN": "8657", 
+      "c_name": "PT"
+    }, 
+    {
+      "country": 12, 
+      "ASN": "8513", 
+      "c_name": "GB"
+    }
+  ], 
+  "links": [
+    {
+      "source": 0, 
+      "target": 4, 
+      "value": 9
+    }, 
+    {
+      "source": 1, 
+      "target": 5, 
+      "value": 8
+    }, 
+    {
+      "source": 1, 
+      "target": 18, 
+      "value": 3
+    }, 
+    {
+      "source": 1, 
+      "target": 14, 
+      "value": 7
+    }, 
+    {
+      "source": 2, 
+      "target": 24, 
+      "value": 4
+    }, 
+    {
+      "source": 2, 
+      "target": 5, 
+      "value": 7
+    }, 
+    {
+      "source": 2, 
+      "target": 18, 
+      "value": 4
+    }, 
+    {
+      "source": 3, 
+      "target": 21, 
+      "value": 9
+    }, 
+    {
+      "source": 13, 
+      "target": 3, 
+      "value": 1
+    }, 
+    {
+      "source": 17, 
+      "target": 4, 
+      "value": 3
+    }, 
+    {
+      "source": 4, 
+      "target": 23, 
+      "value": 9
+    }, 
+    {
+      "source": 4, 
+      "target": 7, 
+      "value": 9
+    }, 
+    {
+      "source": 11, 
+      "target": 4, 
+      "value": 10
+    }, 
+    {
+      "source": 15, 
+      "target": 5, 
+      "value": 9
+    }, 
+    {
+      "source": 5, 
+      "target": 16, 
+      "value": 6
+    }, 
+    {
+      "source": 22, 
+      "target": 5, 
+      "value": 1
+    }, 
+    {
+      "source": 8, 
+      "target": 24, 
+      "value": 9
+    }, 
+    {
+      "source": 19, 
+      "target": 9, 
+      "value": 5
+    }, 
+    {
+      "source": 9, 
+      "target": 20, 
+      "value": 4
+    }
+  ]
+}

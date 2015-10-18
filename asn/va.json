@@ -1,0 +1,36 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "48150", 
+      "c_name": "VA"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "61160", 
+      "c_name": "VA"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "12874", 
+      "c_name": "IT"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "174", 
+      "c_name": "US"
+    }
+  ], 
+  "links": [
+    {
+      "source": 3, 
+      "target": 1, 
+      "value": 6
+    }, 
+    {
+      "source": 2, 
+      "target": 1, 
+      "value": 5
+    }
+  ]
+}

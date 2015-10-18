@@ -1,0 +1,41 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "27675", 
+      "c_name": "GF"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "27806", 
+      "c_name": "GF"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "262190", 
+      "c_name": "GF"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "263175", 
+      "c_name": "GF"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "3215", 
+      "c_name": "FR"
+    }
+  ], 
+  "links": [
+    {
+      "source": 1, 
+      "target": 4, 
+      "value": 3
+    }, 
+    {
+      "source": 3, 
+      "target": 4, 
+      "value": 5
+    }
+  ]
+}

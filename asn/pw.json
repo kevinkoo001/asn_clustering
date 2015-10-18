@@ -1,0 +1,61 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "17893", 
+      "c_name": "PW"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "58932", 
+      "c_name": "PW"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "133897", 
+      "c_name": "PW"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "4648", 
+      "c_name": "NZ"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "60725", 
+      "c_name": "JE"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "38456", 
+      "c_name": "AU"
+    }, 
+    {
+      "country": 4, 
+      "ASN": "11919", 
+      "c_name": "US"
+    }
+  ], 
+  "links": [
+    {
+      "source": 0, 
+      "target": 3, 
+      "value": 2
+    }, 
+    {
+      "source": 6, 
+      "target": 0, 
+      "value": 5
+    }, 
+    {
+      "source": 0, 
+      "target": 4, 
+      "value": 3
+    }, 
+    {
+      "source": 5, 
+      "target": 1, 
+      "value": 5
+    }
+  ]
+}

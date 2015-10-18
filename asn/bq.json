@@ -1,0 +1,116 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "27694", 
+      "c_name": "BQ"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "27745", 
+      "c_name": "BQ"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "28104", 
+      "c_name": "BQ"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "52389", 
+      "c_name": "BQ"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "262188", 
+      "c_name": "BQ"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "23520", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "2914", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "28017", 
+      "c_name": "CW"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "27781", 
+      "c_name": "SX"
+    }, 
+    {
+      "country": 4, 
+      "ASN": "11081", 
+      "c_name": "CW"
+    }, 
+    {
+      "country": 5, 
+      "ASN": "11139", 
+      "c_name": "DM"
+    }, 
+    {
+      "country": 6, 
+      "ASN": "286", 
+      "c_name": "EU"
+    }
+  ], 
+  "links": [
+    {
+      "source": 1, 
+      "target": 11, 
+      "value": 2
+    }, 
+    {
+      "source": 1, 
+      "target": 6, 
+      "value": 6
+    }, 
+    {
+      "source": 9, 
+      "target": 1, 
+      "value": 4
+    }, 
+    {
+      "source": 5, 
+      "target": 1, 
+      "value": 4
+    }, 
+    {
+      "source": 1, 
+      "target": 7, 
+      "value": 10
+    }, 
+    {
+      "source": 2, 
+      "target": 3, 
+      "value": 8
+    }, 
+    {
+      "source": 9, 
+      "target": 3, 
+      "value": 1
+    }, 
+    {
+      "source": 10, 
+      "target": 3, 
+      "value": 5
+    }, 
+    {
+      "source": 4, 
+      "target": 3, 
+      "value": 5
+    }, 
+    {
+      "source": 4, 
+      "target": 8, 
+      "value": 1
+    }
+  ]
+}
