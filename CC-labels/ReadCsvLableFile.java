@@ -26,7 +26,7 @@ public class ReadCsvLableFile {
 				  		CC = ASNameParts[ASNameParts.length - 1].trim();
 				  		BufferedWriter bw = null;
 				  		try {
-					  		File file = new File("/Users/FM/desktop/CC-labels/" + CC + "_label.txt" );
+					  		File file = new File("/Users/FM/desktop/CC-labels/" + CC + "_label.csv" );
 					  		if (!file.exists()) {
 								file.createNewFile();
 							}
@@ -45,7 +45,7 @@ public class ReadCsvLableFile {
 				else {
 					BufferedWriter bw = null;
 					try {
-				  		File file = new File("/Users/FM/desktop/CC-labels/" + CC + "_label.txt" );
+				  		File file = new File("/Users/FM/desktop/CC-labels/" + CC + "_label.csv" );
 				  		if (!file.exists()) {
 							file.createNewFile();
 						}
