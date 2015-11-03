@@ -33,11 +33,11 @@ public class ReadCsvEdgeFile {
 					String[] row = line.split(cvsSplitBy);
 					if (firstLine) {
 						firstLine = false;
-						outputFile += ("CC" + "," + row[0] + "," + row[1] + "\n");
+						outputFile += (row[0] + "," + row[1] + "," + row[2] + "\n");
 //						outputFile += (row[0] + "," + row[1] + "\n");
 					}
 					else {
-						outputFile += (CC + "," + row[0] + "," + row[1] + "\n");
+						outputFile += (row[0] + "," + row[1] + "," + row[2] + "\n");
 //						outputFile += (row[0] + "," + row[1] + "\n");
 					}
 
