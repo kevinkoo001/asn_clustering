@@ -1,0 +1,16 @@
+Source,Target,Type
+14434,209,Undirected
+14434,3549,Undirected
+14434,14979,Undirected
+14434,23520,Undirected
+16971,174,Undirected
+12180,16971,Undirected
+16971,20243,Undirected
+16971,32882,Undirected
+20243,40653,Undirected
+22581,3356,Undirected
+22581,3549,Undirected
+22581,32085,Undirected
+32882,3549,Undirected
+32882,40653,Undirected
+3549,393275,Undirected
