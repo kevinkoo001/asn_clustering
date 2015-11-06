@@ -5,14 +5,16 @@ import json
 import util
 
 try:
+    # http://networkx.github.io/documentation/networkx-1.9.1/examples/index.html
     import networkx as nx
     import matplotlib.pyplot as plt
 except importError:
     logging.error('Required library: networkx, matplotlib')
 
-ABBR = ["AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AP", "AR", "AS", "AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BW", "BY", "BZ", "CA", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CU", "CV", "CW", "CY", "CZ", "DE", "DJ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "ER", "ES", "ET", "EU", "FI", "FJ", "FM", "FO", "FR", "GA", "GB", "GM", "GN", "GP", "GQ", "GR", "GT", "GU", "GW", "GY", "HK", "HN", "HR", "HT", "HU", "IE", "IL", "IM", "IQ", "IR", "IS", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KN", "KR", "KW", "KY", "KZ", "LA", "LB", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MC", "MD", "MF", "MG", "MK", "ML", "MM", "MN", "MO", "MR", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NE", "NF", "NG", "NI", "NL", "NO", "NP", "NR", "NU", "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PM", "PR", "PS", "PT", "PW", "PY", "QA", "RE", "RS", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SI", "SK", "SL", "SM", "SN", "SO", "SR", "SS", "SV", "SX", "SY", "SZ", "TD", "TG", "TJ", "TL", "TM", "TN", "TO", "TR", "TT", "TZ", "UG", "US", "UY", "UZ", "VC", "VE", "VG", "VI", "VN", "VU", "WS", "YE", "YE", "YT", "ZA", "ZM", "ZW"]
-CNTR = ["Andorra", "United Arab Emirates", "Afghanistan", "Antigua and Barbuda", "Anguilla", "Albania", "Armenia", "Angola", "X2", "Argentina", "American Samoa", "Austria", "Australia", "Aruba", "X3", "Azerbaijan", "Bosnia and Herzegovina", "Barbados", "Bangladesh", "Belgium", "Burkina Faso", "Bulgaria", "Bahrain", "Burundi", "Benin", "Bermuda", "Brunei", "Bolivia", "X4", "Brazil", "Bahamas", "Bhutan", "Botswana", "Belarus", "Belize", "Canada", "Democratic Republic of the Congo", "Central African Republic", "Republic of the Congo ", "Switzerland", "Ivory Coast", "Cook Islands", "Chile", "Cameroon", "China", "Colombia", "Costa Rica", "Cuba", "Cape Verde", "Curacao", "Cyprus", "Czech Republic", "Germany", "Djibouti", "Denmark", "Dominica", "Dominican Republic", "Algeria", "Ecuador", "Estonia", "Egypt", "Eritrea", "Spain", "Ethiopia ", "European Union", "Finland ", "Fiji", "Micronesia", "Faroe Islands", "France", "Gabon", "United Kingdom", "Gambia", "Guinea", "X5", "Equatorial Guinea", "Greece", "Guatemala", "Guam", "Guinea-Bissau", "Guyana", "Hong Kong", "Honduras", "Croatia", "Haiti", "Hungary", "Ireland", "Israel", "Isle of Man", "Iraq", "Iran", "Iceland", "Jersey", "Jamaica", "Jordan", "Japan", "Kenya", "Kyrgyzstan", "Cambodia", "Saint Kitts and Nevis", "South Korea", "Kuwait", "Cayman Islands", "Kazakhstan", "Laos", "Lebanon", "Liechtenstein", "Sri Lanka", "Liberia", "Lesotho", "Lithuania", "Luxembourg", "Latvia", "Libya", "Morocco", "Monaco", "Moldova", "Saint Martin", "Madagascar", "Macedonia", "Mali", "Myanmar", "Mongolia", "Macao", "Mauritania", "Malta", "Mauritius", "Maldives", "Malawi", "Mexico", "Malaysia", "Mozambique", "Namibia", "New Caledonia", "Niger", "X1", "Nigeria", "Nicaragua", "Netherlands", "Norway", "Nepal", "Nauru", "Niue", "New Zealand", "Oman", "Panama", "Peru", "French Polynesia", "Papua New Guinea", "Philippines", "Pakistan", "Saint Pierre and Miquelon", "Puerto Rico", "Palestine", "Portugal", "Palau", "Paraguay", "Qatar", "Reunion", "Serbia", "Rwanda", "Saudi Arabia", "Solomon Islands", "Seychelles", "Sudan", "Sweden", "Singapore", "Slovenia", "Slovakia", "Sierra Leone", "San Marino", "Senegal", "Somalia", "Suriname", "South Sudan", "El Salvador", "Sint Maarten", "Syria", "Swaziland", "Chad", "Togo", "Tajikistan", "East Timor", "Turkmenistan", "Tunisia", "Tonga", "Turkey", "Trinidad and Tobago", "Tanzania", "Uganda", "United State", "Uruguay", "Uzbekistan", "Saint Vincent and the Grenadines", "Venezuela", "British Virgin Islands", "U.S. Virgin Islands", "Vietnam", "Vanuatu", "Samoa", "Yemen", "Yemen", "Mayotte", "South Africa", "Zambia", "Zimbabwe"]
-    
+CC_FILE = 'country_code.csv'
+CAIDA_FILE = '20150801.as-rel-caida.txt'
+ASN_TO_CC = 'asn_reg-cymru.txt'
+
 class Graph:
     def __init__(self, data_dir):
         self.data_dir = data_dir
@@ -21,20 +23,22 @@ class Graph:
         self.asns_per_country = dict()
         self.asn_nid = dict()
         self.country_code = dict()
-        
-    def __country_by_code(self):
-        for i in range(len(ABBR)):
-            self.country_code[ABBR[i]] = CNTR[i]
-            #print ABBR[i] + ', ' + CNTR[i]
-        
-    def get_nodes(self, country_id):
+
+    # Country name, Country Code
+    def get_country_by_code(self):
+        cc_code = util.csvImport(CC_FILE, ',')
+        for cc in cc_code:
+             self.country_code[cc[1].strip().upper()] = cc[0].strip()
+        return self.country_code
+
+    def get_nodes(self, cc):
         self.asn_nid = {}
         prev_country = ''
         nid = 0     # ASN node ID
         cid = -1    # country id
         asns_data = []
         
-        for asn, node in self.asns_per_country[country_id]:
+        for asn, node in self.asns_per_country[cc]:
             asn_entry = {}
             if prev_country != node:
                 cid += 1
@@ -48,10 +52,10 @@ class Graph:
             
         return asns_data
             
-    def get_links(self, country_id):
+    def get_links(self, cc):
         links_data = []
         
-        for src, dst in self.edges_per_country[country_id]:
+        for src, dst in self.edges_per_country[cc]:
             link_entry = {}
             link_entry["source"] = self.asn_nid[int(src)]
             link_entry["target"] = self.asn_nid[int(dst)]
@@ -60,6 +64,7 @@ class Graph:
         
         return links_data
 
+    # This is just for drawing json grpah
     def generate_json_graph(self, target_dir):
         # Prepare JSON data type
         def prepare_data(country):
@@ -83,32 +88,100 @@ class Graph:
                 cnt += 1
             except:
                 pass
-                
+
+    # Compute vertex and edge per country from reading previous project format
     def get_vertex_edge_per_country(self):
-        self.__country_by_code()
         for target in os.listdir(self.data_dir):
             tg_path = self.data_dir + target
-            country_id = target[:2]
-            self.countries.add(country_id)
+            cc = target[:2]
+            self.countries.add(cc)
             
             # A node represents a country, an edge represents the link between ASN
             if 'label' in target:
                 nodes = util.csvImport(tg_path, ',', header=True)
                 for asn, node in nodes:
-                    if country_id in self.asns_per_country.keys():
-                        self.asns_per_country[country_id] += [(int(asn), node)]
+                    if cc in self.asns_per_country.keys():
+                        self.asns_per_country[cc] += [(int(asn), node)]
                     else:
-                        self.asns_per_country[country_id] = [(int(asn), node)]
+                        self.asns_per_country[cc] = [(int(asn), node)]
             elif 'edges' in target:
                 edges = util.csvImport(tg_path, ',', header=True)
                 for src, dst, type in edges:
-                    if country_id in self.edges_per_country.keys():
-                        self.edges_per_country[country_id] += [(src, dst)]
+                    if cc in self.edges_per_country.keys():
+                        self.edges_per_country[cc] += [(src, dst)]
                     else:
-                        self.edges_per_country[country_id] = [(src, dst)]
+                        self.edges_per_country[cc] = [(src, dst)]
             else:
                 continue
-        
+
+    '''
+    Compute vertex and edge per country from reading CAIDA_FILE and ASN_TO_CC
+    CAIDA_FILE format
+        src|dst|type (peer, )
+    ASN_TO_CC format
+        AS      | CC | Registry | Allocated  | AS Name
+    '''
+    def get_vertex_edge_per_country2(self):
+        c_code = self.get_country_by_code()
+        asn_mappings_data = util.csvImport(ASN_TO_CC, '|', header=True)
+        asn_to_cc = {}
+        ignore_asns = set()
+
+        for a in asn_mappings_data:
+            asn, cc, full_name = a[0].strip(), a[1].strip().upper(), a[4].strip()
+            # Do not bother if empty CC or ZZ (not allocated)
+            if len(cc) == 0 or 'ZZ' in full_name:
+                ignore_asns.add(int(asn))
+            else:
+                asn_to_cc[int(asn)] = full_name[-2:] if cc == 'EU' and cc != full_name[-2:] else cc
+
+        print len(asn_to_cc), len(set(asn_to_cc.values())), len(c_code)
+
+        collected_ccs = list(set(asn_to_cc.values()))
+        ignore_ccs = set()
+        for cc in collected_ccs:
+            if cc.strip() not in c_code.keys():
+                ignore_ccs.add(cc)
+
+        print 'Ignored country code: %d' % len(ignore_ccs)
+        print 'Ignored ASNs: %d' % len(ignore_asns)
+
+        caida_data = util.csvImport(CAIDA_FILE, '|', header=False)
+
+        for cd in caida_data:
+            if cd[0][0] != '#':
+                src_asn, dst_asn, type = int(cd[0]), int(cd[1]), int(cd[2])
+                if src_asn in list(ignore_asns) or dst_asn in list(ignore_asns):
+                    #print 'Either %s or %s does not belong to any country..' % (src_asn, dst_asn)
+                    pass
+                else:
+                    try:
+                        # ASNs per country
+                        cc = asn_to_cc[src_asn]
+                        if cc in self.asns_per_country.keys():
+                            self.asns_per_country[cc] += [(dst_asn, asn_to_cc[dst_asn])]
+                            self.asns_per_country[cc] += [(src_asn, asn_to_cc[src_asn])]
+                        else:
+                            self.asns_per_country[cc] = [(dst_asn, asn_to_cc[dst_asn])]
+                            self.asns_per_country[cc] = [(src_asn, asn_to_cc[src_asn])]
+
+                        # Edges per country
+                        if cc in self.edges_per_country.keys():
+                            self.edges_per_country[cc] += [(src_asn, dst_asn)]
+                        else:
+                            self.edges_per_country[cc] = [(src_asn, dst_asn)]
+                    except:
+                        pass
+        '''
+        for c in list(sorted(set(asn_to_cc.values()) - ignore_ccs)):
+            # print self.edges_per_country['AE']
+            # print self.asns_per_country['AE']
+            try:
+                print '[%s] Edges %d:, Nodes: %d' % (c, len(self.edges_per_country[c]), len(self.asns_per_country[c]))
+            except:
+                pass
+        '''
+
     def create_graph(self, target, saveTo=False):
         G_per_country = {}
         
@@ -132,7 +205,7 @@ class Graph:
             
         #for c in sorted(self.asns_per_country.keys()):
         #    print c, G_per_country[c].number_of_nodes(), G_per_country[c].number_of_edges()
-        '''
+
         nx.draw(G)
         target_c = target #G_per_country.keys()[-1]
         pos = nx.spring_layout(G, iterations=100) # position for all nodes
@@ -141,8 +214,8 @@ class Graph:
         labels = {}
         for asn,c in self.asns_per_country[target_c]:
             labels[asn] = c
-        print target_c, len(self.asns_per_country[target_c]), len(asns_in_target), len(asns_connected)
-        print asns_in_target, asns_connected
+        #print target_c, len(self.asns_per_country[target_c]), len(asns_in_target), len(asns_connected)
+        #print asns_in_target, asns_connected
 
         # nodes
         try:
@@ -156,7 +229,7 @@ class Graph:
             
         plt.axis('off')
         plt.show()
-        '''
+
         return G_per_country[target]
         '''
         if saveTo:
@@ -164,10 +237,11 @@ class Graph:
                 nx.draw(G_per_country[c])
                 plt.show()
         '''
-                
+
 if __name__ == '__main__':
     logging.basicConfig(filename='detection.log', level=logging.DEBUG)
     g = Graph('../Previous_BGP/edge_lablel_data/')
-    g.get_vertex_edge_per_country()
+    g.get_vertex_edge_per_country2()
     #g.generate_json_graph('asn')
-    g.create_graph('AF')
+    g.create_graph('KR')
+
