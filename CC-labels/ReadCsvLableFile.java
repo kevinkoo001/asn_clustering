@@ -20,9 +20,10 @@ public class ReadCsvLableFile {
 				String[] partsOfLine = line.split("\\|");
 				String CC = partsOfLine[1].trim();
 				String ASName = partsOfLine[4].trim();
+				String AS = partsOfLine[0].trim();
 				String[] ASNameParts = ASName.split(",");
-				if (CC.equals("ZA")) {
-				  	if (!ASNameParts[ASNameParts.length - 1].trim().equals("ZA")) {
+				if (CC.equals("ZZ")) {
+				  	if (!ASNameParts[ASNameParts.length - 1].trim().equals("ZZ")) {
 				  		CC = ASNameParts[ASNameParts.length - 1].trim();
 				  		BufferedWriter bw = null;
 				  		try {
@@ -32,7 +33,7 @@ public class ReadCsvLableFile {
 							}
 					  		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 					  		bw = new BufferedWriter(fw);
-					  		bw.write(CC + "|" + ASName + "\n");
+					  		bw.write(AS + "," + CC + "\n");
 					  		
 				  		}catch (IOException e) {
 							e.printStackTrace();
@@ -54,9 +55,9 @@ public class ReadCsvLableFile {
 				  		String [] ASNameParts2 = ASName.split(",");
 				  		String CCInASName = (ASNameParts2[ASNameParts2.length - 1]);
 				  		if (!CC.equals(CCInASName))
-				  			bw.write(CCInASName + "|" + ASName + "\n");
+				  			bw.write(AS + "," + CCInASName + "\n");
 				  		else
-				  			bw.write(CC + "|" + ASName + "\n");
+				  			bw.write(AS + "," + CC + "\n");
 				  		
 			  		}catch (IOException e) {
 						e.printStackTrace();
