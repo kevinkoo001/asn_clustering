@@ -49,7 +49,7 @@ class Cluster:
         #return similarity
         
     def spec_cluster(self, aff_matrix):
-        labels = spectral_clustering(aff_matrix, n_clusters=20, eigen_solver='arpack')
+        labels = spectral_clustering(aff_matrix, n_clusters=3, eigen_solver='arpack')
         #labels = spectral_clustering(graph, n_clusters=5, eigen_solver=None)
         plt.scatter(aff_matrix[:,:], aff_matrix[:,:], alpha=0.5)
         plt.show()
@@ -57,16 +57,17 @@ class Cluster:
    
 if __name__ == '__main__':
     C = Cluster()
-    G = draw_graph.Graph('../Previous_BGP/edge_lablel_data/')
-    G.get_vertex_edge_per_country()
+    #G = draw_graph.Graph('../Previous_BGP/edge_lablel_data/')
+    G = draw_graph.Graph()
+    G.get_vertex_edge_per_country2()
     
-    all_countries = sorted(list(G.countries))
+    all_countries = sorted(G.get_countries())[:15]
     similarity_comb = [x for x in sorted(itertools.combinations(all_countries, 2))]
     m_size = len(all_countries)
     
     index_matrix = dict()
-    for i,county in enumerate(all_countries):
-        index_matrix[county.upper()] = i
+    for i, cc in enumerate(all_countries):
+        index_matrix[cc] = i
         
     affinity = np.zeros(shape=(m_size, m_size))
     
@@ -80,7 +81,6 @@ if __name__ == '__main__':
     '''
     print "Size of affinity matrix: %dx%d" % (m_size, m_size)
     for c1, c2 in similarity_comb:
-        c1, c2 = c1.upper(), c2.upper()
         s = C.calc_similarity(G.create_graph(c1), G.create_graph(c2))
         affinity[index_matrix[c1], index_matrix[c2]] = s
         affinity[index_matrix[c2], index_matrix[c1]] = s
