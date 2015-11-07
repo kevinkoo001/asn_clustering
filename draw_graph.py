@@ -15,6 +15,7 @@ except importError:
 CC_FILE = 'country_code.csv'
 CAIDA_FILE = '20150801.as-rel-caida.txt'
 ASN_TO_CC = 'asn_reg-cymru.txt'
+DIR_TO_STORE = './topologies/'
 
 class Graph:
     def __init__(self, data_dir=None):
@@ -25,6 +26,7 @@ class Graph:
         self.asns_per_country = dict()
         self.asn_nid = dict()
         self.country_code = dict()
+        self.G_per_country = dict()
 
     # Country name, Country Code
     def get_country_by_code(self):
@@ -36,7 +38,7 @@ class Graph:
     def get_countries(self):
         return list(set(self.asns_per_country.keys()))
 
-    def get_nodes(self, cc):
+    def get_nodes_for_json(self, cc):
         self.asn_nid = {}
         prev_country = ''
         nid = 0     # ASN node ID
@@ -57,7 +59,7 @@ class Graph:
             
         return asns_data
             
-    def get_links(self, cc):
+    def get_links_for_json(self, cc):
         links_data = []
         
         for src, dst in self.edges_per_country[cc]:
@@ -73,8 +75,8 @@ class Graph:
     def generate_json_graph(self, target_dir):
         # Prepare JSON data type
         def prepare_data(country):
-            nodes = self.get_nodes(country)
-            links = self.get_links(country)
+            nodes = self.get_nodes_for_json(country)
+            links = self.get_links_for_json(country)
             json_data = dict()
             json_data["nodes"] = nodes
             json_data["links"] = links
@@ -94,7 +96,8 @@ class Graph:
             except:
                 pass
 
-    # Compute vertex and edge per country from reading previous project format
+    # Get all vertices and edges per country from reading previous project format
+    # Just for double-checking the G(V,E) btn Java and Python code
     def get_vertex_edge_per_country(self):
         for target in os.listdir(self.data_dir):
             tg_path = self.data_dir + target
@@ -124,13 +127,13 @@ class Graph:
             print 'Invalid Country Code!'
             sys.exit(1)
             
-    '''
-    Compute vertex and edge per country from reading CAIDA_FILE and ASN_TO_CC
+    """
+    Get all vertices and edges per country from reading CAIDA_FILE and ASN_TO_CC
     CAIDA_FILE format
         src|dst|type (peer, )
     ASN_TO_CC format
         AS      | CC | Registry | Allocated  | AS Name
-    '''
+    """
     def get_vertex_edge_per_country2(self, country=None, details=False):
         self.get_country_by_code()
         asn_mappings_data = util.csvImport(ASN_TO_CC, '|', header=True)
@@ -162,8 +165,7 @@ class Graph:
 
         # Process to prepare for the graph with ASNs(nodes) and their connectivity(edges) from CAIDA
         total, cnt = 0, 0
-        nodes, edges = set(), set()
-        
+
         for cd in caida_data:
             if cd[0][0] != '#':
                 total += 1
@@ -207,75 +209,73 @@ class Graph:
             for c in sorted(self.asns_per_country.keys()):
                 print '\t[%s] Edges %d:, Nodes: %d' % (c, len(self.edges_per_country[c]), len(self.asns_per_country[c]))
 
-    def create_graph(self, target, saveTo=False):
-        def graph_check(target=None):
-            if target is None:
-                for c in sorted(self.asns_per_country.keys()):
-                    print '\t[%s] Nodes: %d, Edges: %d' \
-                        % (c, G_per_country[c].number_of_nodes(), G_per_country[c].number_of_edges())
-            else:
-                print '\t[%s] Nodes: %d, Edges: %d' \
-                        % (target, G_per_country[target].number_of_nodes(), G_per_country[target].number_of_edges())
-                        
-        self.check_cc(target)
-        G_per_country = {}
-        
+    def create_all_graphs(self):
         # Generate a graph G(V,E) per each country
         for c in self.asns_per_country.keys():
             G = nx.Graph()
             all_asns = set()
-            
+
             # Adding vertexes to the graph for each country
             for asn, country in self.asns_per_country[c]:
                 all_asns.add(asn)
             G.add_nodes_from(list(all_asns))
-            G_per_country[c] = G
+            self.G_per_country[c] = G
         
         for c in self.edges_per_country.keys():
             all_edges = set()
-            
+
             # Adding edges to the graph for each country
             for src, dst in self.edges_per_country[c]:
                 all_edges.add((src, dst))
-            G_per_country[c].add_edges_from(list(all_edges))
-            
-        '''
-        graph_check(target)
-        
-        nx.draw(G_per_country[target])
-        pos = nx.spring_layout(G_per_country[target], iterations=100) # position for all nodes
-        asns_in_target = [asn for asn,c in self.asns_per_country[target] if c==target]
-        asns_connected = [asn for asn,c in self.asns_per_country[target] if c!=target]
-        labels = {}
-        for asn, c in self.asns_per_country[target]:
-            labels[asn] = c
+            self.G_per_country[c].add_edges_from(list(all_edges))
 
-        # nodes
-        try:
+    def get_graph_per_country(self, target):
+        return self.G_per_country[target]
+
+    def save_plot_per_country(self, target=None):
+        def graph_check(target):
+            print '\t[%s] Nodes: %d, Edges: %d' \
+                    % (target, self.G_per_country[target].number_of_nodes(), self.G_per_country[target].number_of_edges())
+
+        # With saveAll option, it will save all
+        def save_plots(G, target, show=False):
             plt.title(target)
-            #nx.draw_networkx_nodes(G, pos, nodelist=asns_in_target, node_size=800, alpha=0.8, node_color='lightblue')
-            #nx.draw_networkx_nodes(G, pos, nodelist=asns_connected, node_size=500, alpha=0.5, node_color='yellow')
-            #nx.draw_networkx_labels(G, pos, labels, font_size=10)
-        except:
-            print 'Something went wrong!!'
-            pass
-            
-        plt.axis('off')
-        plt.show()
-        '''
+            pos = nx.spring_layout(G, iterations=2000) # position for all nodes
+            asns_in_target = [asn for asn, c in self.asns_per_country[target] if c == target]
+            asns_connected = [asn for asn, c in self.asns_per_country[target] if c != target]
+            nx.draw(G, pos, nodelist=asns_in_target, node_size=100, alpha=0.5, node_color='lightblue')
+            nx.draw(G, pos, nodelist=asns_connected, node_size=150, alpha=0.5, node_color='yellow')
 
-        return G_per_country[target]
-        '''
-        if saveTo:
-            for c in self.edges_per_country.keys():
-                nx.draw(G_per_country[c])
+            labels = {}
+            for asn, c in self.asns_per_country[target]:
+                labels[asn] = c
+
+            nx.draw_networkx_labels(G, pos, labels, font_size=7)
+            plt.axis('off')
+
+            if show:
                 plt.show()
-        '''
+            else:
+                f_path = DIR_TO_STORE + target + '.png'
+                if not os.path.exists(DIR_TO_STORE):
+                    os.mkdir(DIR_TO_STORE)
+                plt.savefig(f_path, bbox_inches='tight')
+
+        if target is None:
+            for c in self.asns_per_country.keys():
+                graph_check(c)
+                save_plots(self.G_per_country[c], c, show=False)
+        else:
+            graph_check(target)
+            save_plots(self.G_per_country[target], target, show=False)
 
 if __name__ == '__main__':
     logging.basicConfig(filename='detection.log', level=logging.DEBUG)
-    g = Graph('../Previous_BGP/edge_lablel_data/')
-    g.get_vertex_edge_per_country2(country ='KR')
+    g = Graph()
+    g.get_vertex_edge_per_country2()
+    g.create_all_graphs()
+    g.save_plot_per_country()
     #g.generate_json_graph('asn')
-    g.create_graph('KR')
+    #for cc in sorted(g.get_countries()):
+    #    g.save_plot_per_country(cc)
 
