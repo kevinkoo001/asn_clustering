@@ -15,7 +15,14 @@ except importError:
 CC_FILE = 'country_code.csv'
 CAIDA_FILE = '20150801.as-rel-caida.txt'
 ASN_TO_CC = 'asn_reg-cymru.txt'
-DIR_TO_STORE = './topologies/'
+DIR_TO_STORE = './sub-graphs/topologies/'
+
+CSRSP_CC = ['BH', 'BY', 'CU', 'IR', 'PK', 'SA', 'SD',
+            'SY', 'TM', 'AE', 'UZ', 'VN', 'EG', 'MM', 'TN',
+            'KZ', 'MY', 'LK', 'TH', 'TR', 'JO', 'LY', 'TJ', 'VE', 'YE',
+            'AU', 'KR', 'US', 'CN', 'FR', 'RU', 'IN', 'GB'] # Large Size
+
+# ['ER', 'KP', 'ET'] // Has censorship but no ASN found
 
 class Graph:
     def __init__(self, data_dir=None):
@@ -233,25 +240,47 @@ class Graph:
         return self.G_per_country[target]
 
     def save_plot_per_country(self, target=None):
-        def graph_check(target):
-            print '\t[%s] Nodes: %d, Edges: %d' \
-                    % (target, self.G_per_country[target].number_of_nodes(), self.G_per_country[target].number_of_edges())
+        def graph_check(target, stats=True):
+            node_cnt = self.G_per_country[target].number_of_nodes()
+            edge_cnt = self.G_per_country[target].number_of_edges()
+            if stats:
+                print '\t[%s] Nodes: %d, Edges: %d' \
+                    % (target, node_cnt, edge_cnt)
+            return node_cnt, edge_cnt
 
         # With saveAll option, it will save all
         def save_plots(G, target, show=False):
-            plt.title(target)
-            pos = nx.spring_layout(G, iterations=2000) # position for all nodes
+            plt.figure(num=None, figsize=(500, 500), dpi=80)
+            plt.title(self.country_code[target] + '(' + target + ')')
+            plt.axis('off')
+            node_cnt, edge_cnt = graph_check(target, stats=False)
+
+            pos = nx.spring_layout(G, iterations=node_cnt + edge_cnt) # position for all nodes
             asns_in_target = [asn for asn, c in self.asns_per_country[target] if c == target]
-            asns_connected = [asn for asn, c in self.asns_per_country[target] if c != target]
-            nx.draw(G, pos, nodelist=asns_in_target, node_size=100, alpha=0.5, node_color='lightblue')
-            nx.draw(G, pos, nodelist=asns_connected, node_size=150, alpha=0.5, node_color='yellow')
+            asns_foreign = [asn for asn, c in self.asns_per_country[target] if c != target]
+            #nx.draw(G, pos, nodelist=asns_in_target, node_size=10, alpha=0.8, node_color='lightblue')
+            #nx.draw(G, pos, nodelist=asns_foreign, node_size=10, alpha=0.8, node_color='yellow')
+            #nx.draw_shell(G, nodelist=asns_in_target, node_size=10, alpha=1, node_color='lightblue')
+            #nx.draw_circular(G, nodelist=asns_foreign, node_size=10, alpha=1, node_color='yellow')
+            #nx.draw(G, pos, node_color='#A0CBE2', edge_color='#BB0000', width=1, font_size=7,
+                    #edge_cmap=plt.cm.Blues, with_labels=True)
+
+            pos = nx.spring_layout(G)
+            nx.draw_networkx_nodes(G, pos, nodelist=asns_in_target, node_size=50, alpha=0.9, node_color='lightblue')
+            nx.draw_networkx_nodes(G, pos, nodelist=asns_foreign, node_size=50, alpha=0.9, node_color='red')
+            nx.draw_networkx_edges(G, pos)
+
+            cut = 1.00
+            xmax = cut * max(xx for xx, yy in pos.values())
+            ymax = cut * max(yy for xx, yy in pos.values())
+            plt.xlim(0, xmax*2)
+            plt.ylim(0, ymax*2)
 
             labels = {}
             for asn, c in self.asns_per_country[target]:
                 labels[asn] = c
 
-            nx.draw_networkx_labels(G, pos, labels, font_size=7)
-            plt.axis('off')
+            #nx.draw_networkx_labels(G, pos, labels, font_size=8)
 
             if show:
                 plt.show()
@@ -260,22 +289,24 @@ class Graph:
                 if not os.path.exists(DIR_TO_STORE):
                     os.mkdir(DIR_TO_STORE)
                 plt.savefig(f_path, bbox_inches='tight')
+                plt.close()
 
         if target is None:
-            for c in self.asns_per_country.keys():
+            for c in sorted(self.asns_per_country.keys()):
                 graph_check(c)
                 save_plots(self.G_per_country[c], c, show=False)
         else:
             graph_check(target)
-            save_plots(self.G_per_country[target], target, show=False)
+            save_plots(self.G_per_country[target], target, show=True)
 
 if __name__ == '__main__':
     logging.basicConfig(filename='detection.log', level=logging.DEBUG)
     g = Graph()
     g.get_vertex_edge_per_country2()
     g.create_all_graphs()
-    g.save_plot_per_country()
+    #g.save_plot_per_country('IR')
     #g.generate_json_graph('asn')
-    #for cc in sorted(g.get_countries()):
-    #    g.save_plot_per_country(cc)
 
+    #for cc in sorted(g.get_countries()):
+    for cc in sorted(CSRSP_CC):
+        g.save_plot_per_country(cc)
