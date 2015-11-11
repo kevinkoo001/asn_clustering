@@ -49,7 +49,7 @@ class Cluster:
         #return similarity
         
     def spec_cluster(self, aff_matrix):
-        labels = spectral_clustering(aff_matrix, n_clusters=5, eigen_solver='arpack')
+        labels = spectral_clustering(aff_matrix, n_clusters=15, eigen_solver='arpack')
         plt.scatter(aff_matrix[:,:], aff_matrix[:,:], alpha=0.5)
         plt.show()
         return labels
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     G.get_vertex_edge_per_country2()
     G.create_all_graphs()
 
-    all_countries = sorted(G.get_countries())[:50]
+    all_countries = sorted(G.get_countries())
     similarity_comb = [x for x in sorted(itertools.combinations(all_countries, 2))]
     m_size = len(all_countries)
     

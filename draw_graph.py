@@ -214,7 +214,7 @@ class Graph:
         if details:
             print '[7] Nodes(ASNs) and links for each country'
             for c in sorted(self.asns_per_country.keys()):
-                print '\t[%s] Edges %d:, Nodes: %d' % (c, len(self.edges_per_country[c]), len(self.asns_per_country[c]))
+                print '\t[%s] Edges: %d, Nodes: %d' % (c, len(self.edges_per_country[c]), len(self.asns_per_country[c]))
 
     def create_all_graphs(self):
         # Generate a graph G(V,E) per each country
@@ -246,41 +246,41 @@ class Graph:
             if stats:
                 print '\t[%s] Nodes: %d, Edges: %d' \
                     % (target, node_cnt, edge_cnt)
-            return node_cnt, edge_cnt
 
         # With saveAll option, it will save all
-        def save_plots(G, target, show=False):
-            plt.figure(num=None, figsize=(500, 500), dpi=80)
-            plt.title(self.country_code[target] + '(' + target + ')')
+        def save_plots(G, target, label=True, show=True):
+            #plt.figure(num=None, figsize=(500, 500), dpi=80)
+            plt.figure(num=None, dpi=80)
+            plt.title(self.country_code[target] + ' (' + target + ')')
             plt.axis('off')
-            node_cnt, edge_cnt = graph_check(target, stats=False)
+            graph_check(target, stats=False)
 
-            pos = nx.spring_layout(G, iterations=node_cnt + edge_cnt) # position for all nodes
             asns_in_target = [asn for asn, c in self.asns_per_country[target] if c == target]
             asns_foreign = [asn for asn, c in self.asns_per_country[target] if c != target]
-            #nx.draw(G, pos, nodelist=asns_in_target, node_size=10, alpha=0.8, node_color='lightblue')
-            #nx.draw(G, pos, nodelist=asns_foreign, node_size=10, alpha=0.8, node_color='yellow')
+
+            '''
+            pos = nx.spring_layout(G, iterations=node_cnt + edge_cnt) # position for all nodes
+            nx.draw(G, pos, nodelist=asns_in_target, node_size=10, alpha=0.8, node_color='lightblue')
+            nx.draw(G, pos, nodelist=asns_foreign, node_size=10, alpha=0.8, node_color='yellow')
             #nx.draw_shell(G, nodelist=asns_in_target, node_size=10, alpha=1, node_color='lightblue')
             #nx.draw_circular(G, nodelist=asns_foreign, node_size=10, alpha=1, node_color='yellow')
-            #nx.draw(G, pos, node_color='#A0CBE2', edge_color='#BB0000', width=1, font_size=7,
-                    #edge_cmap=plt.cm.Blues, with_labels=True)
+            '''
 
             pos = nx.spring_layout(G)
             nx.draw_networkx_nodes(G, pos, nodelist=asns_in_target, node_size=50, alpha=0.9, node_color='lightblue')
             nx.draw_networkx_nodes(G, pos, nodelist=asns_foreign, node_size=50, alpha=0.9, node_color='red')
             nx.draw_networkx_edges(G, pos)
 
-            cut = 1.00
-            xmax = cut * max(xx for xx, yy in pos.values())
-            ymax = cut * max(yy for xx, yy in pos.values())
-            plt.xlim(0, xmax*2)
-            plt.ylim(0, ymax*2)
+            cut = 1.07
+            plt.xlim(0, cut * max(xx for xx, yy in pos.values()))
+            plt.ylim(0, cut * max(yy for xx, yy in pos.values()))
 
-            labels = {}
-            for asn, c in self.asns_per_country[target]:
-                labels[asn] = c
-
-            #nx.draw_networkx_labels(G, pos, labels, font_size=8)
+            # node_size=120, font_size=7 is reasonable to see for a mid-sized graph
+            if label:
+                labels = {}
+                for asn, c in self.asns_per_country[target]:
+                    labels[asn] = c
+                nx.draw_networkx_labels(G, pos, labels, font_size=7)  # For Labels (country name)
 
             if show:
                 plt.show()
@@ -294,19 +294,31 @@ class Graph:
         if target is None:
             for c in sorted(self.asns_per_country.keys()):
                 graph_check(c)
-                save_plots(self.G_per_country[c], c, show=False)
+                save_plots(self.G_per_country[c], c, label=False, show=False)
         else:
             graph_check(target)
-            save_plots(self.G_per_country[target], target, show=True)
+            save_plots(self.G_per_country[target], target, label=False, show=False)
 
 if __name__ == '__main__':
     logging.basicConfig(filename='detection.log', level=logging.DEBUG)
     g = Graph()
     g.get_vertex_edge_per_country2()
     g.create_all_graphs()
-    #g.save_plot_per_country('IR')
+    #g.save_plot_per_country('KW')
     #g.generate_json_graph('asn')
 
-    #for cc in sorted(g.get_countries()):
-    for cc in sorted(CSRSP_CC):
+    HUGE = ['AT', 'HK', 'FR', 'PL', 'CA', 'UA', 'AU', 'IT', 'CH', 'GB', 'RU', 'BR', 'US']
+
+    DONE = ['AE', 'AF', 'AL', 'AM', 'AO', 'AR', 'AS', 'AW', 'AZ', 'BA', 'BB', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BM', 'BN',
+            'BO', 'BQ', 'BT', 'BW', 'BY', 'BZ', 'CD', 'CG', 'CI', 'CL', 'CM', 'CN', 'CO', 'CR', 'CU', 'CW', 'CY', 'DJ', 'DK', 'DM',
+            'DO', 'DZ', 'EC', 'EE', 'EG', 'ES', 'EU', 'FI', 'FJ', 'GA', 'GD', 'GE', 'GG', 'GH', 'GI', 'GM', 'GN', 'GP', 'GQ', 'GR',
+            'GT', 'GU', 'GY', 'HN', 'HR', 'HT', 'HU', 'IE', 'IL', 'IN', 'IQ', 'IR', 'IS', 'JE', 'JM', 'JO', 'KE', 'KG', 'KH', 'KN',
+            'KR', 'KW', 'KZ', 'LA', 'LB', 'LI', 'LK', 'LS', 'LT', 'LU', 'LV', 'LY', 'MA', 'MC', 'MD', 'ME', 'MF', 'MG', 'MH', 'MK',
+            'ML', 'MM', 'MN', 'MO', 'MR', 'MT', 'MU', 'MV', 'MW', 'MX', 'MY', 'MZ', 'NA', 'NC', 'NE', 'NG', 'NI', 'NO', 'NP', 'NZ',
+            'OM', 'PA', 'PE', 'PF', 'PG', 'PH', 'PK', 'PR', 'PS', 'PT', 'PY', 'QA', 'RS', 'RW', 'SA', 'SC', 'SD', 'SG', 'SI', 'SK',
+            'SL', 'SM', 'SN', 'SO', 'SS', 'SV', 'SX', 'SY', 'SZ', 'TG', 'TH', 'TJ', 'TM', 'TN', 'TO', 'TR', 'TT', 'TW', 'UG', 'UY',
+            'UZ', 'VC', 'VE', 'VI', 'VN', 'VU', 'WS', 'YE', 'ZM', 'ZW', 'TZ', 'ZA', 'ID', 'JP', 'RO', 'CZ', 'SE', 'NL', 'DE']
+
+    for cc in HUGE:
+    #for cc in sorted(filter(lambda x: x not in DONE, g.get_countries())):
         g.save_plot_per_country(cc)
