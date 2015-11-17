@@ -58,6 +58,8 @@ public class CountryLabelFileScript {
 				}
 			}
 			
+			Set<String> assWithoutCountry = new HashSet<String>();
+			
 			File edgesFolder = new File("/Users/FM/desktop/CC-edge-result/");
 			File[] countries = edgesFolder.listFiles();
 //			Map <String, Set<String>> asInCountries = new HashMap<String, Set<String>>();
@@ -73,6 +75,7 @@ public class CountryLabelFileScript {
 //					System.out.println(countryName);
 					Set<String> assInSpecificCountry = new HashSet<String>();
 					while ((lineInEdgeFile = br2.readLine()) != null) {
+//						System.out.println(lineInEdgeFile);
 						String[] AsParts = lineInEdgeFile.split(",");
 						assInSpecificCountry.add(AsParts[0]);
 						assInSpecificCountry.add(AsParts[1]);
@@ -88,9 +91,13 @@ public class CountryLabelFileScript {
 						}
 				  		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 				  		bw = new BufferedWriter(fw);
-				  		//bw.write(ASinfo);
+				  		
 				  		for (String asInSpecificCountry: assInSpecificCountry) {
-				  			String newLine = asInSpecificCountry + "," + countryASMap.get(asInSpecificCountry) + "\n";
+				  			String countryForSpecificAS = countryASMap.get(asInSpecificCountry);
+				  			if (countryForSpecificAS == null)
+				  				assWithoutCountry.add(asInSpecificCountry);
+				  			
+				  			String newLine = asInSpecificCountry + "," + countryForSpecificAS + "\n";
 				  			bw.write(newLine);
 				  		}
 				  		
@@ -108,6 +115,12 @@ public class CountryLabelFileScript {
 					br2.close();
 				}
 				
+			}
+			
+			System.out.println("The number of AS without assigned country is " + assWithoutCountry.size());
+			System.out.println("The list of AS (without assigned country is): ");
+			for (String aswithoutCountry: assWithoutCountry) {
+				System.out.println(aswithoutCountry);
 			}
 			
 		}catch (FileNotFoundException e) {
