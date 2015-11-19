@@ -9,8 +9,11 @@ try:
     # http://networkx.github.io/documentation/networkx-1.9.1/examples/index.html
     import networkx as nx
     import matplotlib.pyplot as plt
-except importError:
+    import matplotlib.cm as cm
+except ImportError:
     logging.error('Required library: networkx, matplotlib')
+
+import numpy as np
 
 CC_FILE = 'country_code.csv'
 CAIDA_FILE = '20150801.as-rel-caida.txt'
@@ -44,6 +47,9 @@ class Graph:
         
     def get_countries(self):
         return list(set(self.asns_per_country.keys()))
+
+    def get_country_graph(self, country):
+        return self.G_per_country[country]
 
     def get_nodes_for_json(self, cc):
         self.asn_nid = {}
@@ -84,6 +90,7 @@ class Graph:
         def prepare_data(country):
             nodes = self.get_nodes_for_json(country)
             links = self.get_links_for_json(country)
+            print country, len(nodes), len(links)
             json_data = dict()
             json_data["nodes"] = nodes
             json_data["links"] = links
@@ -110,18 +117,18 @@ class Graph:
             tg_path = self.data_dir + target
             cc = target[:2]
             self.countries.add(cc)
-            
+
             # A node represents a country, an edge represents the link between ASN
             if 'label' in target:
-                nodes = util.csvImport(tg_path, ',', header=True)
+                nodes = util.csvImport(tg_path, ',', header=False)
                 for asn, node in nodes:
                     if cc in self.asns_per_country.keys():
                         self.asns_per_country[cc] += [(int(asn), node)]
                     else:
                         self.asns_per_country[cc] = [(int(asn), node)]
-            elif 'edges' in target:
-                edges = util.csvImport(tg_path, ',', header=True)
-                for src, dst, type in edges:
+            elif 'edge' in target:
+                edges = util.csvImport(tg_path, ',', header=False)
+                for src, dst in edges:
                     if cc in self.edges_per_country.keys():
                         self.edges_per_country[cc] += [(src, dst)]
                     else:
@@ -236,6 +243,8 @@ class Graph:
                 all_edges.add((src, dst))
             self.G_per_country[c].add_edges_from(list(all_edges))
 
+        print len(self.asns_per_country.keys()), len(self.edges_per_country.keys())
+
     def get_graph_per_country(self, target):
         return self.G_per_country[target]
 
@@ -297,28 +306,115 @@ class Graph:
                 save_plots(self.G_per_country[c], c, label=False, show=False)
         else:
             graph_check(target)
-            save_plots(self.G_per_country[target], target, label=False, show=False)
+            save_plots(self.G_per_country[target], target, label=False, show=True)
+
+    def compute_properties(self, cc):
+        G = self.get_country_graph(cc)
+        domestic = set([asn for asn, c in self.asns_per_country[cc] if c == cc])
+        foreign = set([asn for asn, c in self.asns_per_country[cc] if c != cc])
+        asns_connected_to_foreign = set([s for (s, d) in self.edges_per_country[cc] if d in foreign])
+        cc_indexes = {}
+        #print '%s, %d, %d, %d, %d, %d' % (cc, len(domestic), len(foreign), len(asns_connected_to_foreign),
+        #                                  self.G_per_country[cc].number_of_nodes(), self.G_per_country[cc].number_of_edges())
+
+        print '[%s] %s' % (cc, self.country_code[cc])
+        print '\tDomestic: %d, International: %d' % (len(domestic), len(foreign))
+        print '\tNodes: %d, Edges: %d' \
+              % (self.G_per_country[cc].number_of_nodes(), self.G_per_country[cc].number_of_edges())
+
+        if len(foreign) == 0:
+            #print '\tNo foreign connection found in %s' % cc
+            return -1, -1
+        elif len(foreign) == 1:
+            #print '\tOnly 1 connection to the outside..'
+            return -2, -2
+        elif self.G_per_country[cc].number_of_edges() + self.G_per_country[cc].number_of_nodes() < 10:
+            #print '\tToo small nodes or edges to decide..'
+            return -3, -3
+        elif self.G_per_country[cc].number_of_edges() + self.G_per_country[cc].number_of_nodes() > 500:
+            #print '\tTOO BIG.. just skipped!!'
+            return -99, -99
+        else:
+
+            #print '\tEstimates the average clustering coefficient: %2.4f' % nx.algorithms.average_clustering(G)
+            #print nx.algorithms.average_degree_connectivity(G)
+            #print nx.algorithms.average_neighbor_degree(G)
+            #print '\tAverage Degree Connectivity: %2.4f' % nx.algorithms.average_degree_connectivity(G)
+            #print '\tAverage Neighbor Degree: %2.4f' % nx.algorithms.average_neighbor_degree(G)
+            #print '\tAverage Node Connectivity: %2.4f' % nx.algorithms.average_node_connectivity(G)
+            #print '\tAverage Shortest Path Length: %2.4f' % nx.algorithms.average_shortest_path_length(G)
+
+            # of domestic ASNs which connects to foreign countries / # of total ASNs in a country
+            X = len(foreign) / float(len(domestic) + len(foreign))
+            Y = float(len(asns_connected_to_foreign)) / len(foreign)
+
+            #print '\tX: %2.4f' % X
+            # of domestic ASNs which connects to foreign countries / # of foreign ASNs connected to a country
+
+            #print '\tY: %2.4f' % Y
+            # surveillance index (si) = 1/x + 1/y
+            Z = (1/X+1/Y)
+            #print '\tIndex(= 1/X + 1/Y): %2.4f' % Z
+            cc_indexes[cc] = 1/X + 1/Y
+            # nx.algorithms.average_node_connectivity(G)
+            return nx.algorithms.average_node_connectivity(G), nx.algorithms.average_neighbor_degree(G)
+
+    def decision_censorship(self):
+        ALL = ['AE', 'AF', 'AL', 'AM', 'AO', 'AR', 'AS', 'AW', 'AZ', 'BA', 'BB', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BM', 'BN',
+                'BO', 'BQ', 'BT', 'BW', 'BY', 'BZ', 'CD', 'CG', 'CI', 'CL', 'CM', 'CN', 'CO', 'CR', 'CU', 'CW', 'CY', 'DJ', 'DK', 'DM',
+                'DO', 'DZ', 'EC', 'EE', 'EG', 'ES', 'EU', 'FI', 'FJ', 'GA', 'GD', 'GE', 'GG', 'GH', 'GI', 'GM', 'GN', 'GP', 'GQ', 'GR',
+                'GT', 'GU', 'GY', 'HN', 'HR', 'HT', 'HU', 'IE', 'IL', 'IN', 'IQ', 'IR', 'IS', 'JE', 'JM', 'JO', 'KE', 'KG', 'KH', 'KN',
+                'KR', 'KW', 'KZ', 'LA', 'LB', 'LI', 'LK', 'LS', 'LT', 'LU', 'LV', 'LY', 'MA', 'MC', 'MD', 'ME', 'MF', 'MG', 'MH', 'MK',
+                'ML', 'MM', 'MN', 'MO', 'MR', 'MT', 'MU', 'MV', 'MW', 'MX', 'MY', 'MZ', 'NA', 'NC', 'NE', 'NG', 'NI', 'NO', 'NP', 'NZ',
+                'OM', 'PA', 'PE', 'PF', 'PG', 'PH', 'PK', 'PR', 'PS', 'PT', 'PY', 'QA', 'RS', 'RW', 'SA', 'SC', 'SD', 'SG', 'SI', 'SK',
+                'SL', 'SM', 'SN', 'SO', 'SS', 'SV', 'SX', 'SY', 'SZ', 'TG', 'TH', 'TJ', 'TM', 'TN', 'TO', 'TR', 'TT', 'TW', 'UG', 'UY',
+                'UZ', 'VC', 'VE', 'VI', 'VN', 'VU', 'WS', 'YE', 'ZM', 'ZW', 'TZ', 'ZA', 'ID', 'JP', 'RO', 'CZ', 'SE', 'NL', 'DE', 'AT',
+                'HK', 'FR', 'PL', 'CA', 'UA', 'AU', 'IT', 'CH', 'GB', 'RU', 'BR', 'US']
+
+        x, y = [], []
+        #colors = cm.rainbow(np.linspace(0, 1, len(y)))
+        #for cc in list(set(ALL) - set(CSRSP_CC)):
+        for cc in sorted(ALL):
+            X,Y = self.compute_properties(cc)
+            x.append(X)
+            y.append(Y)
+
+        plt.scatter(np.array([k for k in x if k > 0]), np.array([k for k in y if k > 0]), color='blue')
+
+        nx, ny = [], []
+        for cc in CSRSP_CC:
+            X,Y = self.compute_properties(cc)
+            nx.append(X)
+            ny.append(Y)
+
+        plt.scatter(np.array([k for k in nx if k > 0]), np.array([k for k in ny if k > 0]), color='red')
+        print 'No foreign connection found: %d' % (x.count(-1) + nx.count(-1))
+        print 'Only 1 connection to the outside: %d' % (x.count(-2) + nx.count(-2))
+        print 'Too small nodes or edges to decide: %d' % (x.count(-3) + nx.count(-3))
+        print 'TOO BIG.. just skipped: %d' % (x.count(-99) + nx.count(-99))
+
+        plt.show()
+
 
 if __name__ == '__main__':
+
     logging.basicConfig(filename='detection.log', level=logging.DEBUG)
+    '''
+    g = Graph('./CC-edges-labels/')
+    g.get_vertex_edge_per_country()
+    g.generate_json_graph('asn')
+    '''
+
     g = Graph()
     g.get_vertex_edge_per_country2()
     g.create_all_graphs()
+    #g.compute_properties('IR')
     #g.save_plot_per_country('KW')
-    #g.generate_json_graph('asn')
+    g.decision_censorship()
 
-    HUGE = ['AT', 'HK', 'FR', 'PL', 'CA', 'UA', 'AU', 'IT', 'CH', 'GB', 'RU', 'BR', 'US']
 
-    DONE = ['AE', 'AF', 'AL', 'AM', 'AO', 'AR', 'AS', 'AW', 'AZ', 'BA', 'BB', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BM', 'BN',
-            'BO', 'BQ', 'BT', 'BW', 'BY', 'BZ', 'CD', 'CG', 'CI', 'CL', 'CM', 'CN', 'CO', 'CR', 'CU', 'CW', 'CY', 'DJ', 'DK', 'DM',
-            'DO', 'DZ', 'EC', 'EE', 'EG', 'ES', 'EU', 'FI', 'FJ', 'GA', 'GD', 'GE', 'GG', 'GH', 'GI', 'GM', 'GN', 'GP', 'GQ', 'GR',
-            'GT', 'GU', 'GY', 'HN', 'HR', 'HT', 'HU', 'IE', 'IL', 'IN', 'IQ', 'IR', 'IS', 'JE', 'JM', 'JO', 'KE', 'KG', 'KH', 'KN',
-            'KR', 'KW', 'KZ', 'LA', 'LB', 'LI', 'LK', 'LS', 'LT', 'LU', 'LV', 'LY', 'MA', 'MC', 'MD', 'ME', 'MF', 'MG', 'MH', 'MK',
-            'ML', 'MM', 'MN', 'MO', 'MR', 'MT', 'MU', 'MV', 'MW', 'MX', 'MY', 'MZ', 'NA', 'NC', 'NE', 'NG', 'NI', 'NO', 'NP', 'NZ',
-            'OM', 'PA', 'PE', 'PF', 'PG', 'PH', 'PK', 'PR', 'PS', 'PT', 'PY', 'QA', 'RS', 'RW', 'SA', 'SC', 'SD', 'SG', 'SI', 'SK',
-            'SL', 'SM', 'SN', 'SO', 'SS', 'SV', 'SX', 'SY', 'SZ', 'TG', 'TH', 'TJ', 'TM', 'TN', 'TO', 'TR', 'TT', 'TW', 'UG', 'UY',
-            'UZ', 'VC', 'VE', 'VI', 'VN', 'VU', 'WS', 'YE', 'ZM', 'ZW', 'TZ', 'ZA', 'ID', 'JP', 'RO', 'CZ', 'SE', 'NL', 'DE']
-
-    for cc in HUGE:
+    #for cc in HUGE:
     #for cc in sorted(filter(lambda x: x not in DONE, g.get_countries())):
-        g.save_plot_per_country(cc)
+    #    g.save_plot_per_country(cc)
+
+    #y_pred = KMeans(n_clusters=2, random_state=random_state).fit_predict(X)
