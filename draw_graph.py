@@ -28,113 +28,44 @@ CSRSP_CC = ['BH', 'BY', 'CU', 'IR', 'PK', 'SA', 'SD',
 # ['ER', 'KP', 'ET'] // Has censorship but no ASN found
 
 class Graph:
-    def __init__(self, data_dir=None):
-        self.data_dir = data_dir
-        self.countries = set()
+    def __init__(self):
+        self.FHI = dict()
         self.asn_to_cc = dict()
         self.edges_per_country = dict()
         self.asns_per_country = dict()
-        self.asn_nid = dict()
         self.country_code = dict()
         self.G_per_country = dict()
 
-    # Country name, Country Code
-    def get_country_by_code(self):
+    # Country name, Country Code, FHI
+    def read_known_countries(self):
         cc_code = util.csvImport(CC_FILE, ',')
         for cc in cc_code:
-             self.country_code[cc[1].strip().upper()] = cc[0].strip()
-        return self.country_code
+            self.country_code[cc[0].strip().upper()] = cc[1].strip()
+            self.FHI[cc[0].strip().upper()] = cc[2].strip()
         
-    def get_countries(self):
+    def get_all_countries(self):
         return list(set(self.asns_per_country.keys()))
 
-    def get_country_graph(self, country):
-        return self.G_per_country[country]
+    def get_country_by_cc(self):
+        return self.country_code
 
-    def get_nodes_for_json(self, cc):
-        self.asn_nid = {}
-        prev_country = ''
-        nid = 0     # ASN node ID
-        cid = -1    # country id
-        asns_data = []
-        
-        for asn, node in self.asns_per_country[cc]:
-            asn_entry = {}
-            if prev_country != node:
-                cid += 1
-            self.asn_nid[asn] = nid
-            asn_entry["ASN"] = str(asn)
-            asn_entry["country"] = cid
-            asn_entry["c_name"] = node
-            asns_data.append(asn_entry)
-            prev_country = node
-            nid += 1
-            
-        return asns_data
-            
-    def get_links_for_json(self, cc):
-        links_data = []
-        
-        for src, dst in self.edges_per_country[cc]:
-            link_entry = {}
-            link_entry["source"] = self.asn_nid[int(src)]
-            link_entry["target"] = self.asn_nid[int(dst)]
-            link_entry["value"] = random.randint(1,10)
-            links_data.append(link_entry)
-        
-        return links_data
+    def get_FHI_by_cc(self):
+        return self.FHI
 
-    # This is just for drawing json grpah
-    def generate_json_graph(self, target_dir):
-        # Prepare JSON data type
-        def prepare_data(country):
-            nodes = self.get_nodes_for_json(country)
-            links = self.get_links_for_json(country)
-            print country, len(nodes), len(links)
-            json_data = dict()
-            json_data["nodes"] = nodes
-            json_data["links"] = links
-            return json.dumps(json_data, indent=2)
-            
-        cnt = 1
-        for c in self.countries:
-            json_file = target_dir + os.sep + c.lower() + '.json'
-            try:
-                self.get_nodes(c)
-                self.get_links(c)
-                json_data = prepare_data(c)
-                print "[%2d] %s" % (cnt, json_file)
-                with open(json_file, 'w') as f:
-                    f.write(json_data)
-                cnt += 1
-            except:
-                pass
+    def get_country_graph(self, cc):
+        return self.G_per_country[cc]
 
-    # Get all vertices and edges per country from reading previous project format
-    # Just for double-checking the G(V,E) btn Java and Python code
-    def get_vertex_edge_per_country(self):
-        for target in os.listdir(self.data_dir):
-            tg_path = self.data_dir + target
-            cc = target[:2]
-            self.countries.add(cc)
+    def get_graph_per_country(self, cc):
+        return self.G_per_country[cc]
 
-            # A node represents a country, an edge represents the link between ASN
-            if 'label' in target:
-                nodes = util.csvImport(tg_path, ',', header=False)
-                for asn, node in nodes:
-                    if cc in self.asns_per_country.keys():
-                        self.asns_per_country[cc] += [(int(asn), node)]
-                    else:
-                        self.asns_per_country[cc] = [(int(asn), node)]
-            elif 'edge' in target:
-                edges = util.csvImport(tg_path, ',', header=False)
-                for src, dst in edges:
-                    if cc in self.edges_per_country.keys():
-                        self.edges_per_country[cc] += [(src, dst)]
-                    else:
-                        self.edges_per_country[cc] = [(src, dst)]
-            else:
-                continue
+    def get_domestic_asns(self, cc):
+        return set([asn for asn, c in self.asns_per_country[cc] if c == cc])
+
+    def get_foreign_asns(self, cc):
+        return set([asn for asn, c in self.asns_per_country[cc] if c != cc])
+
+    def get_asns_connected_to_foreign(self, cc):
+        return set([s for (s, d) in self.edges_per_country[cc] if d in self.get_foreign_asns(cc)])
 
     def check_cc(self, cc):
         if cc not in self.asns_per_country.keys():
@@ -148,8 +79,8 @@ class Graph:
     ASN_TO_CC format
         AS      | CC | Registry | Allocated  | AS Name
     """
-    def get_vertex_edge_per_country2(self, country=None, details=False):
-        self.get_country_by_code()
+    def get_vertex_edge_per_country(self, country=None, details=False):
+        self.read_known_countries()
         asn_mappings_data = util.csvImport(ASN_TO_CC, '|', header=True)
         caida_data = util.csvImport(CAIDA_FILE, '|', header=False)
         
@@ -225,47 +156,41 @@ class Graph:
 
     def create_all_graphs(self):
         # Generate a graph G(V,E) per each country
-        for c in self.asns_per_country.keys():
+        for cc in self.asns_per_country.keys():
             G = nx.Graph()
             all_asns = set()
 
             # Adding vertexes to the graph for each country
-            for asn, country in self.asns_per_country[c]:
+            for asn, country in self.asns_per_country[cc]:
                 all_asns.add(asn)
             G.add_nodes_from(list(all_asns))
-            self.G_per_country[c] = G
+            self.G_per_country[cc] = G
         
-        for c in self.edges_per_country.keys():
+        for cc in self.edges_per_country.keys():
             all_edges = set()
 
             # Adding edges to the graph for each country
-            for src, dst in self.edges_per_country[c]:
+            for src, dst in self.edges_per_country[cc]:
                 all_edges.add((src, dst))
-            self.G_per_country[c].add_edges_from(list(all_edges))
+            self.G_per_country[cc].add_edges_from(list(all_edges))
 
-        print len(self.asns_per_country.keys()), len(self.edges_per_country.keys())
-
-    def get_graph_per_country(self, target):
-        return self.G_per_country[target]
-
-    def save_plot_per_country(self, target=None):
-        def graph_check(target, stats=True):
-            node_cnt = self.G_per_country[target].number_of_nodes()
-            edge_cnt = self.G_per_country[target].number_of_edges()
+    def plot_per_country(self, cc=None):
+        def graph_check(cc, stats=True):
+            node_cnt = self.G_per_country[cc].number_of_nodes()
+            edge_cnt = self.G_per_country[cc].number_of_edges()
             if stats:
                 print '\t[%s] Nodes: %d, Edges: %d' \
-                    % (target, node_cnt, edge_cnt)
+                    % (cc, node_cnt, edge_cnt)
 
-        # With saveAll option, it will save all
-        def save_plots(G, target, label=True, show=True):
+        def save_plots(G, cc, label=True, show=False):
             #plt.figure(num=None, figsize=(500, 500), dpi=80)
             plt.figure(num=None, dpi=80)
-            plt.title(self.country_code[target] + ' (' + target + ')')
+            plt.title(self.country_code[cc] + ' (' + cc + ')')
             plt.axis('off')
-            graph_check(target, stats=False)
+            graph_check(cc, stats=False)
 
-            asns_in_target = [asn for asn, c in self.asns_per_country[target] if c == target]
-            asns_foreign = [asn for asn, c in self.asns_per_country[target] if c != target]
+            asns_in_target = self.get_domestic_asns(cc)
+            asns_foreign = self.get_foreign_asns(cc)
 
             '''
             pos = nx.spring_layout(G, iterations=node_cnt + edge_cnt) # position for all nodes
@@ -287,32 +212,34 @@ class Graph:
             # node_size=120, font_size=7 is reasonable to see for a mid-sized graph
             if label:
                 labels = {}
-                for asn, c in self.asns_per_country[target]:
+                for asn, c in self.asns_per_country[cc]:
                     labels[asn] = c
                 nx.draw_networkx_labels(G, pos, labels, font_size=7)  # For Labels (country name)
 
             if show:
                 plt.show()
             else:
-                f_path = DIR_TO_STORE + target + '.png'
+                f_path = DIR_TO_STORE + cc + '.png'
                 if not os.path.exists(DIR_TO_STORE):
                     os.mkdir(DIR_TO_STORE)
                 plt.savefig(f_path, bbox_inches='tight')
                 plt.close()
 
-        if target is None:
+        if cc is None:
             for c in sorted(self.asns_per_country.keys()):
                 graph_check(c)
                 save_plots(self.G_per_country[c], c, label=False, show=False)
         else:
-            graph_check(target)
-            save_plots(self.G_per_country[target], target, label=False, show=True)
+            graph_check(cc)
+            save_plots(self.G_per_country[cc], cc, label=False, show=True)
 
     def compute_properties(self, cc):
         G = self.get_country_graph(cc)
-        domestic = set([asn for asn, c in self.asns_per_country[cc] if c == cc])
-        foreign = set([asn for asn, c in self.asns_per_country[cc] if c != cc])
-        asns_connected_to_foreign = set([s for (s, d) in self.edges_per_country[cc] if d in foreign])
+
+        # TODO - Draw another Graph for domestic countries only
+        domestic = self.get_domestic_asns(cc)
+        foreign = self.get_foreign_asns(cc)
+        asns_connected_to_foreign = self.get_asns_connected_to_foreign(cc)
         cc_indexes = {}
         #print '%s, %d, %d, %d, %d, %d' % (cc, len(domestic), len(foreign), len(asns_connected_to_foreign),
         #                                  self.G_per_country[cc].number_of_nodes(), self.G_per_country[cc].number_of_edges())
@@ -360,21 +287,9 @@ class Graph:
             return nx.algorithms.average_node_connectivity(G), nx.algorithms.average_neighbor_degree(G)
 
     def decision_censorship(self):
-        ALL = ['AE', 'AF', 'AL', 'AM', 'AO', 'AR', 'AS', 'AW', 'AZ', 'BA', 'BB', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BM', 'BN',
-                'BO', 'BQ', 'BT', 'BW', 'BY', 'BZ', 'CD', 'CG', 'CI', 'CL', 'CM', 'CN', 'CO', 'CR', 'CU', 'CW', 'CY', 'DJ', 'DK', 'DM',
-                'DO', 'DZ', 'EC', 'EE', 'EG', 'ES', 'EU', 'FI', 'FJ', 'GA', 'GD', 'GE', 'GG', 'GH', 'GI', 'GM', 'GN', 'GP', 'GQ', 'GR',
-                'GT', 'GU', 'GY', 'HN', 'HR', 'HT', 'HU', 'IE', 'IL', 'IN', 'IQ', 'IR', 'IS', 'JE', 'JM', 'JO', 'KE', 'KG', 'KH', 'KN',
-                'KR', 'KW', 'KZ', 'LA', 'LB', 'LI', 'LK', 'LS', 'LT', 'LU', 'LV', 'LY', 'MA', 'MC', 'MD', 'ME', 'MF', 'MG', 'MH', 'MK',
-                'ML', 'MM', 'MN', 'MO', 'MR', 'MT', 'MU', 'MV', 'MW', 'MX', 'MY', 'MZ', 'NA', 'NC', 'NE', 'NG', 'NI', 'NO', 'NP', 'NZ',
-                'OM', 'PA', 'PE', 'PF', 'PG', 'PH', 'PK', 'PR', 'PS', 'PT', 'PY', 'QA', 'RS', 'RW', 'SA', 'SC', 'SD', 'SG', 'SI', 'SK',
-                'SL', 'SM', 'SN', 'SO', 'SS', 'SV', 'SX', 'SY', 'SZ', 'TG', 'TH', 'TJ', 'TM', 'TN', 'TO', 'TR', 'TT', 'TW', 'UG', 'UY',
-                'UZ', 'VC', 'VE', 'VI', 'VN', 'VU', 'WS', 'YE', 'ZM', 'ZW', 'TZ', 'ZA', 'ID', 'JP', 'RO', 'CZ', 'SE', 'NL', 'DE', 'AT',
-                'HK', 'FR', 'PL', 'CA', 'UA', 'AU', 'IT', 'CH', 'GB', 'RU', 'BR', 'US']
-
         x, y = [], []
         #colors = cm.rainbow(np.linspace(0, 1, len(y)))
-        #for cc in list(set(ALL) - set(CSRSP_CC)):
-        for cc in sorted(ALL):
+        for cc in self.get_all_countries():
             X,Y = self.compute_properties(cc)
             x.append(X)
             y.append(Y)
@@ -396,25 +311,91 @@ class Graph:
         plt.show()
 
 
-if __name__ == '__main__':
+class D3_json:
+    def __init__(self, data_dir, out_dir):
+        self.target_dir = data_dir
+        self.out_dir = out_dir
+        self.asn_nid = dict()
+        self.countries = []
+        self.edges_per_country = dict()
+        self.asns_per_country = dict()
 
-    logging.basicConfig(filename='detection.log', level=logging.DEBUG)
-    '''
-    g = Graph('./CC-edges-labels/')
-    g.get_vertex_edge_per_country()
-    g.generate_json_graph('asn')
-    '''
+    def _get_nodes_for_json(self, cc):
+        prev_country = ''
+        nid = 0     # ASN node ID
+        cid = -1    # country id
+        nodes = []
 
-    g = Graph()
-    g.get_vertex_edge_per_country2()
-    g.create_all_graphs()
-    #g.compute_properties('IR')
-    #g.save_plot_per_country('KW')
-    g.decision_censorship()
+        for asn, node in self.asns_per_country[cc]:
+            asn_entry = {}
+            if prev_country != node:
+                cid += 1
+            self.asn_nid[asn] = nid
+            asn_entry["ASN"] = str(asn)
+            asn_entry["country"] = cid
+            asn_entry["c_name"] = node
+            nodes.append(asn_entry)
+            prev_country = node
+            nid += 1
 
+        return nodes
 
-    #for cc in HUGE:
-    #for cc in sorted(filter(lambda x: x not in DONE, g.get_countries())):
-    #    g.save_plot_per_country(cc)
+    def _get_links_for_json(self, cc):
+        links = []
 
-    #y_pred = KMeans(n_clusters=2, random_state=random_state).fit_predict(X)
+        for src, dst in self.edges_per_country[cc]:
+            link_entry = {}
+            link_entry["source"] = self.asn_nid[int(src)]
+            link_entry["target"] = self.asn_nid[int(dst)]
+            link_entry["value"] = random.randint(1,10)
+            links.append(link_entry)
+
+        return links
+
+    # [STEP 1] Get all vertices and edges per country
+    # Double-check the G(V,E) btn Java and Python code
+    def get_vertex_edge_per_country(self):
+        for target in os.listdir(self.target_dir):
+            tg_path = self.target_dir + target
+            cc = target[:2]
+            self.countries.append(cc)
+
+            # A node represents a country, an edge represents the link between ASN
+            if 'label' in target:
+                nodes = util.csvImport(tg_path, ',', header=False)
+                for asn, node in nodes:
+                    if cc in self.asns_per_country.keys():
+                        self.asns_per_country[cc] += [(int(asn), node)]
+                    else:
+                        self.asns_per_country[cc] = [(int(asn), node)]
+            elif 'edge' in target:
+                edges = util.csvImport(tg_path, ',', header=False)
+                for src, dst in edges:
+                    if cc in self.edges_per_country.keys():
+                        self.edges_per_country[cc] += [(src, dst)]
+                    else:
+                        self.edges_per_country[cc] = [(src, dst)]
+            else:
+                continue
+                
+    # [STEP 2] Generate a JSON file per each country for d3js
+    def generate_json_graph(self):
+        # Prepare JSON data type
+        def prepare_data(cc, nodes, links):
+            json_data = dict()
+            json_data["nodes"] = nodes
+            json_data["links"] = links
+            return json.dumps(json_data, indent=2)
+
+        cnt = 1
+        for cc in sorted(set(self.countries)):
+            json_file = self.out_dir + os.sep + cc.lower() + '.json'
+            try:
+                nodes = self._get_nodes_for_json(cc)
+                links = self._get_links_for_json(cc)
+                print "[%2d] %s: %d ASNs, %d Links" % (cnt, cc, len(nodes), len(links))
+                with open(json_file, 'w') as f:
+                    f.write(prepare_data(cc, nodes, links))
+                cnt += 1
+            except:
+                pass
