@@ -2,125 +2,20 @@
   "nodes": [
     {
       "country": 0, 
-      "ASN": "37376", 
-      "c_name": "SS"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37406", 
-      "c_name": "SS"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37584", 
-      "c_name": "SS"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37594", 
-      "c_name": "SS"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37631", 
-      "c_name": "SS"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37646", 
-      "c_name": "SS"
-    }, 
-    {
-      "country": 0, 
       "ASN": "327786", 
       "c_name": "SS"
     }, 
     {
       "country": 0, 
-      "ASN": "327860", 
+      "ASN": "37376", 
       "c_name": "SS"
-    }, 
-    {
-      "country": 1, 
-      "ASN": "12491", 
-      "c_name": "IL"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "25320", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 3, 
-      "ASN": "60725", 
-      "c_name": "JE"
-    }, 
-    {
-      "country": 4, 
-      "ASN": "12684", 
-      "c_name": "LU"
-    }, 
-    {
-      "country": 5, 
-      "ASN": "30844", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 6, 
-      "ASN": "51910", 
-      "c_name": "LB"
-    }, 
-    {
-      "country": 7, 
-      "ASN": "9498", 
-      "c_name": "IN"
     }
   ], 
   "links": [
     {
-      "source": 0, 
-      "target": 14, 
-      "value": 5
-    }, 
-    {
-      "source": 9, 
-      "target": 0, 
-      "value": 6
-    }, 
-    {
-      "source": 6, 
-      "target": 0, 
-      "value": 2
-    }, 
-    {
       "source": 1, 
-      "target": 10, 
-      "value": 4
-    }, 
-    {
-      "source": 8, 
-      "target": 2, 
-      "value": 3
-    }, 
-    {
-      "source": 9, 
-      "target": 4, 
-      "value": 6
-    }, 
-    {
-      "source": 4, 
-      "target": 13, 
-      "value": 3
-    }, 
-    {
-      "source": 12, 
-      "target": 5, 
-      "value": 10
-    }, 
-    {
-      "source": 11, 
-      "target": 1, 
-      "value": 6
+      "target": 0, 
+      "value": 5
     }
   ]
 }

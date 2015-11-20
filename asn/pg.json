@@ -1,0 +1,121 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "38009", 
+      "c_name": "PG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "134151", 
+      "c_name": "PG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "58460", 
+      "c_name": "PG"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "45924", 
+      "c_name": "PG"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "45411", 
+      "c_name": "AU"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "58511", 
+      "c_name": "AU"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "63945", 
+      "c_name": "PG"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "55792", 
+      "c_name": "PG"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "38809", 
+      "c_name": "AU"
+    }, 
+    {
+      "country": 4, 
+      "ASN": "133137", 
+      "c_name": "PG"
+    }, 
+    {
+      "country": 4, 
+      "ASN": "17828", 
+      "c_name": "PG"
+    }
+  ], 
+  "links": [
+    {
+      "source": 10, 
+      "target": 0, 
+      "value": 5
+    }, 
+    {
+      "source": 10, 
+      "target": 8, 
+      "value": 2
+    }, 
+    {
+      "source": 10, 
+      "target": 4, 
+      "value": 8
+    }, 
+    {
+      "source": 10, 
+      "target": 3, 
+      "value": 2
+    }, 
+    {
+      "source": 10, 
+      "target": 7, 
+      "value": 7
+    }, 
+    {
+      "source": 10, 
+      "target": 2, 
+      "value": 8
+    }, 
+    {
+      "source": 10, 
+      "target": 5, 
+      "value": 3
+    }, 
+    {
+      "source": 10, 
+      "target": 6, 
+      "value": 2
+    }, 
+    {
+      "source": 10, 
+      "target": 9, 
+      "value": 6
+    }, 
+    {
+      "source": 7, 
+      "target": 1, 
+      "value": 5
+    }, 
+    {
+      "source": 2, 
+      "target": 6, 
+      "value": 1
+    }, 
+    {
+      "source": 2, 
+      "target": 1, 
+      "value": 5
+    }
+  ]
+}

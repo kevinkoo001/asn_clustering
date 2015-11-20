@@ -2,144 +2,19 @@
   "nodes": [
     {
       "country": 0, 
-      "ASN": "37141", 
-      "c_name": "GN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37325", 
-      "c_name": "GN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37427", 
-      "c_name": "GN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37430", 
-      "c_name": "GN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37461", 
-      "c_name": "GN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37612", 
-      "c_name": "GN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37665", 
-      "c_name": "GN"
-    }, 
-    {
-      "country": 1, 
       "ASN": "327769", 
       "c_name": "GW"
     }, 
     {
-      "country": 2, 
-      "ASN": "2905", 
-      "c_name": "ZA"
-    }, 
-    {
-      "country": 3, 
-      "ASN": "6774", 
-      "c_name": "BE"
-    }, 
-    {
-      "country": 4, 
-      "ASN": "57731", 
-      "c_name": "IL"
-    }, 
-    {
-      "country": 5, 
-      "ASN": "60171", 
-      "c_name": "ES"
-    }, 
-    {
-      "country": 6, 
-      "ASN": "5511", 
-      "c_name": "FR"
-    }, 
-    {
-      "country": 7, 
-      "ASN": "16637", 
-      "c_name": "ZA"
-    }, 
-    {
-      "country": 8, 
-      "ASN": "174", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 9, 
-      "ASN": "8346", 
-      "c_name": "EU"
+      "country": 1, 
+      "ASN": "37612", 
+      "c_name": "GN"
     }
   ], 
   "links": [
     {
-      "source": 0, 
-      "target": 11, 
-      "value": 9
-    }, 
-    {
-      "source": 14, 
-      "target": 2, 
-      "value": 10
-    }, 
-    {
-      "source": 2, 
-      "target": 9, 
-      "value": 3
-    }, 
-    {
-      "source": 2, 
-      "target": 10, 
-      "value": 10
-    }, 
-    {
-      "source": 14, 
-      "target": 3, 
-      "value": 7
-    }, 
-    {
-      "source": 4, 
-      "target": 12, 
-      "value": 9
-    }, 
-    {
-      "source": 4, 
-      "target": 15, 
-      "value": 9
-    }, 
-    {
-      "source": 8, 
-      "target": 5, 
-      "value": 10
-    }, 
-    {
-      "source": 13, 
-      "target": 5, 
-      "value": 10
-    }, 
-    {
-      "source": 7, 
-      "target": 5, 
-      "value": 6
-    }, 
-    {
-      "source": 5, 
-      "target": 11, 
-      "value": 3
-    }, 
-    {
-      "source": 6, 
-      "target": 11, 
+      "source": 1, 
+      "target": 0, 
       "value": 3
     }
   ]

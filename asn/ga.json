@@ -2,22 +2,7 @@
   "nodes": [
     {
       "country": 0, 
-      "ASN": "16058", 
-      "c_name": "GA"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "36880", 
-      "c_name": "GA"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37169", 
-      "c_name": "GA"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37246", 
+      "ASN": "37493", 
       "c_name": "GA"
     }, 
     {
@@ -27,130 +12,40 @@
     }, 
     {
       "country": 0, 
-      "ASN": "37493", 
+      "ASN": "37169", 
       "c_name": "GA"
     }, 
     {
       "country": 0, 
-      "ASN": "37582", 
-      "c_name": "GA"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37616", 
+      "ASN": "16058", 
       "c_name": "GA"
     }, 
     {
       "country": 0, 
       "ASN": "37669", 
       "c_name": "GA"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "327796", 
-      "c_name": "GA"
-    }, 
-    {
-      "country": 1, 
-      "ASN": "6774", 
-      "c_name": "BE"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "22351", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "3491", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "6453", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 3, 
-      "ASN": "5511", 
-      "c_name": "FR"
-    }, 
-    {
-      "country": 4, 
-      "ASN": "6713", 
-      "c_name": "MA"
     }
   ], 
   "links": [
     {
-      "source": 0, 
-      "target": 14, 
-      "value": 8
-    }, 
-    {
-      "source": 0, 
-      "target": 13, 
-      "value": 10
-    }, 
-    {
-      "source": 0, 
-      "target": 15, 
-      "value": 7
-    }, 
-    {
-      "source": 0, 
-      "target": 10, 
-      "value": 2
-    }, 
-    {
-      "source": 0, 
+      "source": 3, 
       "target": 2, 
-      "value": 2
-    }, 
-    {
-      "source": 0, 
-      "target": 4, 
-      "value": 2
-    }, 
-    {
-      "source": 0, 
-      "target": 5, 
-      "value": 4
-    }, 
-    {
-      "source": 0, 
-      "target": 8, 
       "value": 6
     }, 
     {
-      "source": 1, 
-      "target": 14, 
+      "source": 3, 
+      "target": 1, 
+      "value": 9
+    }, 
+    {
+      "source": 3, 
+      "target": 0, 
       "value": 3
     }, 
     {
       "source": 3, 
-      "target": 14, 
-      "value": 1
-    }, 
-    {
-      "source": 11, 
-      "target": 3, 
+      "target": 4, 
       "value": 10
-    }, 
-    {
-      "source": 6, 
-      "target": 14, 
-      "value": 3
-    }, 
-    {
-      "source": 12, 
-      "target": 7, 
-      "value": 7
-    }, 
-    {
-      "source": 7, 
-      "target": 13, 
-      "value": 4
     }
   ]
 }

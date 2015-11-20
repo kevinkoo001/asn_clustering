@@ -2,21 +2,6 @@
   "nodes": [
     {
       "country": 0, 
-      "ASN": "30619", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "31960", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "32017", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
       "ASN": "36865", 
       "c_name": "MZ"
     }, 
@@ -26,341 +11,111 @@
       "c_name": "MZ"
     }, 
     {
-      "country": 0, 
-      "ASN": "37042", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37047", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37064", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37099", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37110", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37135", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37139", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37223", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37342", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37436", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37477", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37489", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37509", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37556", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37635", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37697", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "327700", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "327759", 
-      "c_name": "MZ"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "42235", 
-      "c_name": "MZ"
-    }, 
-    {
       "country": 1, 
-      "ASN": "12491", 
-      "c_name": "IL"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "36969", 
-      "c_name": "MW"
-    }, 
-    {
-      "country": 3, 
-      "ASN": "37662", 
-      "c_name": "MU"
-    }, 
-    {
-      "country": 4, 
-      "ASN": "5713", 
-      "c_name": "ZA"
-    }, 
-    {
-      "country": 5, 
-      "ASN": "25139", 
-      "c_name": "EU"
-    }, 
-    {
-      "country": 6, 
-      "ASN": "3491", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 7, 
-      "ASN": "9498", 
-      "c_name": "IN"
-    }, 
-    {
-      "country": 8, 
-      "ASN": "6453", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 9, 
-      "ASN": "1299", 
-      "c_name": "EU"
-    }, 
-    {
-      "country": 10, 
       "ASN": "10798", 
       "c_name": "ZA"
     }, 
     {
-      "country": 11, 
-      "ASN": "29614", 
-      "c_name": "GH"
+      "country": 2, 
+      "ASN": "327759", 
+      "c_name": "MZ"
     }, 
     {
-      "country": 12, 
-      "ASN": "37100", 
-      "c_name": "MU"
+      "country": 2, 
+      "ASN": "30619", 
+      "c_name": "MZ"
     }, 
     {
-      "country": 13, 
-      "ASN": "3741", 
-      "c_name": "ZA"
+      "country": 2, 
+      "ASN": "25139", 
+      "c_name": "MZ"
     }, 
     {
-      "country": 14, 
+      "country": 3, 
       "ASN": "36986", 
       "c_name": "ZW"
     }, 
     {
-      "country": 15, 
-      "ASN": "36994", 
-      "c_name": "ZA"
+      "country": 4, 
+      "ASN": "36969", 
+      "c_name": "MW"
     }, 
     {
-      "country": 16, 
-      "ASN": "8928", 
-      "c_name": "GB"
+      "country": 5, 
+      "ASN": "37110", 
+      "c_name": "MZ"
+    }, 
+    {
+      "country": 5, 
+      "ASN": "32017", 
+      "c_name": "MZ"
+    }, 
+    {
+      "country": 5, 
+      "ASN": "42235", 
+      "c_name": "MZ"
+    }, 
+    {
+      "country": 5, 
+      "ASN": "37477", 
+      "c_name": "MZ"
     }
   ], 
   "links": [
     {
-      "source": 0, 
-      "target": 27, 
-      "value": 6
-    }, 
-    {
-      "source": 0, 
-      "target": 39, 
-      "value": 3
-    }, 
-    {
-      "source": 28, 
-      "target": 0, 
+      "source": 5, 
+      "target": 2, 
       "value": 7
     }, 
     {
-      "source": 0, 
-      "target": 4, 
-      "value": 2
+      "source": 5, 
+      "target": 11, 
+      "value": 7
     }, 
     {
-      "source": 0, 
-      "target": 25, 
-      "value": 3
-    }, 
-    {
-      "source": 0, 
-      "target": 37, 
+      "source": 4, 
+      "target": 5, 
       "value": 9
     }, 
     {
-      "source": 0, 
-      "target": 14, 
+      "source": 4, 
+      "target": 0, 
       "value": 4
     }, 
     {
-      "source": 0, 
-      "target": 35, 
-      "value": 1
+      "source": 4, 
+      "target": 1, 
+      "value": 7
     }, 
     {
-      "source": 0, 
-      "target": 26, 
-      "value": 1
+      "source": 4, 
+      "target": 7, 
+      "value": 9
     }, 
     {
-      "source": 1, 
-      "target": 35, 
-      "value": 6
+      "source": 4, 
+      "target": 6, 
+      "value": 3
     }, 
     {
-      "source": 2, 
-      "target": 23, 
+      "source": 8, 
+      "target": 11, 
       "value": 8
     }, 
     {
-      "source": 3, 
-      "target": 35, 
-      "value": 10
-    }, 
-    {
-      "source": 24, 
-      "target": 6, 
-      "value": 7
-    }, 
-    {
-      "source": 34, 
-      "target": 6, 
-      "value": 9
-    }, 
-    {
-      "source": 9, 
-      "target": 15, 
+      "source": 10, 
+      "target": 9, 
       "value": 2
     }, 
     {
-      "source": 9, 
-      "target": 23, 
-      "value": 4
-    }, 
-    {
-      "source": 29, 
-      "target": 11, 
-      "value": 9
-    }, 
-    {
-      "source": 28, 
-      "target": 12, 
-      "value": 9
-    }, 
-    {
-      "source": 38, 
-      "target": 12, 
-      "value": 10
-    }, 
-    {
-      "source": 33, 
-      "target": 12, 
-      "value": 1
-    }, 
-    {
-      "source": 32, 
-      "target": 13, 
-      "value": 6
-    }, 
-    {
-      "source": 13, 
-      "target": 31, 
-      "value": 4
-    }, 
-    {
-      "source": 13, 
-      "target": 30, 
-      "value": 7
-    }, 
-    {
-      "source": 35, 
-      "target": 14, 
+      "source": 10, 
+      "target": 8, 
       "value": 5
     }, 
     {
-      "source": 28, 
-      "target": 15, 
-      "value": 1
-    }, 
-    {
-      "source": 35, 
-      "target": 16, 
-      "value": 8
-    }, 
-    {
-      "source": 29, 
-      "target": 17, 
-      "value": 6
-    }, 
-    {
-      "source": 35, 
-      "target": 18, 
-      "value": 3
-    }, 
-    {
-      "source": 35, 
-      "target": 20, 
+      "source": 10, 
+      "target": 3, 
       "value": 10
-    }, 
-    {
-      "source": 22, 
-      "target": 23, 
-      "value": 7
-    }, 
-    {
-      "source": 36, 
-      "target": 23, 
-      "value": 6
-    }, 
-    {
-      "source": 0, 
-      "target": 31, 
-      "value": 3
     }
   ]
 }

@@ -2,135 +2,50 @@
   "nodes": [
     {
       "country": 0, 
-      "ASN": "4609", 
-      "c_name": "MO"
+      "ASN": "8657", 
+      "c_name": "PT"
     }, 
     {
-      "country": 0, 
+      "country": 1, 
       "ASN": "7582", 
       "c_name": "MO"
     }, 
     {
-      "country": 0, 
-      "ASN": "24335", 
-      "c_name": "MO"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "45918", 
-      "c_name": "MO"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "133613", 
-      "c_name": "MO"
-    }, 
-    {
-      "country": 1, 
-      "ASN": "4809", 
-      "c_name": "CN"
-    }, 
-    {
       "country": 2, 
-      "ASN": "10099", 
-      "c_name": "HK"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "7617", 
-      "c_name": "HK"
-    }, 
-    {
-      "country": 3, 
-      "ASN": "4837", 
-      "c_name": "CN"
-    }, 
-    {
-      "country": 4, 
-      "ASN": "3491", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 5, 
-      "ASN": "58453", 
-      "c_name": "HK"
-    }, 
-    {
-      "country": 5, 
-      "ASN": "17924", 
-      "c_name": "HK"
-    }, 
-    {
-      "country": 6, 
       "ASN": "7473", 
       "c_name": "SG"
     }, 
     {
-      "country": 7, 
-      "ASN": "8657", 
-      "c_name": "PT"
+      "country": 3, 
+      "ASN": "45918", 
+      "c_name": "MO"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "4609", 
+      "c_name": "MO"
     }
   ], 
   "links": [
     {
-      "source": 9, 
-      "target": 0, 
-      "value": 6
+      "source": 4, 
+      "target": 2, 
+      "value": 9
     }, 
     {
-      "source": 0, 
-      "target": 12, 
-      "value": 10
-    }, 
-    {
-      "source": 0, 
+      "source": 4, 
       "target": 1, 
       "value": 8
     }, 
     {
-      "source": 0, 
-      "target": 13, 
-      "value": 10
-    }, 
-    {
-      "source": 3, 
+      "source": 4, 
       "target": 0, 
-      "value": 10
-    }, 
-    {
-      "source": 0, 
-      "target": 5, 
-      "value": 3
-    }, 
-    {
-      "source": 0, 
-      "target": 8, 
-      "value": 9
-    }, 
-    {
-      "source": 0, 
-      "target": 7, 
-      "value": 3
-    }, 
-    {
-      "source": 6, 
-      "target": 0, 
-      "value": 10
-    }, 
-    {
-      "source": 0, 
-      "target": 10, 
-      "value": 1
-    }, 
-    {
-      "source": 11, 
-      "target": 3, 
-      "value": 9
-    }, 
-    {
-      "source": 6, 
-      "target": 4, 
       "value": 5
+    }, 
+    {
+      "source": 4, 
+      "target": 3, 
+      "value": 4
     }
   ]
 }

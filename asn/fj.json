@@ -1,0 +1,51 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "45349", 
+      "c_name": "FJ"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "38442", 
+      "c_name": "FJ"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "4638", 
+      "c_name": "FJ"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "38568", 
+      "c_name": "NZ"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "24390", 
+      "c_name": "FJ"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "9241", 
+      "c_name": "FJ"
+    }
+  ], 
+  "links": [
+    {
+      "source": 5, 
+      "target": 1, 
+      "value": 3
+    }, 
+    {
+      "source": 4, 
+      "target": 3, 
+      "value": 1
+    }, 
+    {
+      "source": 0, 
+      "target": 2, 
+      "value": 3
+    }
+  ]
+}

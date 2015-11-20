@@ -2,26 +2,11 @@
   "nodes": [
     {
       "country": 0, 
-      "ASN": "34497", 
-      "c_name": "GG"
-    }, 
-    {
-      "country": 0, 
       "ASN": "43538", 
       "c_name": "GG"
     }, 
     {
       "country": 1, 
-      "ASN": "8680", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "8681", 
-      "c_name": "JE"
-    }, 
-    {
-      "country": 3, 
       "ASN": "13216", 
       "c_name": "GB"
     }
@@ -29,23 +14,8 @@
   "links": [
     {
       "source": 0, 
-      "target": 2, 
-      "value": 4
-    }, 
-    {
-      "source": 0, 
-      "target": 3, 
-      "value": 8
-    }, 
-    {
-      "source": 1, 
-      "target": 3, 
-      "value": 3
-    }, 
-    {
-      "source": 4, 
       "target": 1, 
-      "value": 6
+      "value": 1
     }
   ]
 }

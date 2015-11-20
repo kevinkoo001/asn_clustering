@@ -1,0 +1,271 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "23673", 
+      "c_name": "KH"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "132232", 
+      "c_name": "BT"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "29611", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "41811", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "38740", 
+      "c_name": "BT"
+    }, 
+    {
+      "country": 4, 
+      "ASN": "33891", 
+      "c_name": "DE"
+    }, 
+    {
+      "country": 5, 
+      "ASN": "17660", 
+      "c_name": "BT"
+    }, 
+    {
+      "country": 6, 
+      "ASN": "56730", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 6, 
+      "ASN": "41695", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 7, 
+      "ASN": "36351", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 8, 
+      "ASN": "37100", 
+      "c_name": "MU"
+    }, 
+    {
+      "country": 9, 
+      "ASN": "30844", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 10, 
+      "ASN": "38004", 
+      "c_name": "BT"
+    }, 
+    {
+      "country": 11, 
+      "ASN": "202109", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 11, 
+      "ASN": "50300", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 11, 
+      "ASN": "43531", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 12, 
+      "ASN": "29636", 
+      "c_name": "IE"
+    }, 
+    {
+      "country": 13, 
+      "ASN": "59219", 
+      "c_name": "BT"
+    }, 
+    {
+      "country": 14, 
+      "ASN": "31133", 
+      "c_name": "RU"
+    }, 
+    {
+      "country": 15, 
+      "ASN": "25091", 
+      "c_name": "CH"
+    }, 
+    {
+      "country": 16, 
+      "ASN": "39202", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 17, 
+      "ASN": "29208", 
+      "c_name": "SK"
+    }, 
+    {
+      "country": 18, 
+      "ASN": "25160", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 19, 
+      "ASN": "19151", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 20, 
+      "ASN": "34288", 
+      "c_name": "CH"
+    }, 
+    {
+      "country": 21, 
+      "ASN": "20485", 
+      "c_name": "RU"
+    }, 
+    {
+      "country": 22, 
+      "ASN": "42708", 
+      "c_name": "SE"
+    }
+  ], 
+  "links": [
+    {
+      "source": 6, 
+      "target": 23, 
+      "value": 7
+    }, 
+    {
+      "source": 6, 
+      "target": 25, 
+      "value": 3
+    }, 
+    {
+      "source": 6, 
+      "target": 0, 
+      "value": 3
+    }, 
+    {
+      "source": 6, 
+      "target": 19, 
+      "value": 6
+    }, 
+    {
+      "source": 6, 
+      "target": 22, 
+      "value": 9
+    }, 
+    {
+      "source": 6, 
+      "target": 21, 
+      "value": 6
+    }, 
+    {
+      "source": 6, 
+      "target": 2, 
+      "value": 4
+    }, 
+    {
+      "source": 6, 
+      "target": 16, 
+      "value": 1
+    }, 
+    {
+      "source": 6, 
+      "target": 11, 
+      "value": 8
+    }, 
+    {
+      "source": 6, 
+      "target": 18, 
+      "value": 2
+    }, 
+    {
+      "source": 6, 
+      "target": 5, 
+      "value": 7
+    }, 
+    {
+      "source": 6, 
+      "target": 24, 
+      "value": 10
+    }, 
+    {
+      "source": 6, 
+      "target": 9, 
+      "value": 6
+    }, 
+    {
+      "source": 6, 
+      "target": 10, 
+      "value": 1
+    }, 
+    {
+      "source": 6, 
+      "target": 12, 
+      "value": 5
+    }, 
+    {
+      "source": 6, 
+      "target": 20, 
+      "value": 5
+    }, 
+    {
+      "source": 6, 
+      "target": 8, 
+      "value": 1
+    }, 
+    {
+      "source": 6, 
+      "target": 3, 
+      "value": 1
+    }, 
+    {
+      "source": 6, 
+      "target": 26, 
+      "value": 5
+    }, 
+    {
+      "source": 6, 
+      "target": 15, 
+      "value": 10
+    }, 
+    {
+      "source": 6, 
+      "target": 14, 
+      "value": 8
+    }, 
+    {
+      "source": 6, 
+      "target": 7, 
+      "value": 3
+    }, 
+    {
+      "source": 6, 
+      "target": 17, 
+      "value": 6
+    }, 
+    {
+      "source": 6, 
+      "target": 1, 
+      "value": 2
+    }, 
+    {
+      "source": 6, 
+      "target": 13, 
+      "value": 7
+    }, 
+    {
+      "source": 4, 
+      "target": 1, 
+      "value": 9
+    }
+  ]
+}

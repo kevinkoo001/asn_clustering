@@ -1,0 +1,261 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "10130", 
+      "c_name": "FM"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "7575", 
+      "c_name": "AU"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "56200", 
+      "c_name": "GU"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "3605", 
+      "c_name": "GU"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "4739", 
+      "c_name": "AU"
+    }, 
+    {
+      "country": 4, 
+      "ASN": "11666", 
+      "c_name": "CA"
+    }, 
+    {
+      "country": 5, 
+      "ASN": "9246", 
+      "c_name": "GU"
+    }, 
+    {
+      "country": 6, 
+      "ASN": "4181", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 7, 
+      "ASN": "7131", 
+      "c_name": "GU"
+    }, 
+    {
+      "country": 8, 
+      "ASN": "13030", 
+      "c_name": "CH"
+    }, 
+    {
+      "country": 9, 
+      "ASN": "15412", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 10, 
+      "ASN": "6939", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 11, 
+      "ASN": "58511", 
+      "c_name": "AU"
+    }, 
+    {
+      "country": 12, 
+      "ASN": "10026", 
+      "c_name": "HK"
+    }, 
+    {
+      "country": 13, 
+      "ASN": "19151", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 13, 
+      "ASN": "36351", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 13, 
+      "ASN": "14361", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 14, 
+      "ASN": "12989", 
+      "c_name": "NL"
+    }, 
+    {
+      "country": 15, 
+      "ASN": "32614", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 16, 
+      "ASN": "8359", 
+      "c_name": "RU"
+    }, 
+    {
+      "country": 17, 
+      "ASN": "21996", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 18, 
+      "ASN": "4826", 
+      "c_name": "AU"
+    }, 
+    {
+      "country": 19, 
+      "ASN": "5580", 
+      "c_name": "NL"
+    }
+  ], 
+  "links": [
+    {
+      "source": 3, 
+      "target": 7, 
+      "value": 2
+    }, 
+    {
+      "source": 3, 
+      "target": 4, 
+      "value": 5
+    }, 
+    {
+      "source": 3, 
+      "target": 21, 
+      "value": 2
+    }, 
+    {
+      "source": 3, 
+      "target": 22, 
+      "value": 6
+    }, 
+    {
+      "source": 3, 
+      "target": 11, 
+      "value": 2
+    }, 
+    {
+      "source": 3, 
+      "target": 8, 
+      "value": 3
+    }, 
+    {
+      "source": 3, 
+      "target": 1, 
+      "value": 6
+    }, 
+    {
+      "source": 3, 
+      "target": 19, 
+      "value": 4
+    }, 
+    {
+      "source": 3, 
+      "target": 13, 
+      "value": 2
+    }, 
+    {
+      "source": 3, 
+      "target": 0, 
+      "value": 4
+    }, 
+    {
+      "source": 3, 
+      "target": 17, 
+      "value": 2
+    }, 
+    {
+      "source": 3, 
+      "target": 16, 
+      "value": 3
+    }, 
+    {
+      "source": 3, 
+      "target": 14, 
+      "value": 9
+    }, 
+    {
+      "source": 3, 
+      "target": 20, 
+      "value": 2
+    }, 
+    {
+      "source": 3, 
+      "target": 18, 
+      "value": 5
+    }, 
+    {
+      "source": 3, 
+      "target": 15, 
+      "value": 2
+    }, 
+    {
+      "source": 3, 
+      "target": 12, 
+      "value": 7
+    }, 
+    {
+      "source": 6, 
+      "target": 13, 
+      "value": 6
+    }, 
+    {
+      "source": 6, 
+      "target": 5, 
+      "value": 9
+    }, 
+    {
+      "source": 6, 
+      "target": 17, 
+      "value": 6
+    }, 
+    {
+      "source": 6, 
+      "target": 9, 
+      "value": 9
+    }, 
+    {
+      "source": 6, 
+      "target": 16, 
+      "value": 7
+    }, 
+    {
+      "source": 6, 
+      "target": 10, 
+      "value": 7
+    }, 
+    {
+      "source": 6, 
+      "target": 14, 
+      "value": 2
+    }, 
+    {
+      "source": 6, 
+      "target": 18, 
+      "value": 7
+    }, 
+    {
+      "source": 6, 
+      "target": 15, 
+      "value": 10
+    }, 
+    {
+      "source": 6, 
+      "target": 2, 
+      "value": 1
+    }, 
+    {
+      "source": 6, 
+      "target": 12, 
+      "value": 7
+    }
+  ]
+}

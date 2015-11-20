@@ -9,83 +9,13 @@
       "country": 0, 
       "ASN": "47899", 
       "c_name": "TM"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "51327", 
-      "c_name": "TM"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "59974", 
-      "c_name": "TM"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "201558", 
-      "c_name": "TM"
-    }, 
-    {
-      "country": 1, 
-      "ASN": "9121", 
-      "c_name": "TR"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "12389", 
-      "c_name": "RU"
-    }, 
-    {
-      "country": 3, 
-      "ASN": "6453", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 4, 
-      "ASN": "197118", 
-      "c_name": "KG"
-    }, 
-    {
-      "country": 5, 
-      "ASN": "9198", 
-      "c_name": "KZ"
     }
   ], 
   "links": [
     {
       "source": 0, 
-      "target": 7, 
-      "value": 10
-    }, 
-    {
-      "source": 0, 
-      "target": 5, 
-      "value": 4
-    }, 
-    {
-      "source": 0, 
-      "target": 9, 
-      "value": 5
-    }, 
-    {
-      "source": 6, 
-      "target": 0, 
-      "value": 2
-    }, 
-    {
-      "source": 0, 
       "target": 1, 
-      "value": 9
-    }, 
-    {
-      "source": 4, 
-      "target": 0, 
-      "value": 1
-    }, 
-    {
-      "source": 8, 
-      "target": 2, 
-      "value": 7
+      "value": 6
     }
   ]
 }

@@ -6,19 +6,9 @@
       "c_name": "MR"
     }, 
     {
-      "country": 0, 
-      "ASN": "37508", 
-      "c_name": "MR"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37541", 
-      "c_name": "MR"
-    }, 
-    {
       "country": 1, 
-      "ASN": "6713", 
-      "c_name": "MA"
+      "ASN": "25543", 
+      "c_name": "BF"
     }, 
     {
       "country": 2, 
@@ -27,55 +17,25 @@
     }, 
     {
       "country": 3, 
-      "ASN": "25543", 
-      "c_name": "BF"
-    }, 
-    {
-      "country": 4, 
-      "ASN": "5511", 
-      "c_name": "FR"
-    }, 
-    {
-      "country": 5, 
-      "ASN": "8346", 
-      "c_name": "EU"
+      "ASN": "37508", 
+      "c_name": "MR"
     }
   ], 
   "links": [
     {
       "source": 0, 
-      "target": 6, 
-      "value": 5
-    }, 
-    {
-      "source": 0, 
-      "target": 3, 
-      "value": 1
-    }, 
-    {
-      "source": 0, 
-      "target": 7, 
-      "value": 3
-    }, 
-    {
-      "source": 4, 
-      "target": 0, 
-      "value": 2
-    }, 
-    {
-      "source": 5, 
-      "target": 0, 
+      "target": 2, 
       "value": 8
     }, 
     {
       "source": 0, 
       "target": 1, 
-      "value": 4
+      "value": 9
     }, 
     {
-      "source": 1, 
-      "target": 6, 
-      "value": 3
+      "source": 0, 
+      "target": 3, 
+      "value": 9
     }
   ]
 }

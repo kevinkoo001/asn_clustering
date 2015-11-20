@@ -1,0 +1,41 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "52389", 
+      "c_name": "BQ"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "11139", 
+      "c_name": "DM"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "31794", 
+      "c_name": "BB"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "11594", 
+      "c_name": "AG"
+    }
+  ], 
+  "links": [
+    {
+      "source": 1, 
+      "target": 3, 
+      "value": 10
+    }, 
+    {
+      "source": 1, 
+      "target": 2, 
+      "value": 7
+    }, 
+    {
+      "source": 1, 
+      "target": 0, 
+      "value": 2
+    }
+  ]
+}

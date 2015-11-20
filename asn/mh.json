@@ -2,30 +2,20 @@
   "nodes": [
     {
       "country": 0, 
-      "ASN": "24439", 
-      "c_name": "MH"
+      "ASN": "132462", 
+      "c_name": "SB"
     }, 
     {
       "country": 1, 
-      "ASN": "6453", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "132462", 
-      "c_name": "SB"
+      "ASN": "24439", 
+      "c_name": "MH"
     }
   ], 
   "links": [
     {
-      "source": 0, 
-      "target": 1, 
-      "value": 10
-    }, 
-    {
-      "source": 2, 
+      "source": 1, 
       "target": 0, 
-      "value": 10
+      "value": 3
     }
   ]
 }

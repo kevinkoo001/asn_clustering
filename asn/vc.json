@@ -9,53 +9,13 @@
       "country": 0, 
       "ASN": "46408", 
       "c_name": "VC"
-    }, 
-    {
-      "country": 1, 
-      "ASN": "174", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "27665", 
-      "c_name": "TT"
-    }, 
-    {
-      "country": 3, 
-      "ASN": "23520", 
-      "c_name": "US"
     }
   ], 
   "links": [
     {
       "source": 0, 
-      "target": 2, 
-      "value": 4
-    }, 
-    {
-      "source": 0, 
       "target": 1, 
-      "value": 3
-    }, 
-    {
-      "source": 0, 
-      "target": 4, 
-      "value": 5
-    }, 
-    {
-      "source": 0, 
-      "target": 3, 
-      "value": 9
-    }, 
-    {
-      "source": 4, 
-      "target": 1, 
-      "value": 9
-    }, 
-    {
-      "source": 3, 
-      "target": 1, 
-      "value": 1
+      "value": 8
     }
   ]
 }

@@ -9,92 +9,12 @@
       "country": 0, 
       "ASN": "30873", 
       "c_name": "YE"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "201051", 
-      "c_name": "YE"
-    }, 
-    {
-      "country": 1, 
-      "ASN": "30990", 
-      "c_name": "DJ"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "48237", 
-      "c_name": "SA"
-    }, 
-    {
-      "country": 3, 
-      "ASN": "8529", 
-      "c_name": "OM"
-    }, 
-    {
-      "country": 4, 
-      "ASN": "6762", 
-      "c_name": "IT"
-    }, 
-    {
-      "country": 5, 
-      "ASN": "39386", 
-      "c_name": "SA"
-    }, 
-    {
-      "country": 6, 
-      "ASN": "6453", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 7, 
-      "ASN": "35819", 
-      "c_name": "SA"
-    }, 
-    {
-      "country": 8, 
-      "ASN": "15412", 
-      "c_name": "GB"
     }
   ], 
   "links": [
     {
       "source": 0, 
-      "target": 8, 
-      "value": 10
-    }, 
-    {
-      "source": 0, 
-      "target": 6, 
-      "value": 9
-    }, 
-    {
-      "source": 0, 
-      "target": 5, 
-      "value": 3
-    }, 
-    {
-      "source": 0, 
-      "target": 10, 
-      "value": 8
-    }, 
-    {
-      "source": 0, 
-      "target": 3, 
-      "value": 9
-    }, 
-    {
-      "source": 0, 
-      "target": 9, 
-      "value": 4
-    }, 
-    {
-      "source": 0, 
-      "target": 7, 
-      "value": 9
-    }, 
-    {
-      "source": 0, 
-      "target": 4, 
+      "target": 1, 
       "value": 10
     }
   ]

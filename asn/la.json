@@ -1,0 +1,71 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "55508", 
+      "c_name": "LA"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "42909", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "133500", 
+      "c_name": "LA"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "133630", 
+      "c_name": "LA"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "9873", 
+      "c_name": "LA"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "23900", 
+      "c_name": "LA"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "24337", 
+      "c_name": "LA"
+    }
+  ], 
+  "links": [
+    {
+      "source": 4, 
+      "target": 0, 
+      "value": 8
+    }, 
+    {
+      "source": 4, 
+      "target": 3, 
+      "value": 6
+    }, 
+    {
+      "source": 0, 
+      "target": 5, 
+      "value": 8
+    }, 
+    {
+      "source": 0, 
+      "target": 6, 
+      "value": 1
+    }, 
+    {
+      "source": 0, 
+      "target": 1, 
+      "value": 4
+    }, 
+    {
+      "source": 0, 
+      "target": 2, 
+      "value": 9
+    }
+  ]
+}

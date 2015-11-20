@@ -2,77 +2,12 @@
   "nodes": [
     {
       "country": 0, 
-      "ASN": "31245", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37107", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37351", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37492", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37504", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37551", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37671", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
       "ASN": "37693", 
       "c_name": "TN"
     }, 
     {
       "country": 0, 
-      "ASN": "37703", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37705", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37706", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37709", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "327718", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "2609", 
-      "c_name": "TN"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "5438", 
+      "ASN": "37504", 
       "c_name": "TN"
     }, 
     {
@@ -82,105 +17,75 @@
     }, 
     {
       "country": 2, 
-      "ASN": "6762", 
-      "c_name": "IT"
+      "ASN": "37709", 
+      "c_name": "TN"
     }, 
     {
-      "country": 3, 
-      "ASN": "3356", 
-      "c_name": "US"
+      "country": 2, 
+      "ASN": "2609", 
+      "c_name": "TN"
     }, 
     {
-      "country": 4, 
-      "ASN": "5511", 
-      "c_name": "FR"
+      "country": 2, 
+      "ASN": "37671", 
+      "c_name": "TN"
     }, 
     {
-      "country": 5, 
-      "ASN": "174", 
-      "c_name": "US"
+      "country": 2, 
+      "ASN": "5438", 
+      "c_name": "TN"
     }, 
     {
-      "country": 6, 
-      "ASN": "8928", 
-      "c_name": "GB"
+      "country": 2, 
+      "ASN": "37705", 
+      "c_name": "TN"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "37703", 
+      "c_name": "TN"
     }
   ], 
   "links": [
     {
-      "source": 13, 
-      "target": 3, 
-      "value": 1
-    }, 
-    {
-      "source": 17, 
-      "target": 3, 
-      "value": 1
-    }, 
-    {
-      "source": 15, 
-      "target": 3, 
-      "value": 1
-    }, 
-    {
-      "source": 3, 
-      "target": 18, 
-      "value": 2
+      "source": 4, 
+      "target": 2, 
+      "value": 9
     }, 
     {
       "source": 4, 
-      "target": 14, 
-      "value": 3
-    }, 
-    {
-      "source": 6, 
-      "target": 14, 
-      "value": 3
-    }, 
-    {
-      "source": 19, 
-      "target": 7, 
-      "value": 10
-    }, 
-    {
-      "source": 7, 
-      "target": 14, 
-      "value": 10
-    }, 
-    {
-      "source": 9, 
-      "target": 14, 
-      "value": 10
-    }, 
-    {
-      "source": 13, 
-      "target": 15, 
-      "value": 8
-    }, 
-    {
-      "source": 13, 
-      "target": 14, 
-      "value": 8
-    }, 
-    {
-      "source": 13, 
-      "target": 17, 
+      "target": 6, 
       "value": 1
     }, 
     {
-      "source": 13, 
-      "target": 16, 
+      "source": 6, 
+      "target": 1, 
       "value": 8
     }, 
     {
-      "source": 13, 
-      "target": 20, 
+      "source": 6, 
+      "target": 5, 
+      "value": 4
+    }, 
+    {
+      "source": 6, 
+      "target": 0, 
+      "value": 10
+    }, 
+    {
+      "source": 6, 
+      "target": 8, 
       "value": 6
     }, 
     {
-      "source": 13, 
-      "target": 0, 
-      "value": 9
+      "source": 6, 
+      "target": 7, 
+      "value": 5
+    }, 
+    {
+      "source": 0, 
+      "target": 3, 
+      "value": 5
     }
   ]
 }

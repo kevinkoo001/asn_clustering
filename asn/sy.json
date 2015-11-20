@@ -2,85 +2,20 @@
   "nodes": [
     {
       "country": 0, 
-      "ASN": "24814", 
+      "ASN": "29386", 
       "c_name": "SY"
     }, 
     {
       "country": 0, 
       "ASN": "29256", 
       "c_name": "SY"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "29386", 
-      "c_name": "SY"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "39154", 
-      "c_name": "SY"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "48065", 
-      "c_name": "SY"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "52209", 
-      "c_name": "SY"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "201550", 
-      "c_name": "SY"
-    }, 
-    {
-      "country": 1, 
-      "ASN": "9121", 
-      "c_name": "TR"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "6762", 
-      "c_name": "IT"
-    }, 
-    {
-      "country": 3, 
-      "ASN": "3491", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 4, 
-      "ASN": "3320", 
-      "c_name": "DE"
     }
   ], 
   "links": [
     {
       "source": 0, 
-      "target": 7, 
-      "value": 5
-    }, 
-    {
-      "source": 1, 
-      "target": 2, 
-      "value": 9
-    }, 
-    {
-      "source": 2, 
-      "target": 10, 
-      "value": 2
-    }, 
-    {
-      "source": 2, 
-      "target": 9, 
-      "value": 6
-    }, 
-    {
-      "source": 2, 
-      "target": 8, 
-      "value": 6
+      "target": 1, 
+      "value": 1
     }
   ]
 }

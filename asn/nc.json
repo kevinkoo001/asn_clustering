@@ -1,0 +1,131 @@
+{
+  "nodes": [
+    {
+      "country": 0, 
+      "ASN": "45461", 
+      "c_name": "NC"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "56089", 
+      "c_name": "NC"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "131995", 
+      "c_name": "NC"
+    }, 
+    {
+      "country": 0, 
+      "ASN": "132079", 
+      "c_name": "NC"
+    }, 
+    {
+      "country": 1, 
+      "ASN": "38809", 
+      "c_name": "AU"
+    }, 
+    {
+      "country": 2, 
+      "ASN": "17480", 
+      "c_name": "NC"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "33891", 
+      "c_name": "DE"
+    }, 
+    {
+      "country": 4, 
+      "ASN": "58511", 
+      "c_name": "AU"
+    }, 
+    {
+      "country": 5, 
+      "ASN": "18200", 
+      "c_name": "NC"
+    }, 
+    {
+      "country": 5, 
+      "ASN": "45345", 
+      "c_name": "NC"
+    }, 
+    {
+      "country": 6, 
+      "ASN": "2198", 
+      "c_name": "FR"
+    }, 
+    {
+      "country": 7, 
+      "ASN": "20144", 
+      "c_name": "US"
+    }, 
+    {
+      "country": 8, 
+      "ASN": "56055", 
+      "c_name": "NC"
+    }
+  ], 
+  "links": [
+    {
+      "source": 8, 
+      "target": 10, 
+      "value": 6
+    }, 
+    {
+      "source": 8, 
+      "target": 5, 
+      "value": 5
+    }, 
+    {
+      "source": 8, 
+      "target": 11, 
+      "value": 4
+    }, 
+    {
+      "source": 8, 
+      "target": 6, 
+      "value": 2
+    }, 
+    {
+      "source": 8, 
+      "target": 4, 
+      "value": 4
+    }, 
+    {
+      "source": 8, 
+      "target": 9, 
+      "value": 5
+    }, 
+    {
+      "source": 8, 
+      "target": 0, 
+      "value": 9
+    }, 
+    {
+      "source": 8, 
+      "target": 12, 
+      "value": 5
+    }, 
+    {
+      "source": 8, 
+      "target": 1, 
+      "value": 2
+    }, 
+    {
+      "source": 8, 
+      "target": 7, 
+      "value": 5
+    }, 
+    {
+      "source": 8, 
+      "target": 2, 
+      "value": 5
+    }, 
+    {
+      "source": 8, 
+      "target": 3, 
+      "value": 3
+    }
+  ]
+}

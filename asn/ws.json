@@ -2,16 +2,6 @@
   "nodes": [
     {
       "country": 0, 
-      "ASN": "9218", 
-      "c_name": "WS"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "17993", 
-      "c_name": "WS"
-    }, 
-    {
-      "country": 0, 
       "ASN": "38227", 
       "c_name": "WS"
     }, 
@@ -19,112 +9,12 @@
       "country": 0, 
       "ASN": "38800", 
       "c_name": "WS"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "55579", 
-      "c_name": "WS"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "59240", 
-      "c_name": "WS"
-    }, 
-    {
-      "country": 1, 
-      "ASN": "45474", 
-      "c_name": "HK"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "60725", 
-      "c_name": "JE"
-    }, 
-    {
-      "country": 3, 
-      "ASN": "23657", 
-      "c_name": "AS"
-    }, 
-    {
-      "country": 4, 
-      "ASN": "4323", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 5, 
-      "ASN": "4637", 
-      "c_name": "HK"
-    }, 
-    {
-      "country": 6, 
-      "ASN": "71", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 7, 
-      "ASN": "45250", 
-      "c_name": "TW"
-    }, 
-    {
-      "country": 8, 
-      "ASN": "32787", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 9, 
-      "ASN": "4780", 
-      "c_name": "TW"
     }
   ], 
   "links": [
     {
-      "source": 11, 
-      "target": 0, 
-      "value": 7
-    }, 
-    {
-      "source": 10, 
-      "target": 0, 
-      "value": 7
-    }, 
-    {
-      "source": 14, 
-      "target": 0, 
-      "value": 10
-    }, 
-    {
-      "source": 13, 
-      "target": 0, 
-      "value": 9
-    }, 
-    {
-      "source": 12, 
-      "target": 0, 
-      "value": 1
-    }, 
-    {
-      "source": 6, 
-      "target": 0, 
-      "value": 2
-    }, 
-    {
       "source": 1, 
-      "target": 8, 
-      "value": 5
-    }, 
-    {
-      "source": 2, 
-      "target": 9, 
-      "value": 5
-    }, 
-    {
-      "source": 8, 
-      "target": 3, 
-      "value": 4
-    }, 
-    {
-      "source": 3, 
-      "target": 7, 
+      "target": 0, 
       "value": 2
     }
   ]

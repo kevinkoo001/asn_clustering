@@ -2,210 +2,30 @@
   "nodes": [
     {
       "country": 0, 
-      "ASN": "33773", 
-      "c_name": "MW"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "36913", 
-      "c_name": "MW"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "36969", 
-      "c_name": "MW"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37098", 
-      "c_name": "MW"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37187", 
-      "c_name": "MW"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37215", 
-      "c_name": "MW"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37294", 
-      "c_name": "MW"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37300", 
-      "c_name": "MW"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37440", 
-      "c_name": "MW"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37502", 
-      "c_name": "MW"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37651", 
-      "c_name": "MW"
-    }, 
-    {
-      "country": 1, 
-      "ASN": "12491", 
-      "c_name": "IL"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "6939", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 3, 
-      "ASN": "30844", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 4, 
-      "ASN": "37662", 
-      "c_name": "MU"
-    }, 
-    {
-      "country": 5, 
-      "ASN": "10474", 
-      "c_name": "ZA"
-    }, 
-    {
-      "country": 6, 
-      "ASN": "6762", 
-      "c_name": "IT"
-    }, 
-    {
-      "country": 7, 
-      "ASN": "3491", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 8, 
-      "ASN": "37133", 
-      "c_name": "TZ"
-    }, 
-    {
-      "country": 9, 
-      "ASN": "6453", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 10, 
       "ASN": "10798", 
       "c_name": "ZA"
     }, 
     {
-      "country": 11, 
-      "ASN": "37100", 
-      "c_name": "MU"
+      "country": 1, 
+      "ASN": "37440", 
+      "c_name": "MW"
     }, 
     {
-      "country": 12, 
-      "ASN": "174", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 13, 
-      "ASN": "30619", 
-      "c_name": "MZ"
+      "country": 1, 
+      "ASN": "37187", 
+      "c_name": "MW"
     }
   ], 
   "links": [
     {
-      "source": 11, 
-      "target": 1, 
-      "value": 5
-    }, 
-    {
-      "source": 1, 
-      "target": 21, 
-      "value": 10
+      "source": 2, 
+      "target": 0, 
+      "value": 7
     }, 
     {
       "source": 2, 
-      "target": 16, 
-      "value": 9
-    }, 
-    {
-      "source": 23, 
-      "target": 2, 
-      "value": 2
-    }, 
-    {
-      "source": 11, 
-      "target": 3, 
+      "target": 1, 
       "value": 4
-    }, 
-    {
-      "source": 3, 
-      "target": 14, 
-      "value": 2
-    }, 
-    {
-      "source": 22, 
-      "target": 4, 
-      "value": 10
-    }, 
-    {
-      "source": 4, 
-      "target": 19, 
-      "value": 2
-    }, 
-    {
-      "source": 4, 
-      "target": 12, 
-      "value": 8
-    }, 
-    {
-      "source": 15, 
-      "target": 4, 
-      "value": 9
-    }, 
-    {
-      "source": 13, 
-      "target": 4, 
-      "value": 10
-    }, 
-    {
-      "source": 20, 
-      "target": 4, 
-      "value": 1
-    }, 
-    {
-      "source": 4, 
-      "target": 8, 
-      "value": 9
-    }, 
-    {
-      "source": 4, 
-      "target": 14, 
-      "value": 6
-    }, 
-    {
-      "source": 17, 
-      "target": 6, 
-      "value": 5
-    }, 
-    {
-      "source": 17, 
-      "target": 8, 
-      "value": 4
-    }, 
-    {
-      "source": 18, 
-      "target": 8, 
-      "value": 6
     }
   ]
 }

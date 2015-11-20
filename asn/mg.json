@@ -2,73 +2,58 @@
   "nodes": [
     {
       "country": 0, 
-      "ASN": "37037", 
-      "c_name": "MG"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37054", 
-      "c_name": "MG"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37303", 
-      "c_name": "MG"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37327", 
-      "c_name": "MG"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "37608", 
-      "c_name": "MG"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "327699", 
-      "c_name": "MG"
-    }, 
-    {
-      "country": 0, 
-      "ASN": "327834", 
-      "c_name": "MG"
-    }, 
-    {
-      "country": 1, 
-      "ASN": "57734", 
-      "c_name": "FR"
-    }, 
-    {
-      "country": 2, 
-      "ASN": "39792", 
-      "c_name": "RU"
-    }, 
-    {
-      "country": 3, 
-      "ASN": "8422", 
-      "c_name": "DE"
-    }, 
-    {
-      "country": 4, 
       "ASN": "21042", 
       "c_name": "IL"
     }, 
     {
-      "country": 5, 
-      "ASN": "31019", 
+      "country": 1, 
+      "ASN": "41095", 
       "c_name": "NL"
     }, 
     {
+      "country": 2, 
+      "ASN": "37037", 
+      "c_name": "MG"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "41811", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 3, 
+      "ASN": "39202", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 4, 
+      "ASN": "48166", 
+      "c_name": "RU"
+    }, 
+    {
+      "country": 5, 
+      "ASN": "56730", 
+      "c_name": "GB"
+    }, 
+    {
+      "country": 5, 
+      "ASN": "41695", 
+      "c_name": "GB"
+    }, 
+    {
       "country": 6, 
-      "ASN": "30990", 
-      "c_name": "DJ"
+      "ASN": "37100", 
+      "c_name": "MU"
     }, 
     {
       "country": 7, 
-      "ASN": "1267", 
-      "c_name": "EU"
+      "ASN": "37054", 
+      "c_name": "MG"
+    }, 
+    {
+      "country": 8, 
+      "ASN": "202109", 
+      "c_name": "GB"
     }, 
     {
       "country": 8, 
@@ -76,491 +61,81 @@
       "c_name": "GB"
     }, 
     {
-      "country": 9, 
-      "ASN": "20485", 
-      "c_name": "RU"
-    }, 
-    {
-      "country": 10, 
-      "ASN": "12859", 
-      "c_name": "NL"
-    }, 
-    {
-      "country": 11, 
-      "ASN": "202109", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 12, 
-      "ASN": "9304", 
-      "c_name": "HK"
-    }, 
-    {
-      "country": 13, 
-      "ASN": "8468", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 14, 
-      "ASN": "174", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 15, 
-      "ASN": "12779", 
-      "c_name": "IT"
-    }, 
-    {
-      "country": 16, 
-      "ASN": "56730", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 17, 
-      "ASN": "25091", 
-      "c_name": "CH"
-    }, 
-    {
-      "country": 18, 
-      "ASN": "39202", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 18, 
-      "ASN": "25160", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 19, 
-      "ASN": "42708", 
-      "c_name": "SE"
-    }, 
-    {
-      "country": 20, 
-      "ASN": "14537", 
-      "c_name": "CA"
-    }, 
-    {
-      "country": 21, 
-      "ASN": "29611", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 22, 
-      "ASN": "29636", 
-      "c_name": "IE"
-    }, 
-    {
-      "country": 23, 
-      "ASN": "19151", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 24, 
-      "ASN": "33891", 
-      "c_name": "DE"
-    }, 
-    {
-      "country": 25, 
-      "ASN": "30844", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 26, 
-      "ASN": "34288", 
-      "c_name": "CH"
-    }, 
-    {
-      "country": 27, 
-      "ASN": "41692", 
-      "c_name": "PL"
-    }, 
-    {
-      "country": 28, 
-      "ASN": "41695", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 29, 
-      "ASN": "3741", 
-      "c_name": "ZA"
-    }, 
-    {
-      "country": 30, 
-      "ASN": "48166", 
-      "c_name": "RU"
-    }, 
-    {
-      "country": 30, 
-      "ASN": "8359", 
-      "c_name": "RU"
-    }, 
-    {
-      "country": 31, 
-      "ASN": "8419", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 32, 
-      "ASN": "16265", 
-      "c_name": "NL"
-    }, 
-    {
-      "country": 33, 
-      "ASN": "31133", 
-      "c_name": "RU"
-    }, 
-    {
-      "country": 34, 
-      "ASN": "9498", 
-      "c_name": "IN"
-    }, 
-    {
-      "country": 35, 
-      "ASN": "5511", 
-      "c_name": "FR"
-    }, 
-    {
-      "country": 36, 
-      "ASN": "36351", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 37, 
-      "ASN": "29208", 
-      "c_name": "SK"
-    }, 
-    {
-      "country": 38, 
-      "ASN": "6939", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 39, 
-      "ASN": "41811", 
-      "c_name": "GB"
-    }, 
-    {
-      "country": 40, 
-      "ASN": "41095", 
-      "c_name": "NL"
-    }, 
-    {
-      "country": 41, 
+      "country": 8, 
       "ASN": "43531", 
       "c_name": "GB"
     }, 
     {
-      "country": 42, 
-      "ASN": "3549", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 43, 
-      "ASN": "31500", 
-      "c_name": "RU"
-    }, 
-    {
-      "country": 44, 
-      "ASN": "9505", 
-      "c_name": "TW"
-    }, 
-    {
-      "country": 45, 
-      "ASN": "3356", 
-      "c_name": "US"
-    }, 
-    {
-      "country": 46, 
-      "ASN": "1103", 
-      "c_name": "EU"
-    }, 
-    {
-      "country": 47, 
-      "ASN": "37100", 
-      "c_name": "MU"
-    }, 
-    {
-      "country": 48, 
-      "ASN": "13237", 
-      "c_name": "DE"
-    }, 
-    {
-      "country": 49, 
-      "ASN": "29608", 
-      "c_name": "FR"
+      "country": 9, 
+      "ASN": "42708", 
+      "c_name": "SE"
     }
   ], 
   "links": [
     {
-      "source": 0, 
-      "target": 43, 
-      "value": 2
-    }, 
-    {
-      "source": 10, 
+      "source": 9, 
       "target": 0, 
-      "value": 3
-    }, 
-    {
-      "source": 0, 
-      "target": 1, 
-      "value": 8
-    }, 
-    {
-      "source": 20, 
-      "target": 1, 
-      "value": 3
-    }, 
-    {
-      "source": 54, 
-      "target": 1, 
-      "value": 6
-    }, 
-    {
-      "source": 13, 
-      "target": 1, 
-      "value": 6
-    }, 
-    {
-      "source": 53, 
-      "target": 1, 
       "value": 7
     }, 
     {
-      "source": 50, 
-      "target": 1, 
-      "value": 1
-    }, 
-    {
-      "source": 1, 
-      "target": 36, 
-      "value": 6
-    }, 
-    {
-      "source": 1, 
-      "target": 46, 
-      "value": 8
-    }, 
-    {
-      "source": 1, 
-      "target": 38, 
-      "value": 6
-    }, 
-    {
-      "source": 1, 
-      "target": 39, 
+      "source": 9, 
+      "target": 2, 
       "value": 4
     }, 
     {
-      "source": 1, 
-      "target": 9, 
-      "value": 2
-    }, 
-    {
-      "source": 1, 
-      "target": 19, 
-      "value": 9
-    }, 
-    {
-      "source": 1, 
-      "target": 18, 
-      "value": 6
-    }, 
-    {
-      "source": 1, 
-      "target": 52, 
-      "value": 7
-    }, 
-    {
-      "source": 21, 
-      "target": 1, 
-      "value": 10
-    }, 
-    {
-      "source": 16, 
-      "target": 1, 
-      "value": 1
-    }, 
-    {
-      "source": 56, 
-      "target": 1, 
-      "value": 2
-    }, 
-    {
-      "source": 27, 
-      "target": 1, 
-      "value": 4
-    }, 
-    {
-      "source": 40, 
-      "target": 1, 
-      "value": 5
-    }, 
-    {
-      "source": 30, 
-      "target": 1, 
-      "value": 4
-    }, 
-    {
-      "source": 15, 
-      "target": 1, 
-      "value": 6
-    }, 
-    {
-      "source": 23, 
-      "target": 1, 
-      "value": 6
-    }, 
-    {
-      "source": 25, 
-      "target": 1, 
-      "value": 1
-    }, 
-    {
-      "source": 45, 
-      "target": 1, 
-      "value": 8
-    }, 
-    {
-      "source": 57, 
-      "target": 1, 
-      "value": 10
-    }, 
-    {
-      "source": 28, 
-      "target": 1, 
-      "value": 4
-    }, 
-    {
-      "source": 29, 
-      "target": 1, 
-      "value": 10
-    }, 
-    {
-      "source": 32, 
-      "target": 1, 
-      "value": 1
-    }, 
-    {
-      "source": 12, 
-      "target": 1, 
-      "value": 7
-    }, 
-    {
-      "source": 11, 
-      "target": 1, 
-      "value": 7
-    }, 
-    {
-      "source": 41, 
-      "target": 1, 
-      "value": 5
-    }, 
-    {
-      "source": 51, 
-      "target": 1, 
-      "value": 8
-    }, 
-    {
-      "source": 31, 
-      "target": 1, 
-      "value": 5
-    }, 
-    {
-      "source": 33, 
-      "target": 1, 
-      "value": 10
-    }, 
-    {
-      "source": 44, 
-      "target": 1, 
-      "value": 10
-    }, 
-    {
-      "source": 10, 
-      "target": 1, 
-      "value": 2
-    }, 
-    {
-      "source": 1, 
-      "target": 55, 
-      "value": 3
-    }, 
-    {
-      "source": 1, 
-      "target": 4, 
-      "value": 10
-    }, 
-    {
-      "source": 1, 
-      "target": 24, 
-      "value": 7
-    }, 
-    {
-      "source": 1, 
+      "source": 9, 
       "target": 8, 
-      "value": 9
+      "value": 3
     }, 
     {
-      "source": 1, 
-      "target": 48, 
-      "value": 2
-    }, 
-    {
-      "source": 1, 
-      "target": 34, 
-      "value": 4
-    }, 
-    {
-      "source": 1, 
-      "target": 35, 
-      "value": 6
-    }, 
-    {
-      "source": 1, 
-      "target": 47, 
-      "value": 10
-    }, 
-    {
-      "source": 1, 
-      "target": 26, 
-      "value": 2
-    }, 
-    {
-      "source": 1, 
-      "target": 49, 
-      "value": 8
-    }, 
-    {
-      "source": 1, 
-      "target": 37, 
+      "source": 9, 
+      "target": 4, 
       "value": 7
     }, 
     {
-      "source": 1, 
-      "target": 14, 
+      "source": 9, 
+      "target": 1, 
       "value": 6
     }, 
     {
-      "source": 1, 
-      "target": 22, 
-      "value": 2
+      "source": 9, 
+      "target": 7, 
+      "value": 7
     }, 
     {
-      "source": 17, 
-      "target": 1, 
+      "source": 9, 
+      "target": 3, 
+      "value": 9
+    }, 
+    {
+      "source": 9, 
+      "target": 13, 
+      "value": 9
+    }, 
+    {
+      "source": 9, 
+      "target": 12, 
       "value": 4
     }, 
     {
-      "source": 2, 
-      "target": 42, 
+      "source": 9, 
+      "target": 5, 
       "value": 1
     }, 
     {
-      "source": 1, 
-      "target": 7, 
+      "source": 9, 
+      "target": 11, 
+      "value": 8
+    }, 
+    {
+      "source": 9, 
+      "target": 6, 
       "value": 6
+    }, 
+    {
+      "source": 9, 
+      "target": 10, 
+      "value": 8
     }
   ]
 }
