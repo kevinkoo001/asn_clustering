@@ -1,12 +1,16 @@
 import sys
 import os
+import logging
+from datetime import *
 import draw_graph
 import optparse
 import do_cluster
 
+LOGFILE = 'georouting.log'
+
 def generate_d3_json():
     in_dir = './CC-edges-labels/data/'    # directory that all edges and links reside in
-    out_dir = './asn_json'                # output_dir: directory that stores all json files into
+    out_dir = './asn'                     # output_dir: directory that stores all json files into
 
     d3 = draw_graph.D3_json(in_dir, out_dir) # Create a d3js object
     d3.get_vertex_edge_per_country()         # Generate graphs per country
@@ -20,37 +24,66 @@ def generate_graphs():
 
 def draw_topology(cc):
     g = generate_graphs()
+    if cc not in g.get_all_countries():
+        logging.error('No country has been found: %s' % cc)
+        sys.exit(1)
     g.plot_per_country(cc)
 
-def check_corelationship():
+def check_corelationship(DEBUG=False):
     g = generate_graphs()
-    g.decision_censorship()
+    g.decision_censorship(DEBUG)
 
 if __name__ == '__main__':
-    p = optparse.OptionParser(version=0.3)
+    usage  = "Usage: %prog [-d <input_dir> <output_dir>| -t <country code> | -c | -h]"
+    usage += "\n   eg: %prog -d ./CC-edges-labels/data/ ./asn/"
+    usage += "\n   eg: %prog -t AF"
+    p = optparse.OptionParser(usage=usage, version=0.3)
 
-    p.add_option("-d", "--gen_d3_json", dest="json", action="store_true",
-                  help="Generate JSON files upon G(V,E) for D3js")
+    p.add_option("-d", "--d3_json", dest="json", action="store_true",
+                  help="Generate JSON files for D3js")
 
     p.add_option("-t", "--topology", dest="topo", action="store_true",
-                  help="Plot an ASN topology for a given country")
+                  help="Draw an ASN topology for a given country")
 
-    p.add_option("-c", "--corelationship", dest="corelationship", action="store_true",
-                      help="BPF filter that specifies a subset of the traffic to be monitored")
+    p.add_option("-c", "--correlations", dest="correlations", action="store_true",
+                  help="Find the cor")
+
+    p.add_option("-g", "--debug", dest="debug", action="store_true",
+                  help="Debugging option (console message in details)")
 
     # Check provided arguments from command line
-    try:
-        (options, args) = p.parse_args()
-    except:
-        print 'What have you done??!'
-        sys.exit(1)
+    (options, args) = p.parse_args()
 
-    if options.json and len(args) == 0:
-        generate_d3_json()
-    elif options.topo and len(args) == 1:
-        draw_topology(args[2])
-    elif options.corelationship and len(args) == 0:
-        check_corelationship()
+    logging.basicConfig(filename=LOGFILE, level=logging.DEBUG)
+
+    logFormatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
+    rootLogger = logging.getLogger()
+
+    fileHandler = logging.FileHandler(LOGFILE)
+    fileHandler.setFormatter(logFormatter)
+    rootLogger.addHandler(fileHandler)
+
+    consoleHandler = logging.StreamHandler()
+    consoleHandler.setFormatter(logFormatter)
+    rootLogger.addHandler(consoleHandler)
+
+    logging.info('[<---------- BEGIN LOGGING --------->]')
+    if options.json and len(args) == 2:
+        if os.path.exists(args[0]) and os.path.exists(args[1]):
+            generate_d3_json()
+        else:
+            logging.warning('Either provided path does not exist or check the arguments...!')
+    elif options.topo:
+        if len(args) == 1:
+            draw_topology(args[0])
+        else:
+            logging.warning('Check the arguments for topology...!')
+    elif options.correlations:
+        if len(args) == 0:
+            check_corelationship(DEBUG=options.debug)
+        else:
+            logging.warning('Check the arguments for corelationship...!')
     else:
         print 'Something went wrong!'
-        sys.exit(1)
+
+    logging.info('[<----------- END LOGGING ---------->]')

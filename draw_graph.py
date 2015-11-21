@@ -8,12 +8,11 @@ import util
 try:
     # http://networkx.github.io/documentation/networkx-1.9.1/examples/index.html
     import networkx as nx
+    import numpy as np
     import matplotlib.pyplot as plt
     import matplotlib.cm as cm
 except ImportError:
-    logging.error('Required library: networkx, matplotlib')
-
-import numpy as np
+    logging.error('Required library: networkx, numpy, matplotlib')
 
 CC_FILE = 'country_code.csv'
 CAIDA_FILE = '20150801.as-rel-caida.txt'
@@ -49,8 +48,8 @@ class Graph:
     def get_country_by_cc(self):
         return self.country_code
 
-    def get_FHI_by_cc(self):
-        return self.FHI
+    def get_fhi_per_country(self, cc):
+        return self.FHI[cc]
 
     def get_country_graph(self, cc):
         return self.G_per_country[cc]
@@ -136,7 +135,6 @@ class Graph:
                             self.edges_per_country[cc] += [(src_asn, dst_asn)]
                         else:
                             self.edges_per_country[cc] = [(src_asn, dst_asn)]
-                        
                     except:
                         cnt += 1
                         pass
@@ -233,81 +231,83 @@ class Graph:
             graph_check(cc)
             save_plots(self.G_per_country[cc], cc, label=False, show=True)
 
-    def compute_properties(self, cc):
+    def inspect_metrics(self, cc, partial=True, DEBUG=False):
         G = self.get_country_graph(cc)
 
         # TODO - Draw another Graph for domestic countries only
         domestic = self.get_domestic_asns(cc)
         foreign = self.get_foreign_asns(cc)
         asns_connected_to_foreign = self.get_asns_connected_to_foreign(cc)
-        cc_indexes = {}
+
         #print '%s, %d, %d, %d, %d, %d' % (cc, len(domestic), len(foreign), len(asns_connected_to_foreign),
         #                                  self.G_per_country[cc].number_of_nodes(), self.G_per_country[cc].number_of_edges())
 
-        print '[%s] %s' % (cc, self.country_code[cc])
-        print '\tDomestic: %d, International: %d' % (len(domestic), len(foreign))
-        print '\tNodes: %d, Edges: %d' \
-              % (self.G_per_country[cc].number_of_nodes(), self.G_per_country[cc].number_of_edges())
+        if DEBUG:
+            print '[%s] %s' % (cc, self.country_code[cc])
+            print '\tDomestic: %d, International: %d' % (len(domestic), len(foreign))
+            print '\tNodes: %d, Edges: %d' \
+                  % (self.G_per_country[cc].number_of_nodes(), self.G_per_country[cc].number_of_edges())
+
+        '''
+        Several features (=metrics) to consider from networkx libraries
+        Note that it is required to check the returning values/forms (i.e., list, dict, ...)
+            nx.algorithms.average_clustering(G)
+            nx.algorithms.average_degree_connectivity(G)
+            nx.algorithms.average_neighbor_degree(G)
+            nx.algorithms.average_degree_connectivity(G)
+            nx.algorithms.average_neighbor_degree(G)
+            nx.algorithms.average_node_connectivity(G)
+            nx.algorithms.average_shortest_path_length(G)
+            surveillance index (si) = 1/x + 1/y
+                x: # of domestic ASNs which connects to foreign countries / # of total ASNs in a country
+                y: # of domestic ASNs which connects to foreign countries / # of foreign ASNs connected to a country
+        '''
 
         if len(foreign) == 0:
-            #print '\tNo foreign connection found in %s' % cc
+            if DEBUG: print '\tNo foreign connection found in %s' % cc
             return -1, -1
         elif len(foreign) == 1:
-            #print '\tOnly 1 connection to the outside..'
+            if DEBUG: print '\tOnly 1 connection to the outside..'
             return -2, -2
         elif self.G_per_country[cc].number_of_edges() + self.G_per_country[cc].number_of_nodes() < 10:
-            #print '\tToo small nodes or edges to decide..'
+            if DEBUG: print '\tToo small nodes or edges to decide..'
             return -3, -3
         elif self.G_per_country[cc].number_of_edges() + self.G_per_country[cc].number_of_nodes() > 500:
-            #print '\tTOO BIG.. just skipped!!'
+            if DEBUG: print '\tTOO BIG.. just skipped!!'
             return -99, -99
         else:
-
-            #print '\tEstimates the average clustering coefficient: %2.4f' % nx.algorithms.average_clustering(G)
-            #print nx.algorithms.average_degree_connectivity(G)
-            #print nx.algorithms.average_neighbor_degree(G)
-            #print '\tAverage Degree Connectivity: %2.4f' % nx.algorithms.average_degree_connectivity(G)
-            #print '\tAverage Neighbor Degree: %2.4f' % nx.algorithms.average_neighbor_degree(G)
-            #print '\tAverage Node Connectivity: %2.4f' % nx.algorithms.average_node_connectivity(G)
-            #print '\tAverage Shortest Path Length: %2.4f' % nx.algorithms.average_shortest_path_length(G)
-
-            # of domestic ASNs which connects to foreign countries / # of total ASNs in a country
             X = len(foreign) / float(len(domestic) + len(foreign))
             Y = float(len(asns_connected_to_foreign)) / len(foreign)
+            #print '[%s] %s, %.5f' % (cc, self.get_fhi_per_country(cc), 1/X + 1/Y)
+            return self.get_fhi_per_country(cc), 1/X + 1/Y
 
-            #print '\tX: %2.4f' % X
-            # of domestic ASNs which connects to foreign countries / # of foreign ASNs connected to a country
 
-            #print '\tY: %2.4f' % Y
-            # surveillance index (si) = 1/x + 1/y
-            Z = (1/X+1/Y)
-            #print '\tIndex(= 1/X + 1/Y): %2.4f' % Z
-            cc_indexes[cc] = 1/X + 1/Y
-            # nx.algorithms.average_node_connectivity(G)
-            return nx.algorithms.average_node_connectivity(G), nx.algorithms.average_neighbor_degree(G)
-
-    def decision_censorship(self):
+    def decision_censorship(self, partial=True, DEBUG=False):
         x, y = [], []
-        #colors = cm.rainbow(np.linspace(0, 1, len(y)))
-        for cc in self.get_all_countries():
-            X,Y = self.compute_properties(cc)
-            x.append(X)
-            y.append(Y)
+
+        for cc in sorted(self.get_all_countries()):
+            if cc not in CSRSP_CC:
+                X,Y = self.inspect_metrics(cc, partial, DEBUG)
+                x.append(X)
+                y.append(Y)
 
         plt.scatter(np.array([k for k in x if k > 0]), np.array([k for k in y if k > 0]), color='blue')
 
         nx, ny = [], []
-        for cc in CSRSP_CC:
-            X,Y = self.compute_properties(cc)
+        for cc in sorted(CSRSP_CC):
+            X,Y = self.inspect_metrics(cc, partial, DEBUG)
             nx.append(X)
             ny.append(Y)
 
         plt.scatter(np.array([k for k in nx if k > 0]), np.array([k for k in ny if k > 0]), color='red')
-        print 'No foreign connection found: %d' % (x.count(-1) + nx.count(-1))
-        print 'Only 1 connection to the outside: %d' % (x.count(-2) + nx.count(-2))
-        print 'Too small nodes or edges to decide: %d' % (x.count(-3) + nx.count(-3))
-        print 'TOO BIG.. just skipped: %d' % (x.count(-99) + nx.count(-99))
 
+        if partial:
+            print 'No foreign connection found: %d' % (x.count(-1) + nx.count(-1))
+            print 'Only 1 connection to the outside: %d' % (x.count(-2) + nx.count(-2))
+            print 'Too small nodes or edges to decide: %d' % (x.count(-3) + nx.count(-3))
+            print 'TOO BIG.. just skipped: %d' % (x.count(-99) + nx.count(-99))
+
+        print 'Correlation Coefficient Statistics: %.5f' % np.corrcoef(x + nx, y + ny, bias=0)[1, 0]
         plt.show()
 
 
