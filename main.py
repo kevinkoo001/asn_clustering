@@ -1,4 +1,3 @@
-import sys
 import os
 import logging
 from datetime import *
@@ -29,14 +28,15 @@ def draw_topology(cc):
         sys.exit(1)
     g.plot_per_country(cc)
 
-def check_corelationship(DEBUG=False):
+def check_corelationship(partial=True, DEBUG=False):
     g = generate_graphs()
-    g.decision_censorship(DEBUG)
+    g.metric_checker(partial, DEBUG)
 
 if __name__ == '__main__':
     usage  = "Usage: %prog [-d <input_dir> <output_dir>| -t <country code> | -c | -h]"
     usage += "\n   eg: %prog -d ./CC-edges-labels/data/ ./asn/"
     usage += "\n   eg: %prog -t AF"
+    usage += "\n   eg: %prog -c (you may need to define [XXX] in draw_graph.py manually) "
     p = optparse.OptionParser(usage=usage, version=0.3)
 
     p.add_option("-d", "--d3_json", dest="json", action="store_true",
@@ -59,15 +59,12 @@ if __name__ == '__main__':
     logFormatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
     rootLogger = logging.getLogger()
 
-    fileHandler = logging.FileHandler(LOGFILE)
-    fileHandler.setFormatter(logFormatter)
-    rootLogger.addHandler(fileHandler)
-
     consoleHandler = logging.StreamHandler()
     consoleHandler.setFormatter(logFormatter)
     rootLogger.addHandler(consoleHandler)
 
     logging.info('[<---------- BEGIN LOGGING --------->]')
+
     if options.json and len(args) == 2:
         if os.path.exists(args[0]) and os.path.exists(args[1]):
             generate_d3_json()
@@ -80,7 +77,8 @@ if __name__ == '__main__':
             logging.warning('Check the arguments for topology...!')
     elif options.correlations:
         if len(args) == 0:
-            check_corelationship(DEBUG=options.debug)
+            # [XXX] Change 'partial' value if necessary
+            check_corelationship(partial=True, DEBUG=options.debug)
         else:
             logging.warning('Check the arguments for corelationship...!')
     else:
