@@ -7,7 +7,7 @@ from sys import platform
 
 try:
     from progress.bar import Bar
-except importError:
+except:
     logging.error('Required package: progress')
 
 def csvImport(csvFile, delim, header=True):

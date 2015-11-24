@@ -294,7 +294,7 @@ class Graph:
                     y: # of domestic ASNs which connects to foreign countries / # of foreign ASNs connected to a country
             '''
             if len(G) > 1:
-                metric = 1/X + 1/Y      # [XXX] metric to test!!
+                metric = nx.triangles(G)      # [XXX] metric to test!!
             else:
                 metric = -1
 
@@ -320,7 +320,7 @@ class Graph:
         plt.suptitle('Free House Index VS Metric')
         plt.xlabel('FHI')
         # [XXX] Label here accordingly
-        plt.ylabel('Avg clustering')
+        plt.ylabel('triangles')
 
         axes = plt.gca()
         axes.set_xlim([0, int(max(X) * 1.05)])
