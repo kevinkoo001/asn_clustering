@@ -24,6 +24,8 @@ CSRSP_CC = ['BH', 'BY', 'CU', 'IR', 'PK', 'SA', 'SD',
             'KZ', 'MY', 'LK', 'TH', 'TR', 'JO', 'LY', 'TJ', 'VE', 'YE',
             'AU', 'KR', 'US', 'CN', 'FR', 'RU', 'IN', 'GB'] # Large Size
 
+METRIC_RESULT = 'metric_results.csv'
+
 # ['ER', 'KP', 'ET'] // Has censorship but no ASN found
 
 class Graph:
@@ -234,36 +236,7 @@ class Graph:
 
     # Returns (FHI, metric) per each country
     def inspect_metrics(self, cc, partial=True, DEBUG=False):
-        G = self.get_country_graph(cc)
-
-        if partial:
-            if self.G_per_country[cc].number_of_edges() + self.G_per_country[cc].number_of_nodes() < 5:
-                if DEBUG: print '\tToo small nodes or edges to decide..'
-                return -3, -3
-            elif self.G_per_country[cc].number_of_edges() + self.G_per_country[cc].number_of_nodes() > 5000:
-                if DEBUG: print '\tTOO BIG.. just skipped!!'
-                return -99, -99
-
-        domestic = self.get_domestic_asns(cc)
-        foreign = self.get_foreign_asns(cc)
-        asns_connected_to_foreign = self.get_asns_connected_to_foreign(cc)
-
-        #print '%s, %d, %d, %d, %d, %d' % (cc, len(domestic), len(foreign), len(asns_connected_to_foreign),
-        #                                  self.G_per_country[cc].number_of_nodes(), self.G_per_country[cc].number_of_edges())
-
-        if DEBUG:
-            print '[%s] %s' % (cc, self.country_code[cc])
-            print '\tDomestic: %d, International: %d' % (len(domestic), len(foreign))
-            print '\tNodes: %d, Edges: %d' \
-                  % (self.G_per_country[cc].number_of_nodes(), self.G_per_country[cc].number_of_edges())
-
-        if len(foreign) == 0:
-            if DEBUG: print '\tNo foreign connection found in %s' % cc
-            return -1, -1
-        elif len(foreign) == 1:
-            if DEBUG: print '\tOnly 1 connection to the outside..'
-            return -2, -2
-        else:
+        def remove_foriegn_cc(G, foreign):
             # Remove foreign nodes and edges for the accurate metrics, if necessary
             G.remove_edges_from([e for e in G.edges() if e[0] in foreign or e[1] in foreign])
             for n in list(foreign):
@@ -271,47 +244,154 @@ class Graph:
                     G.remove_node(n)
                 except:
                     pass
+            return G
 
-            # The below is a sample metric that I defined!
-            X = len(foreign) / float(len(domestic) + len(foreign))
-            Y = float(len(asns_connected_to_foreign)) / len(foreign)
-            #print '[%s] %s, %.5f' % (cc, self.get_fhi_per_country(cc), 1/X + 1/Y)
+        def special_handler(m, v):
+            for x in m:
+                v[x] = -1
+            return v
+
+        G = self.get_country_graph(cc)
+
+        metrics = ['a. n_nodes', 'b. n_edges', 'c. n_foreign_asns', 'd. n_asns_out_conn',
+                   'e. average_clustering', 'f. average_degree_connectivity', 'g. average_neighbor_degree',
+                   'h. average_node_connectivity', 'i. surveillance_index',
+                   'j. average_shortest_path_length', 'k. center', 'l. diameter', 'm. eccentricity',
+                   'n. periphery', 'o. radius', 'p. density', 'q. components']
+
+        metric_values = {}
+        scale = self.G_per_country[cc].number_of_edges() + self.G_per_country[cc].number_of_nodes()
+        if scale <= 1:
+            logging.info('\t[%s] Too small nodes or edges to decide..' % cc)
+            return special_handler(metrics, metric_values)
+
+        elif scale > 100000:
+            logging.info('\t[%s] TOO BIG.. just skipped!!' % cc)
+            return special_handler(metrics, metric_values)
+
+        else:
+            domestic = self.get_domestic_asns(cc)
+            foreign = self.get_foreign_asns(cc)
+            asns_connected_to_foreign = self.get_asns_connected_to_foreign(cc)
+
+            n_foreign_asns = len(foreign)
+            n_asns_out_conn = len(asns_connected_to_foreign)
 
             '''
             [Notes]
+            Default metrics
+                n_nodes
+                n_edges
+                n_foreign_asns
+                n_asns_out_conn
             If the metric requires the foreign nodes, then use self.get_country_graph(cc) instead of G
             Several features (=metrics) to consider from networkx libraries
-            Note that it is required to check the returning values/forms (i.e., list, dict, ...)
-                nx.algorithms.average_clustering(G)
-                nx.algorithms.average_degree_connectivity(G)
-                nx.algorithms.average_neighbor_degree(G)
-                nx.algorithms.average_degree_connectivity(G)
-                nx.algorithms.average_neighbor_degree(G)
-                nx.algorithms.average_node_connectivity(G)
-                nx.algorithms.average_shortest_path_length(G)
-                surveillance index (si) = 1/x + 1/y
+                m1. average_clustering: return the average clustering coefficient (float)
+                m2. average_degree_connectivity: return the average nearest neighbor degree of nodes with degree k (dict)
+                m3. average_neighbor_degree: return the average degree of the neighborhood of each node (dict)
+                m4. average_node_connectivity: return the average connectivity (float)
+                m5. average_shortest_path_length: return the average shortest path length (float)
+                m6. surveillance_index (si) = 1/x + 1/y
                     x: # of domestic ASNs which connects to foreign countries / # of total ASNs in a country
                     y: # of domestic ASNs which connects to foreign countries / # of foreign ASNs connected to a country
+
+                [Distance Measures]
+                m7.  Center: return the center of G, the set of nodes with eccentricity equal to radius (list)
+                m8.  Diameter: return the diameter of G (int)
+                m9.  Eccentricity: return the eccentricity that a node v is the maximum distance from v to all other nodes (dict)
+                m10. Periphery: return the periphery of the graph G (list)
+                m11. Radius: return the radius (the minimum eccentricity) of the graph G (float)
+                m12. Density: return the density of a graph (float; d = 2m/n(n-1), where n: # of nodes, m: # of edges)
+                m13. Components: return the number of connected components in G (int)
             '''
-            if len(G) > 1:
-                metric = nx.triangles(G)      # [XXX] metric to test!!
-            else:
-                metric = -1
 
-            # Compute the average of each node when having dict or list returns (Does this make sense?)
-            if type(metric) is dict:
-                metric_value = sum(metric.values())/float(len(metric))
-            elif type(metric) is list:
-                metric_value = sum(metric)/float(len(metric))
-            else:
-                metric_value = metric
+            G = remove_foriegn_cc(G, foreign)
 
-            return int(self.get_fhi_per_country(cc)), metric_value
+            if len(G) <= 1 or len(foreign) == 0:
+                logging.info('\t[%s] No foreign node or graph is too small after removing foreign countries' % cc)
+                return special_handler(metrics, metric_values)
+
+            metric_values[metrics[0]] = G.number_of_nodes()
+            metric_values[metrics[1]] = G.number_of_edges()
+            metric_values[metrics[2]] = n_foreign_asns
+            metric_values[metrics[3]] = n_asns_out_conn
+
+            metric_values[metrics[4]] = nx.algorithms.average_clustering(G) # m1
+            metric_values[metrics[5]] = np.mean(nx.algorithms.average_degree_connectivity(G).values()) # m2
+            metric_values[metrics[6]] = np.mean(nx.algorithms.average_neighbor_degree(G).values()) # m3
+            metric_values[metrics[7]] = nx.algorithms.average_node_connectivity(G) # m4
+
+            x = len(foreign) / float(len(domestic) + len(foreign))
+            y = float(len(asns_connected_to_foreign)) / len(foreign)
+            metric_values[metrics[9]] = 1/x + 1/y      # m6
+            metric_values[metrics[16]] = nx.number_connected_components(G) # m13
+
+            # The metrics below only works when G is all connected
+            if nx.is_connected(G):
+                metric_values[metrics[8]] = nx.algorithms.average_shortest_path_length(G) # m5
+                metric_values[metrics[10]] = np.mean(nx.algorithms.distance_measures.center(G)) # m7
+                metric_values[metrics[11]] = nx.algorithms.distance_measures.diameter(G) # m8
+                metric_values[metrics[12]] = np.mean(nx.algorithms.distance_measures.eccentricity(G).values()) # m9
+                metric_values[metrics[13]] = np.mean(nx.algorithms.distance_measures.periphery(G)) # m10
+                metric_values[metrics[14]] = nx.algorithms.distance_measures.radius(G) # m11
+                metric_values[metrics[15]] = nx.classes.function.density(G) # m12
+            else:
+                for i in [8, 10, 11, 12, 13, 14, 15]:
+                    metric_values[metrics[i]] = -1
+
+            return metric_values
 
     # Compute a pre-defined metric to choose meaningful features for clustering!
     def metric_checker(self, partial=True, DEBUG=False):
-        X, Y = [], []
 
+        fhi_cc, metrics_cc = {}, {}
+        targets = []
+        metrics = ['cc', 'fhi', 'a. n_nodes', 'b. n_edges', 'c. n_foreign_asns', 'd. n_asns_out_conn',
+                   'e. average_clustering', 'f. average_degree_connectivity', 'g. average_neighbor_degree',
+                   'h. average_node_connectivity', 'i. surveillance_index',
+                   'j. average_shortest_path_length', 'k. center', 'l. diameter', 'm. eccentricity',
+                   'n. periphery', 'o. radius', 'p. density', 'q. components']
+
+        logging.info('Inspecting the metrics per each country...')
+
+        for cc in sorted(self.get_all_countries()):
+            fhi_cc[cc] = int(self.get_fhi_per_country(cc))
+            metric_values = self.inspect_metrics(cc, partial, DEBUG)
+            metrics_cc[cc] = [metric_values[m] for m in sorted(metric_values.keys())]
+            if metrics_cc[cc][0] > 0:
+                targets.append(cc)
+
+        if os.path.isfile(METRIC_RESULT):
+            f = open(METRIC_RESULT, 'a')
+        else:
+            f = open(METRIC_RESULT, 'w')
+            headers = ''
+            for m in metrics:
+                headers += m + ','
+            f.write(headers + '\n')
+
+        #for cc in sorted(fhi_cc.keys()):
+        for cc in sorted(targets):
+            f.write(cc + ', ' + str(fhi_cc[cc]) + ', ')
+            for metric in metrics_cc[cc]:
+                f.write(str(metric) + ', ')
+            f.write('\n')
+
+        #X = [fhi_cc[x] for x in sorted(fhi_cc.keys())]
+        X = [fhi_cc[x] for x in sorted(targets)]
+
+        print "Processed %d countries...!" % len(X)
+
+        for i in range(len(metrics_cc[cc])):
+            Y = []
+            for cc in sorted(targets):
+                Y.append(metrics_cc[cc][i])
+            print np.corrcoef(X, Y, bias=0)[1, 0]
+
+        f.close()
+
+        '''
+        X, Y = [], []
         for cc in sorted(self.get_all_countries()):
             x, y = self.inspect_metrics(cc, partial, DEBUG)
             X.append(x)
@@ -320,7 +400,7 @@ class Graph:
         plt.suptitle('Free House Index VS Metric')
         plt.xlabel('FHI')
         # [XXX] Label here accordingly
-        plt.ylabel('triangles')
+        plt.ylabel('Avg clustering')
 
         axes = plt.gca()
         axes.set_xlim([0, int(max(X) * 1.05)])
@@ -350,6 +430,7 @@ class Graph:
 
         logging.info('\tCorrelation Coefficient Statistics: %.5f' % np.corrcoef(X + CX, Y + CY, bias=0)[1, 0])
         plt.show()
+        '''
 
 # This class is to draw topologies using d3js only
 class D3_json:

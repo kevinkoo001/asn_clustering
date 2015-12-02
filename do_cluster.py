@@ -10,7 +10,7 @@ try:
     from sklearn.feature_extraction import image
     from sklearn.cluster import spectral_clustering
     
-except:
+except importError:
     logging.error('Required library: networkx, numpy, matplot, sklearn')
 
 class Cluster:
