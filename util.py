@@ -7,7 +7,7 @@ from sys import platform
 
 try:
     from progress.bar import Bar
-except importError:
+except:
     logging.error('Required package: progress')
 
 def csvImport(csvFile, delim, header=True):
@@ -50,9 +50,10 @@ def get_reg_info(caida, saveTo=False):
     def check_platform():
         if platform == 'win32' or not 'linux' in platform:
             logging.error('AS information can be retrieved using whois in linux platform') 
-            sys.exit(-1)
             if 'whois' not in os.system('which whois'):
                 logging.error('Check if the linux system has installed "whois"!')
+            sys.exit(-1)
+
     check_platform()
     logging.info('Trying to get the ASN registration info from cymru.com')
     
