@@ -15,7 +15,7 @@ except ImportError:
     logging.error('Required library: networkx, numpy, matplotlib')
 
 CC_FILE = 'country_code.csv'
-CAIDA_FILE = '20150801.as-rel-caida.txt'
+CAIDA_FILE = 'caida_traceroute_data.txt'
 ASN_TO_CC = 'asn_reg-cymru.txt'
 DIR_TO_STORE = './sub-graphs/topologies/'
 
@@ -30,7 +30,9 @@ METRIC_RESULT = 'metric_results.csv'
 
 class Graph:
     def __init__(self):
-        self.FHI = dict()
+        self.FHI = dict()   # Free House Index (2012): the lower, the better
+        self.DI = dict()    # Democratic Index (2014): the higher, the better
+        self.RWBI = dict()  # Reporters Without Borders Index (2015): the lower, the better
         self.asn_to_cc = dict()
         self.edges_per_country = dict()
         self.asns_per_country = dict()
@@ -39,10 +41,12 @@ class Graph:
 
     # Country name, Country Code, FHI
     def read_known_countries(self):
-        cc_code = util.csvImport(CC_FILE, ',')
+        cc_code = util.csvImport(CC_FILE, ',', header=True)
         for cc in cc_code:
             self.country_code[cc[0].strip().upper()] = cc[1].strip()
-            self.FHI[cc[0].strip().upper()] = cc[2].strip()
+            self.FHI[cc[0].strip().upper()] = float(cc[2].strip())
+            self.DI[cc[0].strip().upper()] = float(cc[3].strip())
+            self.RWBI[cc[0].strip().upper()] = float(cc[4].strip())
         
     def get_all_countries(self):
         return list(set(self.asns_per_country.keys()))
@@ -51,7 +55,28 @@ class Graph:
         return self.country_code
 
     def get_fhi_per_country(self, cc):
-        return self.FHI[cc]
+        try:
+            fhi = self.FHI[cc]
+        except KeyError:
+            logging.error('Can\'t find the country code: %s', cc)
+            sys.exit(1)
+        return fhi
+
+    def get_di_per_country(self, cc):
+        try:
+            di = self.DI[cc]
+        except KeyError:
+            logging.error('Can\'t find the country code: %s', cc)
+            sys.exit(1)
+        return di
+
+    def get_rwbi_per_country(self, cc):
+        try:
+            rwbi = self.RWBI[cc]
+        except KeyError:
+            logging.error('Can\'t find the country code: %s', cc)
+            sys.exit(1)
+        return rwbi
 
     def get_country_graph(self, cc):
         return self.G_per_country[cc]
@@ -235,7 +260,7 @@ class Graph:
             save_plots(self.G_per_country[cc], cc, label=False, show=True)
 
     # Returns (FHI, metric) per each country
-    def inspect_metrics(self, cc, partial=True, DEBUG=False):
+    def inspect_metrics(self, cc, metrics, partial=True, DEBUG=False):
         def remove_foriegn_cc(G, foreign):
             # Remove foreign nodes and edges for the accurate metrics, if necessary
             G.remove_edges_from([e for e in G.edges() if e[0] in foreign or e[1] in foreign])
@@ -253,19 +278,15 @@ class Graph:
 
         G = self.get_country_graph(cc)
 
-        metrics = ['a. n_nodes', 'b. n_edges', 'c. n_foreign_asns', 'd. n_asns_out_conn',
-                   'e. average_clustering', 'f. average_degree_connectivity', 'g. average_neighbor_degree',
-                   'h. average_node_connectivity', 'i. surveillance_index',
-                   'j. average_shortest_path_length', 'k. center', 'l. diameter', 'm. eccentricity',
-                   'n. periphery', 'o. radius', 'p. density', 'q. components']
+        metrics = metrics[4:]
 
         metric_values = {}
         scale = self.G_per_country[cc].number_of_edges() + self.G_per_country[cc].number_of_nodes()
-        if scale <= 1:
+        if scale <= 1000:
             logging.info('\t[%s] Too small nodes or edges to decide..' % cc)
             return special_handler(metrics, metric_values)
 
-        elif scale > 100000:
+        elif scale > 5000:
             logging.info('\t[%s] TOO BIG.. just skipped!!' % cc)
             return special_handler(metrics, metric_values)
 
@@ -327,39 +348,60 @@ class Graph:
             metric_values[metrics[16]] = nx.number_connected_components(G) # m13
 
             # The metrics below only works when G is all connected
-            if nx.is_connected(G):
-                metric_values[metrics[8]] = nx.algorithms.average_shortest_path_length(G) # m5
-                metric_values[metrics[10]] = np.mean(nx.algorithms.distance_measures.center(G)) # m7
-                metric_values[metrics[11]] = nx.algorithms.distance_measures.diameter(G) # m8
-                metric_values[metrics[12]] = np.mean(nx.algorithms.distance_measures.eccentricity(G).values()) # m9
-                metric_values[metrics[13]] = np.mean(nx.algorithms.distance_measures.periphery(G)) # m10
-                metric_values[metrics[14]] = nx.algorithms.distance_measures.radius(G) # m11
-                metric_values[metrics[15]] = nx.classes.function.density(G) # m12
-            else:
-                for i in [8, 10, 11, 12, 13, 14, 15]:
-                    metric_values[metrics[i]] = -1
+            # If multiple components are discovered, then use the largest connected component for the metric
+            if not nx.is_connected(G):
+                G = max(nx.connected_component_subgraphs(G), key=len)
+
+            metric_values[metrics[8]] = nx.algorithms.average_shortest_path_length(G) # m5
+            metric_values[metrics[10]] = np.mean(nx.algorithms.distance_measures.center(G)) # m7
+            metric_values[metrics[11]] = nx.algorithms.distance_measures.diameter(G) # m8
+            metric_values[metrics[12]] = np.mean(nx.algorithms.distance_measures.eccentricity(G).values()) # m9
+            metric_values[metrics[13]] = np.mean(nx.algorithms.distance_measures.periphery(G)) # m10
+            metric_values[metrics[14]] = nx.algorithms.distance_measures.radius(G) # m11
+            metric_values[metrics[15]] = nx.classes.function.density(G) # m12
 
             return metric_values
 
     # Compute a pre-defined metric to choose meaningful features for clustering!
     def metric_checker(self, partial=True, DEBUG=False):
+        metrics_cc = {}
+        fhi_cc, di_cc, rwbi_cc = {}, {}, {}
 
-        fhi_cc, metrics_cc = {}, {}
         targets = []
-        metrics = ['cc', 'fhi', 'a. n_nodes', 'b. n_edges', 'c. n_foreign_asns', 'd. n_asns_out_conn',
+        metrics = ['cc', 'fhi', 'di', 'rwbi', 'a. n_nodes', 'b. n_edges', 'c. n_foreign_asns', 'd. n_asns_out_conn',
                    'e. average_clustering', 'f. average_degree_connectivity', 'g. average_neighbor_degree',
                    'h. average_node_connectivity', 'i. surveillance_index',
                    'j. average_shortest_path_length', 'k. center', 'l. diameter', 'm. eccentricity',
                    'n. periphery', 'o. radius', 'p. density', 'q. components']
 
+        logging.info('Extracting indexes for metric computation...')
+
+        fhi = filter(lambda x: x>0, self.FHI.values())
+        max_fhi, min_fhi = max(fhi), min(fhi)
+        di = filter(lambda x: x>0, self.DI.values())
+        max_di, min_di = max(di), min(di)
+        rwbi = filter(lambda x: x>0, self.RWBI.values())
+        max_rwbi, min_rwbi = max(rwbi), min(rwbi)
+
+        logging.info('\tFound %d countries for FHI (Free House Index)', len(fhi))
+        logging.info('\tFound %d countries for DI (Democracy Index)', len(di))
+        logging.info('\tFound %d countries for RWBI (Reporters Without Borders Index)', len(rwbi))
+
         logging.info('Inspecting the metrics per each country...')
 
+        # Set up the target countries to be considered
+        # For simplicity, take only countries that all index values are available
         for cc in sorted(self.get_all_countries()):
-            fhi_cc[cc] = int(self.get_fhi_per_country(cc))
-            metric_values = self.inspect_metrics(cc, partial, DEBUG)
-            metrics_cc[cc] = [metric_values[m] for m in sorted(metric_values.keys())]
-            if metrics_cc[cc][0] > 0:
+            if self.get_fhi_per_country(cc) > 0 and self.get_di_per_country(cc) > 0 and self.get_rwbi_per_country(cc) > 0:
+                # Indexes are normalized as [0 - 1],
+                fhi_cc[cc] = 1 - ((self.get_fhi_per_country(cc) - min_fhi) / (max_fhi - min_fhi))
+                di_cc[cc] = (self.get_di_per_country(cc) - min_di) / (max_di - min_di)
+                rwbi_cc[cc] = 1 - ((self.get_rwbi_per_country(cc) - min_rwbi) / (max_rwbi - min_rwbi))
+
                 targets.append(cc)
+                logging.info('\t[%s] Comptuting metrics...', cc)
+                metric_values = self.inspect_metrics(cc, metrics, partial, DEBUG)
+                metrics_cc[cc] = [metric_values[m] for m in sorted(metric_values.keys())]
 
         if os.path.isfile(METRIC_RESULT):
             f = open(METRIC_RESULT, 'a')
@@ -370,23 +412,26 @@ class Graph:
                 headers += m + ','
             f.write(headers + '\n')
 
-        #for cc in sorted(fhi_cc.keys()):
         for cc in sorted(targets):
-            f.write(cc + ', ' + str(fhi_cc[cc]) + ', ')
-            for metric in metrics_cc[cc]:
-                f.write(str(metric) + ', ')
-            f.write('\n')
+            if metrics_cc[cc][4] > 0:
+                f.write(cc + ', ' + str(fhi_cc[cc]) + ', ' + str(di_cc[cc]) + ', ' + str(rwbi_cc[cc]) + ', ')
+                for metric in metrics_cc[cc]:
+                    f.write(str(metric) + ', ')
+                f.write('\n')
 
-        #X = [fhi_cc[x] for x in sorted(fhi_cc.keys())]
-        X = [fhi_cc[x] for x in sorted(targets)]
+        X1 = [fhi_cc[x] for x in sorted(targets)]
+        X2 = [di_cc[x] for x in sorted(targets)]
+        X3 = [rwbi_cc[x] for x in sorted(targets)]
 
-        print "Processed %d countries...!" % len(X)
+        print "Processed %d countries...!" % len(targets)
 
         for i in range(len(metrics_cc[cc])):
             Y = []
             for cc in sorted(targets):
                 Y.append(metrics_cc[cc][i])
-            print np.corrcoef(X, Y, bias=0)[1, 0]
+            print '\tFHI : %.3f' % np.corrcoef(X1, Y, bias=0)[1, 0]
+            print '\tDI  : %.3f' % np.corrcoef(X2, Y, bias=0)[1, 0]
+            print '\tRWBI: %.3f' % np.corrcoef(X3, Y, bias=0)[1, 0]
 
         f.close()
 
