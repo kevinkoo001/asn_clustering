@@ -200,6 +200,7 @@ class Graph:
                 all_edges.add((src, dst))
             self.G_per_country[cc].add_edges_from(list(all_edges))
 
+    # Draw a graph per country (cc: country code)
     def plot_per_country(self, cc=None):
         def graph_check(cc, stats=True):
             node_cnt = self.G_per_country[cc].number_of_nodes()
@@ -259,8 +260,8 @@ class Graph:
             graph_check(cc)
             save_plots(self.G_per_country[cc], cc, label=False, show=True)
 
-    # Returns (FHI, metric) per each country
-    def inspect_metrics(self, cc, metrics, partial=True, DEBUG=False):
+    # Returns all metric values per each country
+    def inspect_metrics(self, cc, metrics, DEBUG=False):
         def remove_foriegn_cc(G, foreign):
             # Remove foreign nodes and edges for the accurate metrics, if necessary
             G.remove_edges_from([e for e in G.edges() if e[0] in foreign or e[1] in foreign])
@@ -282,7 +283,7 @@ class Graph:
 
         metric_values = {}
         scale = self.G_per_country[cc].number_of_edges() + self.G_per_country[cc].number_of_nodes()
-        if scale <= 1000:
+        if scale <= 0:
             logging.info('\t[%s] Too small nodes or edges to decide..' % cc)
             return special_handler(metrics, metric_values)
 
@@ -328,9 +329,11 @@ class Graph:
 
             G = remove_foriegn_cc(G, foreign)
 
-            if len(G) <= 1 or len(foreign) == 0:
+            '''
+            if len(G) < 1 or len(foreign) == 0:
                 logging.info('\t[%s] No foreign node or graph is too small after removing foreign countries' % cc)
                 return special_handler(metrics, metric_values)
+            '''
 
             metric_values[metrics[0]] = G.number_of_nodes()
             metric_values[metrics[1]] = G.number_of_edges()
@@ -342,9 +345,13 @@ class Graph:
             metric_values[metrics[6]] = np.mean(nx.algorithms.average_neighbor_degree(G).values()) # m3
             metric_values[metrics[7]] = nx.algorithms.average_node_connectivity(G) # m4
 
-            x = len(foreign) / float(len(domestic) + len(foreign))
-            y = float(len(asns_connected_to_foreign)) / len(foreign)
-            metric_values[metrics[9]] = 1/x + 1/y      # m6
+            try:
+                x = len(foreign) / float(len(domestic) + len(foreign))
+                y = float(len(asns_connected_to_foreign)) / len(foreign)
+                metric_values[metrics[8]] = 1/x + 1/y      # m6
+            except ZeroDivisionError:
+                metric_values[metrics[8]] = -1
+
             metric_values[metrics[16]] = nx.number_connected_components(G) # m13
 
             # The metrics below only works when G is all connected
@@ -352,7 +359,11 @@ class Graph:
             if not nx.is_connected(G):
                 G = max(nx.connected_component_subgraphs(G), key=len)
 
-            metric_values[metrics[8]] = nx.algorithms.average_shortest_path_length(G) # m5
+            try:
+                metric_values[metrics[9]] = nx.algorithms.average_shortest_path_length(G) # m5
+            except ZeroDivisionError:
+                metric_values[metrics[9]] = -1
+
             metric_values[metrics[10]] = np.mean(nx.algorithms.distance_measures.center(G)) # m7
             metric_values[metrics[11]] = nx.algorithms.distance_measures.diameter(G) # m8
             metric_values[metrics[12]] = np.mean(nx.algorithms.distance_measures.eccentricity(G).values()) # m9
@@ -363,7 +374,7 @@ class Graph:
             return metric_values
 
     # Compute a pre-defined metric to choose meaningful features for clustering!
-    def metric_checker(self, partial=True, DEBUG=False):
+    def metric_checker(self, DEBUG=False):
         metrics_cc = {}
         fhi_cc, di_cc, rwbi_cc = {}, {}, {}
 
@@ -400,7 +411,7 @@ class Graph:
 
                 targets.append(cc)
                 logging.info('\t[%s] Comptuting metrics...', cc)
-                metric_values = self.inspect_metrics(cc, metrics, partial, DEBUG)
+                metric_values = self.inspect_metrics(cc, metrics, DEBUG)
                 metrics_cc[cc] = [metric_values[m] for m in sorted(metric_values.keys())]
 
         if os.path.isfile(METRIC_RESULT):
@@ -413,11 +424,11 @@ class Graph:
             f.write(headers + '\n')
 
         for cc in sorted(targets):
-            if metrics_cc[cc][4] > 0:
-                f.write(cc + ', ' + str(fhi_cc[cc]) + ', ' + str(di_cc[cc]) + ', ' + str(rwbi_cc[cc]) + ', ')
-                for metric in metrics_cc[cc]:
-                    f.write(str(metric) + ', ')
-                f.write('\n')
+            #if metrics_cc[cc][4] <= 0:
+            f.write(cc + ', ' + str(fhi_cc[cc]) + ', ' + str(di_cc[cc]) + ', ' + str(rwbi_cc[cc]) + ', ')
+            for metric in metrics_cc[cc]:
+                f.write(str(metric) + ', ')
+            f.write('\n')
 
         X1 = [fhi_cc[x] for x in sorted(targets)]
         X2 = [di_cc[x] for x in sorted(targets)]
@@ -434,48 +445,6 @@ class Graph:
             print '\tRWBI: %.3f' % np.corrcoef(X3, Y, bias=0)[1, 0]
 
         f.close()
-
-        '''
-        X, Y = [], []
-        for cc in sorted(self.get_all_countries()):
-            x, y = self.inspect_metrics(cc, partial, DEBUG)
-            X.append(x)
-            Y.append(y)
-
-        plt.suptitle('Free House Index VS Metric')
-        plt.xlabel('FHI')
-        # [XXX] Label here accordingly
-        plt.ylabel('Avg clustering')
-
-        axes = plt.gca()
-        axes.set_xlim([0, int(max(X) * 1.05)])
-        axes.set_ylim([0, int(max(Y) * 1.05)])
-        plt.grid(True)
-
-        targets = [(x, y) for x, y in zip(X, Y) if x > 0 and y > 0]
-        plt.scatter(np.array([x for x, y in targets]), np.array([y for x, y in targets]), color='blue')
-
-        CX, CY = [], []
-        for cc in sorted(CSRSP_CC):
-            x, y = self.inspect_metrics(cc, partial, DEBUG)
-            CX.append(x)
-            CY.append(y)
-
-        c_targets = [(x, y) for x, y in zip(CX, CY) if x > 0 and y > 0]
-        plt.scatter(np.array([x for x, y in c_targets]), np.array([y for x, y in c_targets]), color='red')
-
-        if partial:
-            logging.info('The countries below have been skipped...!')
-            logging.info('\t[1] No foreign connection found: %d' % (X.count(-1) + CX.count(-1)))
-            logging.info('\t[2] Only 1 connection to the outside: %d' % (X.count(-2) + CX.count(-2)))
-            logging.info('\t[3] Too small nodes or edges to decide: %d' % (X.count(-3) + CX.count(-3)))
-            logging.info('\t[4] TOO BIG.. just skipped: %d' % (X.count(-99) + CX.count(-99)))
-            logging.info('\t[5] Target countries to investigate: %d' % \
-                         (len(self.get_all_countries()) - len([skipped for skipped in X + CX if skipped < 0])))
-
-        logging.info('\tCorrelation Coefficient Statistics: %.5f' % np.corrcoef(X + CX, Y + CY, bias=0)[1, 0])
-        plt.show()
-        '''
 
 # This class is to draw topologies using d3js only
 class D3_json:

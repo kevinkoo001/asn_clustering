@@ -7,8 +7,10 @@ from sys import platform
 
 try:
     from progress.bar import Bar
+    import numpy as np
+    import matplotlib.pyplot as plt
 except:
-    logging.error('Required package: progress')
+    logging.error('Required package: progress, matplotlib and numpy')
 
 def csvImport(csvFile, delim, header=True):
     # Reading a csv file and return data
@@ -85,6 +87,36 @@ def get_reg_info(caida, saveTo=False):
     if saveTo:
         print 'All whois data has been saved into %s' % saveTo
 
+def cdf_plot(dataset, colors):
+    for data, label, color in zip(dataset, sorted(colors.keys()), [colors[x] for x in sorted(colors.keys())]):
+        sorted_data = np.sort(data)
+        y = np.arange(len(sorted_data)) / float(len(sorted_data))
+        plt.plot(sorted_data, y, c=color, label=label)
+
+    plt.xlim([0, 1])
+    plt.ylim([0, 1])
+    plt.grid()
+    plt.legend(loc='lower right')
+    plt.xlabel('Normalized Index (The higher, the better)')
+    plt.ylabel('CDF')
+
+    plt.show()
+
+
 if __name__ == '__main__':
     pass
     #get_reg_info('20150801.as-rel.txt', saveTo='asn_reg2.txt')
+    '''
+    data = csvImport('metric_results.csv', ',', header=True)
+    metrics = dict()
+    metrics['fhi'], metrics['di'], metrics['rwbi'] = [], [], []
+
+    for row in data:
+        metrics['fhi'] += [float(row[1])]
+        metrics['di'] += [float(row[2])]
+        metrics['rwbi'] += [float(row[3])]
+
+    colors = {'DI': 'red', 'FHI': 'green', 'RWBI': 'blue'}
+    dataset = [metrics['fhi'], metrics['rwbi'], metrics['di']]
+    cdf_plot(dataset, colors)
+    '''

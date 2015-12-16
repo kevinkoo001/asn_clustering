@@ -28,15 +28,21 @@ def draw_topology(cc):
         sys.exit(1)
     g.plot_per_country(cc)
 
-def check_corelationship(partial=True, DEBUG=False):
+def check_metrics(partial=True, DEBUG=False):
     g = generate_graphs()
-    g.metric_checker(partial, DEBUG)
+    g.metric_checker(DEBUG)
+
+def proc_cluster(n_clusters):
+    do_cluster.metric_index_test()
+    do_cluster.cluster_test(n_clusters)
 
 if __name__ == '__main__':
-    usage  = "Usage: %prog [-d <input_dir> <output_dir>| -t <country code> | -c | -h]"
+    usage  = "Usage: %prog [-d <input_dir> <output_dir>| -t <country code> | -m | -c | -h]"
     usage += "\n   eg: %prog -d ./CC-edges-labels/data/ ./asn/"
     usage += "\n   eg: %prog -t AF"
-    usage += "\n   eg: %prog -c (you may need to define [XXX] in draw_graph.py manually) "
+    usage += "\n   eg: %prog -m (for metric checking)"
+    usage += "\n   eg: %prog -c (for clustering plot)"
+
     p = optparse.OptionParser(usage=usage, version=0.3)
 
     p.add_option("-d", "--d3_json", dest="json", action="store_true",
@@ -45,8 +51,11 @@ if __name__ == '__main__':
     p.add_option("-t", "--topology", dest="topo", action="store_true",
                   help="Draw an ASN topology for a given country")
 
-    p.add_option("-c", "--correlations", dest="correlations", action="store_true",
-                  help="Find the cor")
+    p.add_option("-m", "--metrics", dest="metrics", action="store_true",
+                  help="Find the metrics with correlation coefficients")
+
+    p.add_option("-c", "--clustering", dest="clustering", action="store_true",
+                  help="Generate clustering results")
 
     p.add_option("-g", "--debug", dest="debug", action="store_true",
                   help="Debugging option (console message in details)")
@@ -75,12 +84,16 @@ if __name__ == '__main__':
             draw_topology(args[0])
         else:
             logging.warning('Check the arguments for topology...!')
-    elif options.correlations:
+    elif options.metrics:
         if len(args) == 0:
-            # [XXX] Change 'partial' value if necessary
-            check_corelationship(partial=True, DEBUG=options.debug)
+            check_metrics(partial=True, DEBUG=options.debug)
         else:
-            logging.warning('Check the arguments for corelationship...!')
+            logging.warning('Check the arguments for metrics...!')
+    elif options.clustering:
+        if len(args) == 1:
+            proc_cluster(int(args[0]))
+        else:
+            logging.warning('Check the arguments for clustering...!')
     else:
         print 'Something went wrong!'
 
