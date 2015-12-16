@@ -15,7 +15,7 @@ Interdomain Connectivity and Internet Freedom}
 \noindent 
 We have used the registered country code according to ISO3166-1. Currently $249$
 country codes are officially available. The CAIDA data contains $51,501$ AS
-numbers (ASN) all over the world.
+numbers (ASN) all over the world. ~\ref{caida}
 \bigskip
 
 \noindent 
@@ -106,7 +106,7 @@ Internet freedom or economic/political characteristics of the countries based on
 their interdomain connectivity. Therefore it is essential to choose appropriate
 metrics and check how well they could explain the relationship bewteen AS
 connectivity and Internet freedom. We have taken advantage of three official
-indexes to measure economic/political characteristics: Free House Index (FHI),
+indexes to measure economic/political characteristics: Freedom House Index (FHI),
 Democracy Index (DI), and Reporters Without Borders Index (RWBI). However, not
 all countries are available to get the indexes. We could obtain 192, 167, and
 178 indexes (FHI in 2012, DI in 2014, and RWBI in 2015 in order) for different
@@ -135,7 +135,8 @@ of three publicly available indexes to explain the degree of freedom and democra
 \noindent
 Table~\ref{tab:data} is the part of the indexes and the number of ASes for a 
 country.  After getting the sub-graphs of each country, in Table~\ref{tab:corrcoeff},
-we have explored 22 different metrics.
+we have explored 22 different metrics with the help of both \texttt{networkX} and 
+\texttt{gephi} libraries.
 
 \begin{figure}[h]
 \centering 
@@ -202,7 +203,7 @@ but this project sheds light on the possibility of the relationship.
 
 \begin{table}
 \centering
-\caption{Number of ASes and the normalized indexes: Free House Index, Democracy Index and Reporters Without Borders Index)}
+\caption{Number of ASes and the normalized indexes: Freedom House Index, Democracy Index and Reporters Without Borders Index)}
 \label{tab:data}
 \begin{longtable}{|l|l|l|l|l|l|l|}
 \hline
@@ -257,6 +258,59 @@ No  & Country Code & Country Name                                         & ASNs
 \end{longtable}
 \end{table}
 
-
+\begin{thebibliography}{9}
+\bibitem{cymru} 
+Team Cymru, IP to ASN Mapping,
+\\\texttt{https://www.team-cymru.org/IP-ASN-mapping.html}
  
+\bibitem{scikit} 
+Scikit-learn, Clustering,
+\\\texttt{http://scikit-learn.org/stable/modules/clustering.html}
+ 
+\bibitem{censorship} 
+Wikipedia: Censorship by country,
+\\\texttt{https://en.wikipedia.org/wiki/Censorship\_by\_country}
+
+\bibitem{caida}
+CAIDA, AS Relationships Dataset,
+\\\texttt{http://www.caida.org/data/as-relationships}
+
+\bibitem{gephi}
+Gephi, The Open Graph Viz Platform,
+\\\texttt{https://gephi.org/}
+
+\bibitem{networkx}
+NetworkX, High-productivity software for complex networks,
+\\\texttt{https://networkx.github.io/}
+
+\bibitem{matplotlib}
+Matplotlib, a python 2D plotting library with MATLAB-like interface,
+\\\texttt{http://matplotlib.org}
+
+\bibitem{similarity}
+Danai Koutra, Ankur Parikh, Algorithms for Graph Similarity and Subgraph Matching,
+\\\texttt{https://www.cs.cmu.edu/\~{}jingx/docs/DBreport.pdf​}
+
+\bibitem{fhi}
+Freedom House Index,
+\\\texttt{https://freedomhouse.org}
+
+\bibitem{di}
+Wikipedia: Democracy Index,
+\\\texttt{https://en.wikipedia.org/wiki/Democracy\_Index}
+
+\bibitem{rwbi}
+Reporters Without Borders Index,
+\\\texttt{https://rsf.org/index2014/en-index2014.php}
+
+\bibitem{topologies}
+ASN topologies per each country at a glance,
+\\\texttt{http://dandylife.net/test/topologies}
+
+\bibitem{corrcoef}
+Correlationship Coefficient for Indexes VS Metrics,
+\\\texttt{http://bit.ly/1m7IMji}
+
+\end{thebibliography}
+
 \end{document}
