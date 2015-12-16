@@ -15,7 +15,7 @@ Interdomain Connectivity and Internet Freedom}
 \noindent 
 We have used the registered country code according to ISO3166-1. Currently $249$
 country codes are officially available. The CAIDA data contains $51,501$ AS
-numbers (ASN) all over the world. ~\ref{caida}
+numbers (ASN) all over the world. 
 \bigskip
 
 \noindent 
@@ -29,7 +29,7 @@ ignored which ended up with accounting for only $0.01\%$.
 \bigskip
 
 \noindent 
-Along with ASN links from CAIDA, we combined the hidden edges using seperate
+Along with ASN links from CAIDA, we combined the hidden edges using separate
 traceroute data, discovered by Rachee, with the existing links. As CAIDA data itself is
 incomplete because it might not see the local edges, the combination of two data
 set helps to get close to complete AS graphs. The number of connections among
@@ -57,11 +57,11 @@ that connect to foreign countries (red circles).}
 \noindent 
 The $231$ countries turn out to possess at least one or more ASes. First, we
 produce the sub-graphs of the Internet topology for each country.
-(http://dandylife.net/test/topologies) The graph illustrates what the topology
+The graph illustrates what the topology
 of $192$ countries looks like at a glance. Again, due to the incompleteness of
 data set some edges are clearly missing, or some countries have no outgoing
 connection. Figure~\ref{fig:topo_iran} illustrates the example of the topology 
-for Iran that is known to censor Internet traffic. 
+for two countries that is known to censor Internet traffic and not. 
 
 
 \section*{Part 3: Exploring the metrics}
@@ -182,7 +182,9 @@ as large circle in the figure.
 We have not combined all features together when performing clustering, because we were
 not able to discover the feature that strongly supports the relationship between ASN and 
 the freedom of Internet or the degree of democracy for a country. It is still an open problem,
-but this project sheds light on the possibility of the relationship.
+but this project sheds light on the possibility of the relationship. For future work,
+we can apply other indexes such as Good Country Index. Also, it would be worthy to 
+investigate the combined metric by feature reduction or linear regression for clustering.
 
 \begin{figure}[h]
 \centering 
@@ -293,7 +295,7 @@ Danai Koutra, Ankur Parikh, Algorithms for Graph Similarity and Subgraph Matchin
 
 \bibitem{fhi}
 Freedom House Index,
-\\\texttt{https://freedomhouse.org}
+\\\texttt{https://freedomhouse.org/report/freedom-net-2015/table-country-scores}
 
 \bibitem{di}
 Wikipedia: Democracy Index,
