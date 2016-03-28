@@ -99,6 +99,22 @@ print_outliers <- function(data, kind) {
     cat ('[BOTTOM5]', bottoms, '\n')
 }
   
+# Leave One Out Cross Validation w/o regularization (lambda estimation)
+loocv1 <- function(data) {
+    sse <- 0
+    ccs <- nrow(data)
+    library(DAAG)
+    for(i in 1:ccs)
+    {
+        loo_data <- data[c(-i),]
+        #fit <- lm(loo_data$fhi ~ loo_data$n_foreign_asns + loo_data$n_asns_out + loo_data$radius + loo_data$density + loo_data$avg_degree + loo_data$avg_path_len + loo_data$modularity + loo_data$comm_no)
+        cvlm <- CVlm(data=loo_data, form.lm = formula(fhi ~ n_foreign_asns + n_asns_out + radius + density + avg_degree + avg_path_len + modularity + comm_no), m=129, dots= FALSE, seed=29, plotit=FALSE, printit=TRUE)
+        sse[i] <- sum((cvlm$fhi - cvlm$Predicted) ^ 2)
+    }
+    return(sse)
+}
+  
+  
 # Read the data from a file
 georouting <- read.table("geodata.csv", sep=",", header=FALSE)
 
@@ -303,20 +319,21 @@ dev.off()
 
 # Linear Regression Model
 # Removed the features that have the dependency: avg_sp, diameter (due to avg_path_len)
-georouting$index <- c((geo_idxes_scaled$fhi + geo_idxes_scaled$di + geo_idxes_scaled$rwbi + geo_idxes_scaled$gdp + geo_idxes_scaled$emp_r + geo_idxes_scaled$internet_users)/6)
+#geo_all_scaled$index <- c((geo_idxes_scaled$fhi + geo_idxes_scaled$di + geo_idxes_scaled$rwbi + geo_idxes_scaled$gdp + geo_idxes_scaled$emp_r + geo_idxes_scaled$internet_users)/6)
 
 #lmfit <- lm(georouting$index ~ georouting$n_foreign_asns + georouting$n_asns_out + georouting$avg_sp + georouting$diameter + georouting$radius + georouting$density + georouting$avg_degree + georouting$avg_path_len + georouting$modularity + georouting$comm_no)
 
-lmfit <- lm(georouting$index ~ georouting$n_foreign_asns + georouting$n_asns_out + georouting$radius + georouting$density + georouting$avg_degree + georouting$avg_path_len + georouting$modularity + georouting$comm_no)
+#lmfit <- lm(geo_all_scaled$fhi ~ geo_all_scaled$n_foreign_asns + geo_all_scaled$n_asns_out + geo_all_scaled$radius + geo_all_scaled$density + geo_all_scaled$avg_degree + geo_all_scaled$avg_path_len + geo_all_scaled$modularity + geo_all_scaled$comm_no)
 
-layout(matrix(c(1,2,3,4),2,2))
-summary(lmfit)    # show results
-plot(lmfit)       # Diagnostic Plots
+#layout(matrix(c(1,2,3,4),2,2))
+#summary(lmfit)    # show results
+#plot(lmfit)       # Diagnostic Plots
 
-readkey()
-dev.off()
+sse <- loocv1(geo_all_scaled)
+histogram(sse)
+
 
 # K-fold Cross Validation where k=5
 #CVlm(data=georouting, form.lm = formula(index ~ n_foreign_asns + n_asns_out + avg_sp + diameter + radius + density + avg_degree + avg_path_len + modularity + comm_no), m=5, dots= FALSE, seed=29, plotit=TRUE, printit=TRUE)
 
-CVlm(data=georouting, form.lm = formula(index ~ n_foreign_asns + n_asns_out + radius + density + avg_degree + avg_path_len + modularity + comm_no), m=5, dots= FALSE, seed=29, plotit=TRUE, printit=TRUE)
+#CVlm(data=geo_all_scaled, form.lm = formula(fhi ~ n_foreign_asns + n_asns_out + radius + density + avg_degree + avg_path_len + modularity + comm_no), m=130, dots= FALSE, seed=29, plotit=TRUE, printit=TRUE)
