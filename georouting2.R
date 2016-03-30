@@ -31,11 +31,10 @@ loocv1 <- function(geodata) {
     for(i in 1:nrow(geodata))
     {
         loo_data <- geodata[c(-i),]
-        #fit <- lm(loo_data$fhi ~ loo_data$n_foreign_asns + loo_data$n_asns_out + loo_data$radius + loo_data$density + loo_data$avg_degree + loo_data$avg_path_len + loo_data$modularity + loo_data$comm_no)
-        cvlm <- CVlm(data=loo_data, form.lm = formula(fhi ~ n_foreign_asns + n_asns_out + avg_sp + radius + density + avg_path_len + modularity + comm_no + ip_density + diameter + avg_pgrank + num_intl_countries + num_edges + num_nodes + num_large_providers 
-        + avg_degree + avg_bcen + largest_cust_cone + num_announced_ip + num_intl_nodes), 
-        m=129, dots= FALSE, seed=29, plotit=FALSE, printit=TRUE)
+        fit.lm <- lm(loo_data$fhi ~ loo_data$n_foreign_asns + loo_data$n_asns_out + loo_data$avg_sp + loo_data$radius + loo_data$density + loo_data$avg_path_len + loo_data$modularity + loo_data$comm_no + loo_data$ip_density + loo_data$diameter + loo_data$avg_pgrank + loo_data$num_intl_countries + loo_data$num_edges + loo_data$num_nodes + loo_data$num_large_providers + loo_data$avg_degree + loo_data$avg_bcen + loo_data$largest_cust_cone + loo_data$num_announced_ip + loo_data$num_intl_nodes)
+        cvlm <- CVlm(data=loo_data, form.lm = formula(fhi ~ n_foreign_asns + n_asns_out + avg_sp + radius + density + avg_path_len + modularity + comm_no + ip_density + diameter + avg_pgrank + num_intl_countries + num_edges + num_nodes + num_large_providers + avg_degree + avg_bcen + largest_cust_cone + num_announced_ip + num_intl_nodes),         m=129, dots= FALSE, seed=29, plotit=FALSE, printit=TRUE)
         sse[i] <- sum((cvlm$fhi - cvlm$Predicted) ^ 2)
+        # predict(fit.lm)
     }
     return(sse)
 }
@@ -102,8 +101,6 @@ boxplot(zero_one_norm(geodata$ip_density), zero_one_norm(geodata$num_announced_i
         
         
 readkey()
-dev.off()
-
 
 ###############################
 ##     Linear Regression     ##
@@ -112,18 +109,16 @@ dev.off()
 # Draw the Distribution of Corelationship Coefficients per Feature
 y <- geodata$fhi        # y = FHI (index)
 x <- geodata[,-1:-3]    # all_features
-cor(x, y)
+cor_coeff <- cor(x, y)
 dotchart(cor_coeff, labels=row.names(cor_coeff), cex=.7, main="Distribution of Corelationship Coefficients per Feature", xlab="FHI")
 
 readkey()
-dev.off()
 
 # Get the Scatterplot Matrices
 D <- geodata[,-1:-2]
 pairs(~D$fhi + D$n_foreign_asns + D$n_asns_out + D$avg_sp + D$radius + D$density + D$avg_path_len + D$modularity + D$comm_no + D$ip_density + D$diameter + D$avg_pgrank + D$num_intl_countries + D$num_edges + D$num_nodes + D$num_large_providers + D$avg_degree + D$avg_bcen + D$largest_cust_cone + D$num_announced_ip + D$num_intl_nodes, data=D, main="Scatterplot Matrix")
 
 readkey()
-dev.off()
 
 # Leave One Out Cross Validation without Regularization
 # SSE vector contains sum of prediction square errors per country
@@ -137,7 +132,6 @@ dotchart(data.matrix(sse[1:65]), labels=geodata$cc[1:65], cex=.7, main="Sum of P
 dotchart(data.matrix(sse[66:130]), labels=geodata$cc[66:130], cex=.7, main="Sum of Prediction Square Errors per Country", xlab="SPSE")
 
 readkey()
-dev.off()
 
 par(mfrow=c(1,2))
 hist(sse, main="SPSE Histogram", breaks=50, xlab="SPSE")
@@ -145,4 +139,3 @@ lines(density(sse)$x, density(sse)$y, col="blue", lwd=2)
 plot(ecdf(sse), main="CDF of SPSE", xlab="Sum of Prediction Square Errors", ylab="CDF")
 
 readkey()
-dev.off()
