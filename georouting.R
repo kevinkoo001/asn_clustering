@@ -254,9 +254,17 @@ kmeans(geo_feats_scaled, centers=6)
 readkey()
 dev.off()
 
-# Draw a dendogram using 4 different methods
+# Draw a dendogram using 4 different methods with Euclidean distance
 rownames(geo_feats_scaled) <- row_names
-distance<-dist(geo_feats_scaled)
+#distance<-dist(geo_feats_scaled, method ="euclidean")
+
+# Draw a dendogram using 4 different methods with Mahalanobis distance
+# distance() function of "ecodist" library
+library(ecodist)
+br <- bcdist(geo_feats_scaled)
+mahal_sq <- distance(geo_feats_scaled, "mahal")
+distance <-sqrt(mahal_sq)
+##
 
 hc1<-hclust(distance, method="single")      # Single linkage
 plot(hc1, main="Cluster dendrogram with single linkage")
@@ -329,8 +337,8 @@ dev.off()
 #summary(lmfit)    # show results
 #plot(lmfit)       # Diagnostic Plots
 
-sse <- loocv1(geo_all_scaled)
-histogram(sse)
+#sse <- loocv1(geo_all_scaled)
+#histogram(sse)
 
 
 # K-fold Cross Validation where k=5

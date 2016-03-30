@@ -26,18 +26,45 @@ print_outliers <- function(data, kind) {
   
 # Leave One Out Cross Validation w/o regularization (lambda estimation)
 loocv1 <- function(geodata) {
-    sse <- 0
+    spe <- 0
     library(DAAG)
     for(i in 1:nrow(geodata))
     {
         loo_data <- geodata[c(-i),]
-        #fit <- lm(loo_data$fhi ~ loo_data$n_foreign_asns + loo_data$n_asns_out + loo_data$radius + loo_data$density + loo_data$avg_degree + loo_data$avg_path_len + loo_data$modularity + loo_data$comm_no)
-        cvlm <- CVlm(data=loo_data, form.lm = formula(fhi ~ n_foreign_asns + n_asns_out + avg_sp + radius + density + avg_path_len + modularity + comm_no + ip_density + diameter + avg_pgrank + num_intl_countries + num_edges + num_nodes + num_large_providers 
-        + avg_degree + avg_bcen + largest_cust_cone + num_announced_ip + num_intl_nodes), 
-        m=129, dots= FALSE, seed=29, plotit=FALSE, printit=TRUE)
-        sse[i] <- sum((cvlm$fhi - cvlm$Predicted) ^ 2)
+        y <- loo_data$fhi
+        x1 <- loo_data$n_foreign_asns
+        x2 <- loo_data$n_asns_out
+        x3 <- loo_data$avg_sp
+        x4 <- loo_data$radius
+        x5 <- loo_data$density
+        x6 <- loo_data$avg_path_len
+        x7 <- loo_data$modularity
+        x8 <- loo_data$comm_no
+        x9 <- loo_data$ip_density
+        x10 <- loo_data$diameter
+        x11 <- loo_data$avg_pgrank
+        x12 <- loo_data$num_intl_countries
+        x13 <- loo_data$num_edges
+        x14 <- loo_data$num_nodes
+        x15 <- loo_data$num_large_providers
+        x16 <- loo_data$avg_degree
+        x17 <- loo_data$avg_bcen
+        x18 <- loo_data$largest_cust_cone
+        x19 <- loo_data$num_announced_ip
+        x20 <- loo_data$num_intl_nodes
+        
+        fit.lm <- lm(y ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10 + x11 + x12 + x13 + x14 + x15 + x16 + x17 + x18 + x19 + x20)
+        idx_pred <- data.frame(x1 = geodata[i,]$n_foreign_asns, x2 = geodata[i,]$n_asns_out, x3 = geodata[i,]$avg_sp, x4 = geodata[i,]$radius, x5 = geodata[i,]$density, x6 = geodata[i,]$avg_path_len, x7 = geodata[i,]$modularity, x8 = geodata[i,]$comm_no, x9 = geodata[i,]$ip_density, x10 = geodata[i,]$diameter, x11 = geodata[i,]$avg_pgrank, x12 = geodata[i,]$num_intl_countries, x13 = geodata[i,]$num_edges, x14 = geodata[i,]$num_nodes, x15 = geodata[i,]$num_large_providers, x16 = geodata[i,]$avg_degree, x17 = geodata[i,]$avg_bcen, x18 = geodata[i,]$largest_cust_cone, x19 = geodata[i,]$num_announced_ip, x20 = geodata[i,]$num_intl_nodes)
+
+        p <- predict(fit.lm, idx_pred, interval="prediction", level=0.95)
+        spe[i] <- (p[1] - geodata[i,]$fhi)^2
+                   
+        #fit.lm <- lm(loo_data$fhi ~ loo_data$n_foreign_asns + loo_data$n_asns_out + loo_data$avg_sp + loo_data$radius + loo_data$density + loo_data$avg_path_len + loo_data$modularity + loo_data$comm_no + loo_data$ip_density + loo_data$diameter + loo_data$avg_pgrank + loo_data$num_intl_countries + loo_data$num_edges + loo_data$num_nodes + loo_data$num_large_providers + loo_data$avg_degree + loo_data$avg_bcen + loo_data$largest_cust_cone + loo_data$num_announced_ip + loo_data$num_intl_nodes)
+        #cvlm <- CVlm(data=loo_data, form.lm = formula(fhi ~ n_foreign_asns + n_asns_out + avg_sp + radius + density + avg_path_len + modularity + comm_no + ip_density + diameter + avg_pgrank + num_intl_countries + num_edges + num_nodes + num_large_providers + avg_degree + avg_bcen + largest_cust_cone + num_announced_ip + num_intl_nodes), m=129, dots= FALSE, seed=29, plotit=FALSE, printit=TRUE)
+        #spe[i] <- sum((cvlm$fhi - cvlm$Predicted) ^ 2)
+        
     }
-    return(sse)
+    return(spe)
 }
   
 DATAFILE <- "geodata2.csv"
@@ -102,7 +129,6 @@ boxplot(zero_one_norm(geodata$ip_density), zero_one_norm(geodata$num_announced_i
         
         
 readkey()
-dev.off()
 
 
 ###############################
@@ -112,37 +138,33 @@ dev.off()
 # Draw the Distribution of Corelationship Coefficients per Feature
 y <- geodata$fhi        # y = FHI (index)
 x <- geodata[,-1:-3]    # all_features
-cor(x, y)
+cor_coeff <- cor(x, y)
 dotchart(cor_coeff, labels=row.names(cor_coeff), cex=.7, main="Distribution of Corelationship Coefficients per Feature", xlab="FHI")
 
 readkey()
-dev.off()
 
 # Get the Scatterplot Matrices
 D <- geodata[,-1:-2]
 pairs(~D$fhi + D$n_foreign_asns + D$n_asns_out + D$avg_sp + D$radius + D$density + D$avg_path_len + D$modularity + D$comm_no + D$ip_density + D$diameter + D$avg_pgrank + D$num_intl_countries + D$num_edges + D$num_nodes + D$num_large_providers + D$avg_degree + D$avg_bcen + D$largest_cust_cone + D$num_announced_ip + D$num_intl_nodes, data=D, main="Scatterplot Matrix")
 
 readkey()
-dev.off()
 
 # Leave One Out Cross Validation without Regularization
-# SSE vector contains sum of prediction square errors per country
-sse <- loocv1(geodata)
-sse <- data.matrix(sse)
-rownames(sse) <- geodata$cn
-colnames(sse) <- c('SSE')
+# spe vector contains sum of prediction square errors per country
+spe <- loocv1(geodata)
+spe <- data.matrix(spe)
+rownames(spe) <- geodata$cn
+colnames(spe) <- c('spe')
 
 par(mfrow=c(1,2))
-dotchart(data.matrix(sse[1:65]), labels=geodata$cc[1:65], cex=.7, main="Sum of Prediction Square Errors per Country", xlab="SPSE")
-dotchart(data.matrix(sse[66:130]), labels=geodata$cc[66:130], cex=.7, main="Sum of Prediction Square Errors per Country", xlab="SPSE")
+dotchart(data.matrix(spe[1:65]), labels=geodata$cc[1:65], cex=.7, main="Prediction Square Errors per Country", xlab="PSE")
+dotchart(data.matrix(spe[66:130]), labels=geodata$cc[66:130], cex=.7, main="Prediction Square Errors per Country", xlab="PSE")
 
 readkey()
-dev.off()
 
 par(mfrow=c(1,2))
-hist(sse, main="SPSE Histogram", breaks=50, xlab="SPSE")
-lines(density(sse)$x, density(sse)$y, col="blue", lwd=2)
-plot(ecdf(sse), main="CDF of SPSE", xlab="Sum of Prediction Square Errors", ylab="CDF")
+hist(spe, main="Prediction Square Error Histogram", breaks=50, xlab="Prediction Square Errors")
+lines(density(spe)$x, density(spe)$y, col="blue", lwd=2)
+plot(ecdf(spe), main="CDF of PSE", xlab="Prediction Square Errors", ylab="CDF")
 
 readkey()
-dev.off()
