@@ -140,7 +140,8 @@ readkey()
 y <- geodata$fhi        # y = FHI (index)
 x <- geodata[,-1:-3]    # all_features
 cor_coeff <- cor(x, y)
-dotchart(cor_coeff, labels=row.names(cor_coeff), cex=.7, main="Distribution of Corelationship Coefficients per Feature", xlab="FHI")
+cor_coeff_sort <- cor_coeff[order(cor_coeff),]
+dotchart(cor_coeff_sort, cex=.7, main="Distribution of Corelationship Coefficients per Feature", xlab="FHI")
 
 readkey()
 
@@ -156,10 +157,11 @@ spe <- loocv1(geodata)
 spe <- data.matrix(spe)
 rownames(spe) <- geodata$cn
 colnames(spe) <- c('spe')
+spesort <- spe[order(spe),]
 
 par(mfrow=c(1,2))
-dotchart(data.matrix(spe[1:65]), labels=geodata$cc[1:65], cex=.7, main="Prediction Square Errors per Country", xlab="PSE")
-dotchart(data.matrix(spe[66:130]), labels=geodata$cc[66:130], cex=.7, main="Prediction Square Errors per Country", xlab="PSE")
+dotchart(spesort[1:65], cex=.7, main="Prediction Square Errors per Country", xlab="PSE")
+dotchart(spesort[66:130], cex=.7, main="Prediction Square Errors per Country", xlab="PSE")
 
 readkey()
 
