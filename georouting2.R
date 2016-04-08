@@ -57,6 +57,7 @@ loocv1 <- function(geodata) {
         idx_pred <- data.frame(x1 = geodata[i,]$n_foreign_asns, x2 = geodata[i,]$n_asns_out, x3 = geodata[i,]$avg_sp, x4 = geodata[i,]$radius, x5 = geodata[i,]$density, x6 = geodata[i,]$avg_path_len, x7 = geodata[i,]$modularity, x8 = geodata[i,]$comm_no, x9 = geodata[i,]$ip_density, x10 = geodata[i,]$diameter, x11 = geodata[i,]$avg_pgrank, x12 = geodata[i,]$num_intl_countries, x13 = geodata[i,]$num_edges, x14 = geodata[i,]$num_nodes, x15 = geodata[i,]$num_large_providers, x16 = geodata[i,]$avg_degree, x17 = geodata[i,]$avg_bcen, x18 = geodata[i,]$largest_cust_cone, x19 = geodata[i,]$num_announced_ip, x20 = geodata[i,]$num_intl_nodes)
 
         p <- predict(fit.lm, idx_pred, interval="prediction", level=0.95)
+        cat (p[1], geodata[i,]$fhi, (p[1] - geodata[i,]$fhi)^2, '\n')
         spe[i] <- (p[1] - geodata[i,]$fhi)^2
                    
         #fit.lm <- lm(loo_data$fhi ~ loo_data$n_foreign_asns + loo_data$n_asns_out + loo_data$avg_sp + loo_data$radius + loo_data$density + loo_data$avg_path_len + loo_data$modularity + loo_data$comm_no + loo_data$ip_density + loo_data$diameter + loo_data$avg_pgrank + loo_data$num_intl_countries + loo_data$num_edges + loo_data$num_nodes + loo_data$num_large_providers + loo_data$avg_degree + loo_data$avg_bcen + loo_data$largest_cust_cone + loo_data$num_announced_ip + loo_data$num_intl_nodes)
@@ -127,7 +128,7 @@ boxplot(zero_one_norm(geodata$ip_density), zero_one_norm(geodata$num_announced_i
                 "Size of largest \ncustomer cone")), ylab="0-1 scaled value",
         notch=TRUE, main="Distribution of IP Demographic \n Routing/BGP Features")
         
-        
+
 readkey()
 
 
@@ -167,4 +168,4 @@ hist(spe, main="Prediction Square Error Histogram", breaks=50, xlab="Prediction 
 lines(density(spe)$x, density(spe)$y, col="blue", lwd=2)
 plot(ecdf(spe), main="CDF of PSE", xlab="Prediction Square Errors", ylab="CDF")
 
-readkey()
+
