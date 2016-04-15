@@ -684,5 +684,4 @@ histogram(sse)
 # K-fold Cross Validation where k=5
 #CVlm(data=georouting, form.lm = formula(index ~ n_foreign_asns + n_asns_out + avg_sp + diameter + radius + density + avg_degree + avg_path_len + modularity + comm_no), m=5, dots= FALSE, seed=29, plotit=TRUE, printit=TRUE)
 
->>>>>>> 6406a2612d514ab445312f61a057a2622f33b26b
 #CVlm(data=geo_all_scaled, form.lm = formula(fhi ~ n_foreign_asns + n_asns_out + radius + density + avg_degree + avg_path_len + modularity + comm_no), m=130, dots= FALSE, seed=29, plotit=TRUE, printit=TRUE)

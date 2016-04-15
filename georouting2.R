@@ -32,22 +32,22 @@ loocv1 <- function(geodata) {
     {
         loo_data <- geodata[c(-i),]
         y <- loo_data$fhi
-        x1 <- loo_data$n_foreign_asns
+        x1 <- loo_data$n_foreign_asns #7
         x2 <- loo_data$n_asns_out
-        x3 <- loo_data$avg_sp
-        x4 <- loo_data$radius
+        x3 <- loo_data$avg_sp #4
+        x4 <- loo_data$radius #8
         x5 <- loo_data$density
-        x6 <- loo_data$avg_path_len
-        x7 <- loo_data$modularity
-        x8 <- loo_data$comm_no
-        x9 <- loo_data$ip_density
-        x10 <- loo_data$diameter
+        x6 <- loo_data$avg_path_len #5
+        x7 <- loo_data$modularity #9
+        x8 <- loo_data$comm_no #2
+        x9 <- loo_data$ip_density #1
+        x10 <- loo_data$diameter #10
         x11 <- loo_data$avg_pgrank
-        x12 <- loo_data$num_intl_countries
+        x12 <- loo_data$num_intl_countries #6
         x13 <- loo_data$num_edges
         x14 <- loo_data$num_nodes
         x15 <- loo_data$num_large_providers
-        x16 <- loo_data$avg_degree
+        x16 <- loo_data$avg_degree #3
         x17 <- loo_data$avg_bcen
         x18 <- loo_data$largest_cust_cone
         x19 <- loo_data$num_announced_ip
@@ -147,7 +147,7 @@ readkey()
 
 # Get the Scatterplot Matrices
 D <- geodata[,-1:-2]
-pairs(~D$fhi + D$n_foreign_asns + D$n_asns_out + D$avg_sp + D$radius + D$density + D$avg_path_len + D$modularity + D$comm_no + D$ip_density + D$diameter + D$avg_pgrank + D$num_intl_countries + D$num_edges + D$num_nodes + D$num_large_providers + D$avg_degree + D$avg_bcen + D$largest_cust_cone + D$num_announced_ip + D$num_intl_nodes, data=D, main="Scatterplot Matrix")
+pairs(~., data=D, main="Scatterplot Matrix")
 
 readkey()
 
@@ -166,8 +166,8 @@ dotchart(spesort[66:130], cex=.7, main="Prediction Square Errors per Country", x
 readkey()
 
 par(mfrow=c(1,2))
-hist(spe, main="Prediction Square Error Histogram", breaks=50, xlab="Prediction Square Errors")
-lines(density(spe)$x, density(spe)$y, col="blue", lwd=2)
-plot(ecdf(spe), main="CDF of PSE", xlab="Prediction Square Errors", ylab="CDF")
+hist(log(spe), main="PSE Histogram", breaks=20, xlab="Log(Prediction Square Errors)")
+lines(density(log(spe))$x, density(log(spe))$y, col="blue", lwd=2)
+plot(ecdf(log(spe)), main="CDF of PSE", xlab="Log(Prediction Square Errors)", ylab="CDF")
 
 
