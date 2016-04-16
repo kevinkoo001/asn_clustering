@@ -70,6 +70,27 @@ part.feature <- function(geo)
   }
 }
 
+# Leave One Out Cross Validation with Regression Tree
+loocv_rt <- function(geodata) {
+  library(rpart)
+  library(rpart.plot)
+  spe <- 0    # square prediction error
+  
+  for(i in 1:nrow(geodata))
+  {
+    loo_data <- geodata[c(-i),]
+    pred_cc <- geodata[i,]
+    rpart.fit <- rpart(fhi_12 ~ ., method="anova", data=loo_data)
+    pred_v <- predict(rpart.fit, newdata=pred_cc, interval="prediction", level=0.95)
+    real_v <- geodata[i,]$fhi_12
+    square_err <- (pred_v - real_v)^2
+    cat (pred_v, real_v, square_err, '\n')
+    spe[i] <- square_err
+  }
+  
+  return(spe)
+}
+
 
 DATAFILE <- "geodata3.csv"
 
@@ -79,8 +100,11 @@ geodata <- read.table(DATAFILE, sep=",", header=TRUE)
 # Define row/col names
 rownames(geodata) <- geodata$cn
 
+geo_subset <- subset(geodata, select=c("fhi_12", "ip_density", "num_intl_countries", "percentile_degree", "stub_count", "diameter", "tot_peer_edges", "num_edges", "num_nodes", "num_large_providers", "num_avg_peer", "num_avg_prov", "num_announced_ip", "num_large_nodes", "num_intl_nodes"))
+
 fhi <- geodata[, 3:3]
-features <- geodata[,-1:-3]
+#features <- geodata[,-1:-3]
+features <- geo_subset[, -1]
 feature_plot(fhi, features)
 
 # Draw the Distribution of Corelationship Coefficients per Feature
@@ -90,9 +114,9 @@ coeff_features(cor_coeff, cor_coeff_sort)
 
 # Get the Scatterplot Matrices
 #pairs(~., data=geodata[,-1:-2], main="Scatterplot Matrix")
-pairs(~., data=geodata[,-1:-2], lower.panel=panel.smooth, upper.panel=panel.cor)
+pairs(~., data=geo_subset, lower.panel=panel.smooth, upper.panel=panel.cor, main="Scatterplot Matrix for all features")
 
-# Regression Tree
+# Regression Tree: Here we use rpart package for recursive partitioning
 # References
 #   http://www.di.fc.ul.pt/~jpn/r/tree/tree.html
 #   http://www.statmethods.net/advstats/cart.html
@@ -101,14 +125,36 @@ library(rpart.plot)
 library(partykit)
 
 # "class": classification tree, "anova": regression tree
-fit <- rpart(fhi_12 ~ ., method="anova", data=geodata[,-1:-2])
+fit <- rpart(fhi_12 ~ ., method="anova", data=geo_subset)
+printcp(fit)
+
+par(mfrow=c(1,1))
 prp(fit, type=2, extra=100, tweak=.8, xcompact=TRUE, ycompact=TRUE)
 
 rpart.tree <- as.party(fit)
 plot(rpart.tree, which.plot=2, cex=0.8)
 
-part.feature(geodata[,-1:-2])
-
 par(mfrow=c(1,3))
 plotcp(fit)
 rsq.rpart(fit)
+
+# How to tabulate some of the data with a condition
+# table(subset(geodata2, ip_density<0.44)$num_node)
+
+# Leave one out Regression Tree
+# A. For each country, leave it out when generating paritition with regression tree
+# B. For each model, predict the FHI of the country that has been left out
+# C. For each country, compute the square prediction error (i.e., spe=(pred-real)^2)
+# D. Sort out all SPEs and plot them for all countries
+
+spe <- loocv_rt(geo_subset)
+
+spe <- data.matrix(spe)
+rownames(spe) <- geodata$cn
+colnames(spe) <- c('spe')
+spesort <- spe[order(spe),]
+
+par(mfrow=c(1,3))
+dotchart(spesort[1:62], cex=.7, main="Prediction Square Errors per Country (1)", xlab="PSE")
+dotchart(spesort[63:126], cex=.7, main="Prediction Square Errors per Country (2)", xlab="PSE")
+dotchart(spesort[127:186], cex=.7, main="Prediction Square Errors per Country (3)", xlab="PSE")
