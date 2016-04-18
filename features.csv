@@ -1,3 +1,4 @@
+ip_density,diameter,percentile_cust_cone,percentile_degree,stub_count,num_intl_countries,tot_peer_edges,num_edges,num_nodes,num_large_providers,avg_deg,num_intl_nodes,num_large_nodes,num_announced_ip,max_h_im,max_p_len,max_v_im
 BD,0.0022,0.5385,0.1021,0.28,0.0572,0.0687,0.002,0.0227,0.0438,0.0417,0.2332,0.0079,0.0,0.1026,0.0383,0.5618,0.0007
 BE,0.7631,0.6154,0.0315,0.48,0.0458,0.3206,0.0419,0.0544,0.0619,0.0417,0.4712,0.0677,0.0,0.041,0.1421,0.1546,0.0007
 BF,0.0013,0.3077,0.0199,0.078,0.0008,0.0534,0.0,0.0004,0.0017,0.0,0.0492,0.0025,0.0,0.0026,0.0092,0.2618,0.0
