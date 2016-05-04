@@ -153,6 +153,11 @@ rsq.rpart(fit)
 
 spe <- loocv_rt(geo_subset)
 
+#plot spe distribution
+library(ggplot2)
+reg_spe_country = data.frame( country = geodata[,1], spe = spe)
+ggplot(reg_spe_country, aes(x=country, y=spe)) + geom_bar(stat='identity') + coord_fixed(.01)+ theme(axis.text.x = element_text(angle = 90, hjust = 1, colour = 'black'))
+
 spe <- data.matrix(spe)
 rownames(spe) <- geodata$cn
 colnames(spe) <- c('spe')
