@@ -158,7 +158,107 @@ rownames(spe) <- geodata$cn
 colnames(spe) <- c('spe')
 spesort <- spe[order(spe),]
 
-par(mfrow=c(1,3))
-dotchart(spesort[1:56], cex=.7, main="Prediction Square Errors per Country (1)", xlab="PSE")
-dotchart(spesort[57:112], cex=.7, main="Prediction Square Errors per Country (2)", xlab="PSE")
-dotchart(spesort[113:168], cex=.7, main="Prediction Square Errors per Country (3)", xlab="PSE")
+#par(mfrow=c(1,3))
+#dotchart(spesort[1:56], cex=.7, main="Prediction Square Errors per Country (1)", xlab="PSE")
+#dotchart(spesort[57:112], cex=.7, main="Prediction Square Errors per Country (2)", xlab="PSE")
+#dotchart(spesort[113:168], cex=.7, main="Prediction Square Errors per Country (3)", xlab="PSE")
+
+buckets <- fit$where
+bucket_no<-unique(buckets)
+bdf <- as.data.frame(buckets)
+
+pse_ridge <- 0
+pse_lasso <- 0
+
+# At each bucket, do the linear regression with regularization respectively!
+for(i in 1:length(bucket_no)) {
+  cc_bucket = rownames(bdf)[bdf$buckets==bucket_no[i]]
+  cat ("\nBucket", bucket_no[i], "(", length(cc_bucket), "Countries)", "\n")
+  cat (cc_bucket, "\n")
+  
+  bucket_data <- NULL
+  for (j in 1:length(cc_bucket)) {
+    bucket_data<-rbind(geodata[cc_bucket[j],], bucket_data)
+  }
+  
+  bucket_data<-bucket_data[,-1:-2]
+
+  if (nrow(bucket_data) > 0) {
+    # Linear Regression without regularization
+    #lm.out <- lm(zero_one_norm(fhi_12)~., data=bucket_data)
+    #lm_summary <- summary(lm.out)
+    #par(mfrow=c(2,2))
+    #plot(lm.out)
+    
+    library(glmnet)
+    
+    # Ranges [10^-4:10]
+    lambda_candidates = 10^(seq(1,-4,length=100))
+
+    x <- model.matrix(fhi_12~., data=bucket_data)[,-1]
+    y <- bucket_data$fhi_12
+    par(mfrow=c(2,1))
+
+    #######################################################
+    # A. Linear Regression with Ridge regularization 
+    #######################################################
+    ridge.model <- glmnet(x,y, alpha=0, lambda = lambda_candidates)
+    # dim(coef(ridge.model)) # Dimension 18 coefficients for 100 lambda
+    
+    # cross-validation (LOOCV)
+    set.seed(10)
+    cv.out <- cv.glmnet(x,y,alpha=0, grouped=FALSE)
+    xlab_ridge = paste("log(Lambda)", "using", "Ridge", "in", "Bucket", bucket_no[i], sep=" ")
+    plot(cv.out, xlab=xlab_ridge)
+    
+    best_lambda <- cv.out$lambda.min
+    Model.Ridge <- glmnet(x,y,alpha=0)
+    
+    cat("Best lambda with Ridge:", best_lambda, "\n")
+    
+    # Best thetas from the best lambda value
+    pred <- predict(Model.Ridge, type="coefficients", s=best_lambda)[1:18,]
+    cat ("Predicted coefficients:", pred[2:length(pred)], "\n")
+    
+    # Make predictions and calculate mean square errors
+    fit <- glmnet(x, y, family="gaussian", alpha=0, lambda=best_lambda)
+    predictions <- predict(fit, x, type="link")
+    mse <- mean((y - predictions)^2)
+    cat ("PSE: ", mse, "\n")
+    pse_ridge[i] <- mse
+    
+    #######################################################
+    # B. Linear Regression with LASSO regularization 
+    #######################################################
+    
+    lasso.model <- glmnet(x,y, alpha=1, lambda = lambda_candidates)
+    dim(coef(lasso.model))
+
+    # cross-validation (LOOCV)
+    cv.out2 <- cv.glmnet(x,y,alpha=1, grouped=FALSE)
+    xlab_lasso = paste("log(Lambda)", "using", "LASSO", "in", "Bucket", bucket_no[i], sep=" ")
+    plot(cv.out2, xlab=xlab_lasso)
+    
+    best_lambda2 <- cv.out2$lambda.min
+    Model.Lasso <- glmnet(x,y,alpha=1)
+    
+    cat("Best lambda with LASSO:", best_lambda2, "\n")
+    
+    # Best thetas from the best lambda value
+    pred2 <- predict(Model.Lasso, type="coefficients", s=best_lambda2)[1:18,]
+    cat ("Predicted coefficients:", pred2[2:length(pred2)], "\n")
+    
+    # Make predictions and calculate mean square errors
+    fit <- glmnet(x, y, family="gaussian", alpha=1, lambda=best_lambda2)
+    predictions2 <- predict(fit, x, type="link")
+    mse2 <- mean((y - predictions2)^2)
+    cat ("PSE: ", mse2, "\n")
+    pse_lasso[i] <- mse2
+    
+  }
+  
+  #cat("Residuals\n", lm_summary$residuals, "\n")
+  #cat("Coefficients\n", lm_summary$coefficients, "\n")
+  #cat("R^2 value:", lm_summary$r.squared, "\n")
+  
+}
