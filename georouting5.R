@@ -366,11 +366,11 @@ cat ("(4) Mean(PSE) of LR at each bucket of RT: ", mean(rt.pse.full), "\n")
 #########################################################
 
 par(mfrow=c(2,4))
-hist(global.pse.lm, main="(0) PSE for global L/R without regularization")
-hist(global.pse.lasso, main="(1) PSE for global L/R with LASSO")
-hist(rt.pse.avg, main="(2) PSE for R/T with leaf-averages")
-#hist(rt.pse.part, main="(3) PSE for R/T with L/R (root-leaf features) at the leaves")
-hist(rt.pse.full, main="(4) PSE for R/T with L/R (full features) at the leaves")
+hist(global.pse.lm, main="(0) PSE for global L/R \nwithout regularization")
+hist(global.pse.lasso, main="(1) PSE for global L/R \nwith LASSO")
+hist(rt.pse.avg, main="(2) PSE for R/T \nwith leaf-averages")
+#hist(rt.pse.part, main="(3) PSE for R/T with L/R \n(root-leaf features) at the leaves")
+hist(rt.pse.full, main="(4) PSE for R/T with L/R \n(full features) at the leaves")
 
 plot(ecdf(global.pse.lm), main="CDF of Case (0)", xlab="PSE", ylab="CDF")
 plot(ecdf(global.pse.lasso), main="CDF of Case (1)", xlab="PSE", ylab="CDF")
@@ -389,3 +389,25 @@ pse_all <- cbind.data.frame(global.pse.lm, global.pse.lasso, rt.pse.avg, rt.pse.
 # Mean   : 348.06   Mean   : 311.1351   Mean   : 273.54   Mean   :  88.4955  
 # 3rd Qu.: 467.56   3rd Qu.: 532.4056   3rd Qu.: 264.53   3rd Qu.:  90.2500  
 # Max.   :4769.26   Max.   :1577.1391   Max.   :2715.57   Max.   :1056.2500 
+
+par(mfrow=c(2,4))
+hist(log(global.pse.lm), main="(0) log(PSE) for global L/R \nwithout regularization")
+hist(log(global.pse.lasso), main="(1) log(PSE) for global L/R \nwith LASSO")
+hist(log(rt.pse.avg), main="(2) log(PSE) for R/T \nwith leaf-averages")
+#hist(log(rt.pse.part), main="(3) log(PSE) for R/T with L/R \n(root-leaf features) at the leaves")
+hist(log(rt.pse.full), main="(4) log(PSE) for R/T with L/R \n(full features) at the leaves")
+
+plot(ecdf(log(global.pse.lm)), main="log(CDF) of Case (0)", xlab="log(PSE)", ylab="CDF")
+plot(ecdf(log(global.pse.lasso)), main="log(CDF) of Case (1)", xlab="log(PSE)", ylab="CDF")
+plot(ecdf(log(rt.pse.avg)), main="log(CDF) of Case (2)", xlab="log(PSE)", ylab="CDF")
+#plot(ecdf(log(rt.pse.part)), main="log(CDF) of Case (3)", xlab="log(PSE)", ylab="CDF")
+plot(ecdf(log(rt.pse.full)), main="log(CDF) of Case (4)", xlab="log(PSE)", ylab="CDF")
+
+par(mfrow=c(1,1))
+plot(c(-7,7), c(0,1), main="log(CDF) of PSEs", xlab="log(PSE)", ylab="CDF")
+lines(ecdf(log(global.pse.lm)), col="black")
+lines(ecdf(log(global.pse.lasso)), col="green")
+lines(ecdf(log(rt.pse.avg)), col="red")
+lines(ecdf(log(rt.pse.full)), col="blue")
+legend(-7, 1, c("global.pse.lm", "global.pse.lasso", "rt.pse.avg", "rt.pse.full"),
+       lwd=c(4, 2.5), col=c("black", "green", "red", "blue"))
