@@ -22,23 +22,10 @@ feature.plot <- function(y, data) {
     abline(lm(y~data[[i]]), col="red")
     
     hist(log(data[[i]]), main=t_hist, xlab=i, breaks=20, prob=TRUE)
-    #hist(data[[i]], main=t_hist, xlab=i, breaks=20, prob=TRUE)
-    
     plot(density(log(data[[i]])), xlab=i, ylab="Density", main=t_density)
-    #plot(density(data[[i]]), xlab=i, ylab="Density", main=t_density)
-    #densityplot(data[[i]], data=data, xlab=i, ylab="Density", main=t_density)
-    
+
     x <- log(data[[i]])
     plot(ecdf(x), xlim=c(min(x[x!=min(x)]), max(x[x!=max(x)])), main=t_cdf, xlab=i)
-    #plot(ecdf(data[[i]]), main=t_cdf, xlab=i)
-    #lines(ecdf(log(data[[i]])), col="blue")
-    
-    #boxplot(zero.one.norm(data[[i]]), notch=TRUE, 
-    #        pars = list(boxwex = 0.9, staplewex = 0.5, outwex = 0.5), cex.axis=0.8, tck=-.01,
-    #        xlab=i, ylab="0-1 scaled value", main=t_boxplot)
-    
-    #pairs(~data[[i]]+y, data=data, main="Scatterplot matrix")
-    
   }
 }
 
@@ -149,10 +136,7 @@ loocv.lr.reg <- function(kind, lambdas, x, y, b.no) {
     quit("yes")
   }
   
-  # model <- glmnet(x,y, alpha=type, lambda = lambdas)
-  # dim(coef(model)) # Dimension checks
-  
-  # Cross-validation (LOOCV) for picking up 
+  # Cross-validation (LOOCV) for picking up the best lambda
   set.seed(10)
   cv.out <- cv.glmnet(x,y, alpha=type, grouped=FALSE)
   if (b.no == 0) {
@@ -166,7 +150,7 @@ loocv.lr.reg <- function(kind, lambdas, x, y, b.no) {
   plot(cv.out, xlab=xlab_reg)
   
   best.lambda <- cv.out$lambda.min
-  final.model <- glmnet(x,y,alpha=type)
+  final.model <- glmnet(x, y, alpha=type, lambda = best.lambda)
   
   cat("Best lambda with", kind, best.lambda, "\n")
   
@@ -189,13 +173,13 @@ loocv.lr.reg <- function(kind, lambdas, x, y, b.no) {
 ###################################################################
 ###################################################################
 ##                  MAIN WORKFLOW
+## (-) Data normalized, and global outliers removed
 ## (0) Global linear regression without regularization
 ## (1) Global linear regression with LASSO
-## (2) Global linear regression with LASSO after removing outliers
-## (3) Regression tree with leaf-averages
-## (4) Regression tree with linear-regression at the leaves 
+## (2) Regression tree with leaf-averages
+## (3) Regression tree with linear-regression at the leaves 
 ##     using root-to-leaf intermediate features
-## (5) Regression tree with linear-regression at the leaves 
+## (4) Regression tree with linear-regression at the leaves 
 ##     using all features with LASSO
 ###################################################################
 ###################################################################
@@ -206,7 +190,7 @@ loocv.lr.reg <- function(kind, lambdas, x, y, b.no) {
 #########################################################
 
 # Read the data from a file
-DATAFILE <- "geodata4.csv" # "features_rachee.csv"
+DATAFILE <- "geodata5.csv" # "features_rachee.csv"
 geodata <- read.table(DATAFILE, sep=",", header=TRUE)
 
 # Define row/col names and subset of data
@@ -223,7 +207,7 @@ subset.col2 = c("fhi_12", "ip_density", "diameter", "percentile_cust_cone",
                 "avg_h_im", "max_p_len", "avg_v_im", "max_cen", "max_load_cen",
                 "avg_clustering", "graph_clique_number", "transitivity")
 
-geo_subset <- subset(geodata, select=subset.col1) #ADJUSTED
+geo_subset <- subset(geodata, select=subset.col2) #ADJUSTED
 
 
 #########################################################
@@ -269,7 +253,7 @@ cat ("(1) Mean(PSE) in LR with LASSO: ", mean(global.pse.lasso), "\n")
 
 
 #########################################################
-# (3) Regression tree with leaf-averages
+# (2) Regression tree with leaf-averages
 # "class": classification tree, "anova": regression tree
 # Regression Tree: Here we use rpart package for recursive partitioning
 # [References]
@@ -320,7 +304,17 @@ dotchart(rt.pse.avg.sorted[as.integer(num.cc/3*2+1):num.cc], cex=.7, main="Predi
 
 
 #########################################################
-# (4) At each bucket, do the linear regression with regularization respectively!
+## (3) Regression tree with linear-regression at the leaves 
+##     using root-to-leaf intermediate features
+#########################################################
+
+# TO-DO MANUALLY HERE
+
+
+
+#########################################################
+## (4) Regression tree with linear-regression at the leaves 
+##     using all features with LASSO
 #########################################################
 
 buckets <- fit$where
@@ -385,3 +379,13 @@ plot(ecdf(rt.pse.avg), main="CDF of Case (2)", xlab="PSE", ylab="CDF")
 plot(ecdf(rt.pse.full), main="CDF of Case (4)", xlab="PSE", ylab="CDF")
 
 pse_all <- cbind.data.frame(global.pse.lm, global.pse.lasso, rt.pse.avg, rt.pse.full)
+
+# For 174 countries, and 23 features in total
+# > summary(pse_all)
+# global.pse.lm     global.pse.lasso      rt.pse.avg       rt.pse.full       
+# Min.   :   0.00   Min.   :   0.0487   Min.   :   0.04   Min.   :   0.0003  
+# 1st Qu.:  36.51   1st Qu.:  28.2135   1st Qu.:  19.34   1st Qu.:   5.4444  
+# Median : 153.04   Median : 147.6377   Median :  81.02   Median :  27.2872  
+# Mean   : 348.06   Mean   : 311.1351   Mean   : 273.54   Mean   :  88.4955  
+# 3rd Qu.: 467.56   3rd Qu.: 532.4056   3rd Qu.: 264.53   3rd Qu.:  90.2500  
+# Max.   :4769.26   Max.   :1577.1391   Max.   :2715.57   Max.   :1056.2500 
