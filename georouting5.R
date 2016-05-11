@@ -57,8 +57,10 @@ panel.cor <- function(x, y, digits=2, prefix="", cex.cor)
 # Leave One Out Cross Validation with Linear Regression
 #########################################################
 loocv.lr <- function(geodata) {
-  spe <- 0
   library(DAAG)
+  
+  spe <- 0
+  perr <- 0
   
   for(i in 1:nrow(geodata))
   {
@@ -73,9 +75,10 @@ loocv.lr <- function(geodata) {
     square_err <- (pred_v - real_v)^2
     #cat (pred_v, real_v, square_err, '\n')
     spe[i] <- square_err
+    perr[i] <- pred_v - real_v
   }
   
-  return(spe)
+  return(perr)
 }
 
 #########################################################
@@ -102,8 +105,10 @@ part.feature <- function(geo)
 loocv.rt <- function(geodata) {
   library(rpart)
   library(rpart.plot)
-  spe <- 0    # square prediction error
   
+  perr <- 0   # prediction error
+  spe <- 0    # square prediction error
+
   for(i in 1:nrow(geodata))
   {
     loo_data <- geodata[c(-i),]
@@ -114,15 +119,16 @@ loocv.rt <- function(geodata) {
     square_err <- (pred_v - real_v)^2
     #cat (pred_v, real_v, square_err, '\n')
     spe[i] <- square_err
+    perr[i] <- pred_v - real_v
   }
   
-  return(spe)
+  return(perr)
 }
 
 #########################################################
 # Linear Regression with regularization (Ridge or LASSO)
 #########################################################
-loocv.lr.reg <- function(kind, lambdas, x, y, b.no) {
+loocv.lr.reg <- function(kind, lambdas, x, y, b.no, lambda.plt) {
   library(glmnet)
   
   if (kind == 'Ridge') {
@@ -138,7 +144,7 @@ loocv.lr.reg <- function(kind, lambdas, x, y, b.no) {
   
   # Cross-validation (LOOCV) for picking up the best lambda
   set.seed(10)
-  cv.out <- cv.glmnet(x,y, alpha=type, grouped=FALSE)
+  lambda.cv.out <- cv.glmnet(x,y, alpha=type, grouped=FALSE)
   if (b.no == 0) {
     xlab_reg = paste("log(Lambda)", "using", kind, "globally", sep=" ")
   }
@@ -146,10 +152,12 @@ loocv.lr.reg <- function(kind, lambdas, x, y, b.no) {
     xlab_reg = paste("log(Lambda)", "using", kind, "in", "Bucket", b.no, sep=" ")
   }
 
-  par(mfrow=c(1,1))
-  plot(cv.out, xlab=xlab_reg)
+  if (lambda.plt == TRUE) {
+    par(mfrow=c(1,1))
+    plot(lambda.cv.out, xlab=xlab_reg)
+  }
   
-  best.lambda <- cv.out$lambda.min
+  best.lambda <- lambda.cv.out$lambda.min
   final.model <- glmnet(x, y, alpha=type, lambda = best.lambda)
   
   cat("Best lambda with", kind, best.lambda, "\n")
@@ -165,8 +173,9 @@ loocv.lr.reg <- function(kind, lambdas, x, y, b.no) {
   
   # Calculate mean square errors of prediction
   pse <- (y - pred.values)^2
+  perr <- pred.values - y
 
-  return (pse)
+  return (perr)
 }
 
 
@@ -177,9 +186,9 @@ loocv.lr.reg <- function(kind, lambdas, x, y, b.no) {
 ## (0) Global linear regression without regularization
 ## (1) Global linear regression with LASSO
 ## (2) Regression tree with leaf-averages
-## (3) Regression tree with linear-regression at the leaves 
+## (x) Regression tree with linear-regression at the leaves 
 ##     using root-to-leaf intermediate features
-## (4) Regression tree with linear-regression at the leaves 
+## (3) Regression tree with linear-regression at the leaves 
 ##     using all features with LASSO
 ###################################################################
 ###################################################################
@@ -217,7 +226,7 @@ geo_subset <- subset(geodata, select=subset.col2) #ADJUSTED
 # Plot scatterplot/cdf/pdf/histogram per each feature
 fhi <- subset(geodata, select=c("fhi_12"))[,1:1]
 features <- geo_subset[, -1]
-feature.plot(fhi, features)
+#feature.plot(fhi, features)
 
 # Draw the Distribution of Corelationship Coefficients for all features
 par(mfrow=c(1,1))
@@ -241,13 +250,13 @@ cat ("(0) Mean(PSE) in LR: ", mean(global.pse.lm), "\n")
 # (1) Global linear regression with LASSO
 #########################################################
 
-# Ranges [10^-4:10]
+# Ranges [10^-4:10^1]
 lambda.candidates = 10^(seq(1,-4,length=100))
 
 xx <- model.matrix(fhi_12~., data=geo_subset)[,-1]
 yy <- geo_subset$fhi_12
 
-global.pse.lasso <- loocv.lr.reg('LASSO', lambda.candidates, xx, yy, 0)
+global.pse.lasso <- loocv.lr.reg('LASSO', lambda.candidates, xx, yy, 0, FALSE)
 colnames(global.pse.lasso) <- c('global.pse.lasso')
 cat ("(1) Mean(PSE) in LR with LASSO: ", mean(global.pse.lasso), "\n")
 
@@ -309,7 +318,17 @@ dotchart(rt.pse.avg.sorted[as.integer(num.cc/3*2+1):num.cc], cex=.7, main="Predi
 #########################################################
 
 # TO-DO MANUALLY HERE
-
+# Node 6 (n=14)
+# subset(geodata[c("Argentina","Bangladesh","Colombia","Iran","Jordan","Kyrgyzstan","Kuwait","Kazakhstan","Mauritania","Mexico","Pakistan","Qatar","Sudan","Tunisia"),], select=c("ip_density", "max_p_len", "percentile_degree", "transitivity"))
+# Node 16 (n=16)
+# subset(geodata[c("Afghanistan","Burkina Faso","Burundi","Brunei Darussalam","Congo","Cote dIvoire","Cameroon","Gabon","Guinea","Haiti","Liberia","Lesotho","Niger","Senegal","Chad","Togo"),],select=c("ip_density", "max_p_len", "num_nodes", "avg_deg", "max_cen", "max_load_cen", "tot_peer_edges", "num_intl_nodes"))
+# Node 17 (n=14)
+# subset(geodata[c("Angola","Bosnia and Herzegovina","Bhutan","Botswana","Egypt","Jamaica","Lebanon","Sri Lanka","Madagascar","Mongolia","Maldives","Malawi","Nigeria","Papua New Guinea"),], select=c("ip_density", "max_p_len", "num_nodes", "avg_deg", "max_cen", "max_load_cen", "tot_peer_edges", "num_intl_nodes"))
+# Node 18 (n=24)
+# subset(geodata[c("Albania","Benin","Bolivia","Congo, DR","Dominican Republic","Algeria","Ecuador","Fiji","Ghana","Guatemala","Honduras","Mozambique","Nicaragua","Nepal","Panama","Peru","Paraguay","Sierra Leone","El Salvador","Tajikistan","Trinidad and Tobago","Tanzania","Samoa","Zambia"),], select = c("ip_density", "max_p_len", "num_nodes", "avg_deg", "max_cen"))
+# Node 19 (n=16)
+# subset(geodata[c("Armenia","Brazil","Indonesia","India","Kenya","Malaysia","Namibia","Philippines","Romania","Serbia","Slovakia","Thailand","Ukraine","Uganda","Vanuatu","South Africa"),], select=c("ip_density", "max_p_len", "num_nodes", "avg_deg"))
+# Node 22 (n=38); only ip_density
 
 
 #########################################################
@@ -345,7 +364,7 @@ for(i in 1:length(bucket_no)) {
     x <- model.matrix(fhi_12~., data=bucket_data)[,-1]
     y <- bucket_data$fhi_12
     
-    mse <- loocv.lr.reg('LASSO', lambda.candidates, x, y, bucket_no[i])
+    mse <- loocv.lr.reg('LASSO', lambda.candidates, x, y, bucket_no[i], FALSE)
     rt.pse.full <- c(rt.pse.full, mse)
     rt.pse.full <- data.matrix(rt.pse.full)
     colnames(rt.pse.full) <- c('rt.pse.full')
@@ -370,13 +389,13 @@ hist(global.pse.lm, main="(0) PSE for global L/R \nwithout regularization")
 hist(global.pse.lasso, main="(1) PSE for global L/R \nwith LASSO")
 hist(rt.pse.avg, main="(2) PSE for R/T \nwith leaf-averages")
 #hist(rt.pse.part, main="(3) PSE for R/T with L/R \n(root-leaf features) at the leaves")
-hist(rt.pse.full, main="(4) PSE for R/T with L/R \n(full features) at the leaves")
+hist(rt.pse.full, main="(3) PSE for R/T with L/R \n(full features) at the leaves")
 
 plot(ecdf(global.pse.lm), main="CDF of Case (0)", xlab="PSE", ylab="CDF")
 plot(ecdf(global.pse.lasso), main="CDF of Case (1)", xlab="PSE", ylab="CDF")
 plot(ecdf(rt.pse.avg), main="CDF of Case (2)", xlab="PSE", ylab="CDF")
 #plot(ecdf(rt.pse.part), main="CDF of Case (3)", xlab="PSE", ylab="CDF")
-plot(ecdf(rt.pse.full), main="CDF of Case (4)", xlab="PSE", ylab="CDF")
+plot(ecdf(rt.pse.full), main="CDF of Case (3)", xlab="PSE", ylab="CDF")
 
 pse_all <- cbind.data.frame(global.pse.lm, global.pse.lasso, rt.pse.avg, rt.pse.full)
 
@@ -390,24 +409,36 @@ pse_all <- cbind.data.frame(global.pse.lm, global.pse.lasso, rt.pse.avg, rt.pse.
 # 3rd Qu.: 467.56   3rd Qu.: 532.4056   3rd Qu.: 264.53   3rd Qu.:  90.2500  
 # Max.   :4769.26   Max.   :1577.1391   Max.   :2715.57   Max.   :1056.2500 
 
-par(mfrow=c(2,4))
-hist(log(global.pse.lm), main="(0) log(PSE) for global L/R \nwithout regularization")
-hist(log(global.pse.lasso), main="(1) log(PSE) for global L/R \nwith LASSO")
-hist(log(rt.pse.avg), main="(2) log(PSE) for R/T \nwith leaf-averages")
+#par(mfrow=c(2,4))
+#hist(log(global.pse.lm), main="(0) log(PSE) for global L/R \nwithout regularization")
+#hist(log(global.pse.lasso), main="(1) log(PSE) for global L/R \nwith LASSO")
+#hist(log(rt.pse.avg), main="(2) log(PSE) for R/T \nwith leaf-averages")
 #hist(log(rt.pse.part), main="(3) log(PSE) for R/T with L/R \n(root-leaf features) at the leaves")
-hist(log(rt.pse.full), main="(4) log(PSE) for R/T with L/R \n(full features) at the leaves")
+#hist(log(rt.pse.full), main="(3) log(PSE) for R/T with L/R \n(full features) at the leaves")
 
-plot(ecdf(log(global.pse.lm)), main="log(CDF) of Case (0)", xlab="log(PSE)", ylab="CDF")
-plot(ecdf(log(global.pse.lasso)), main="log(CDF) of Case (1)", xlab="log(PSE)", ylab="CDF")
-plot(ecdf(log(rt.pse.avg)), main="log(CDF) of Case (2)", xlab="log(PSE)", ylab="CDF")
+#plot(ecdf(log(global.pse.lm)), main="log(CDF) of Case (0)", xlab="log(PSE)", ylab="CDF")
+#plot(ecdf(log(global.pse.lasso)), main="log(CDF) of Case (1)", xlab="log(PSE)", ylab="CDF")
+#plot(ecdf(log(rt.pse.avg)), main="log(CDF) of Case (2)", xlab="log(PSE)", ylab="CDF")
 #plot(ecdf(log(rt.pse.part)), main="log(CDF) of Case (3)", xlab="log(PSE)", ylab="CDF")
-plot(ecdf(log(rt.pse.full)), main="log(CDF) of Case (4)", xlab="log(PSE)", ylab="CDF")
+#plot(ecdf(log(rt.pse.full)), main="log(CDF) of Case (3)", xlab="log(PSE)", ylab="CDF")
 
 par(mfrow=c(1,1))
-plot(c(-7,7), c(0,1), main="log(CDF) of PSEs", xlab="log(PSE)", ylab="CDF")
-lines(ecdf(log(global.pse.lm)), col="black")
-lines(ecdf(log(global.pse.lasso)), col="green")
-lines(ecdf(log(rt.pse.avg)), col="red")
-lines(ecdf(log(rt.pse.full)), col="blue")
-legend(-7, 1, c("global.pse.lm", "global.pse.lasso", "rt.pse.avg", "rt.pse.full"),
-       lwd=c(4, 2.5), col=c("black", "green", "red", "blue"))
+plot(c(-40,40), c(0,1), main="CDF of Prediction Errors (Pred - FHI)", xlab="Prediction Error", ylab="CDF")
+lines(ecdf(global.pse.lm), col="black")
+lines(ecdf(global.pse.lasso), col="green")
+lines(ecdf(rt.pse.avg), col="red")
+lines(ecdf(rt.pse.full), col="blue")
+legend(20, 0.2, c("global.pse.lm", "global.pse.lasso", "rt.pse.avg", "rt.pse.full"),
+       lwd=c(5, 2.5), col=c("black", "green", "red", "blue"))
+
+
+all_errs <- (cbind(pse_all, data.frame(geodata$fhi_12)))
+actual_fhi <-all_errs$geodata.fhi_12
+par(mfrow=c(1,1))
+plot(c(0,3), c(0,1), main="Rate CDF (Pred over Actual FHI)", xlab="Pred/FHI", ylab="CDF")
+lines(ecdf((all_errs$global.pse.lm + actual_fhi)/actual_fhi), col="black")
+lines(ecdf((all_errs$global.pse.lasso + actual_fhi)/actual_fhi), col="green")
+lines(ecdf((all_errs$rt.pse.avg + actual_fhi)/actual_fhi), col="red")
+lines(ecdf((all_errs$rt.pse.full + actual_fhi)/actual_fhi), col="blue")
+legend(2.3, 0.4, c("global.pse.lm", "global.pse.lasso", "rt.pse.avg", "rt.pse.full"),
+       lwd=c(5, 2.5), col=c("black", "green", "red", "blue"))
