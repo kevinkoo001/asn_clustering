@@ -217,7 +217,7 @@ subset.col2 = c("fhi_12", "ip_density", "diameter", "percentile_cust_cone",
                 "avg_deg", "num_intl_nodes", "num_large_nodes", "num_announced_ip", 
                 "avg_h_im", "max_p_len", "avg_v_im", "max_load_cen",
                 "avg_clustering", "graph_clique_number", "transitivity",
-                "alg_conn", "frac_conn")
+                  "alg_conn", "frac_conn")
 
 geo_subset <- subset(geodata, select=subset.col2) #ADJUSTED
 
@@ -232,8 +232,8 @@ geo_subset <- subset(geodata, select=subset.col2) #ADJUSTED
 #feature.plot(fhi, features)
 
 # Draw the Distribution of Corelationship Coefficients for all features
-#par(mfrow=c(1,1))
-#cor_coeff <- cor(features, fhi)
+par(mfrow=c(1,1))
+cor_coeff <- cor(features, fhi)
 #coeff.features(cor_coeff, cor_coeff[order(cor_coeff),])
 
 # Get the Scatterplot Matrices
@@ -394,30 +394,30 @@ hist(rt.pse.avg, breaks=20,main="(2) PSE for R/T \nwith leaf-averages")
 #hist(rt.pse.part, main="(3) PSE for R/T with L/R \n(root-leaf features) at the leaves")
 hist(rt.pse.full, breaks=20,main="(3) PSE for R/T with L/R \n(full features) at the leaves")
 
-par(mfrow=c(1,1))
+#par(mfrow=c(1,1))
 d_1<-density(global.pse.lm, bw="SJ")
 d_2<-density(global.pse.lasso,  bw="SJ")
 d_3<-density(rt.pse.avg,  bw="SJ")
 d_4<-density(rt.pse.full,  bw="SJ")
-plot(d_1, ylim=c(0,0.06), xlim=c(-80, 70), main="",  xaxt="n", xlab="", ylab="")
-par(new=TRUE)
-plot(d_2, ylim=c(0,0.06), xlim=c(-80, 70), main="",xaxt="n", xlab="", ylab="")
-par(new=TRUE)
-plot(d_3, ylim=c(0,0.06), xlim=c(-80, 70), main="",xaxt="n", xlab="", ylab="")
-par(new=TRUE)
-plot(d_4, ylim=c(0,0.06), xlim=c(-80, 70), main="", xlab="", ylab="")
-polygon(d_1, col=rgb(1, 0, 0,0.3))
-polygon(d_2, col=rgb(0, 1, 1,0.3))
-polygon(d_3, col=rgb(1, 1, 0,0.3))
-polygon(d_4, col=rgb(0, 1, 0,0.3))
-legend("topleft", ncol=1, c("LR (no regularisation)", "LASSO LR", "Decision Tree (leaf avg)", "Decision Tree (LR in leaves)"), fill=c(rgb(1, 0, 0,0.3), rgb(0, 1, 1,0.3), rgb(1, 1, 0,0.3),rgb(0, 1, 0,0.3)) , title="KDE of prediction error of DT", bty="n", cex=1.5, inset=0.05, xjust = 1, yjust = 1)
+#plot(d_1, ylim=c(0,0.06), xlim=c(-80, 70), main="",  xaxt="n", xlab="", ylab="")
+#par(new=TRUE)
+#plot(d_2, ylim=c(0,0.06), xlim=c(-80, 70), main="",xaxt="n", xlab="", ylab="")
+#par(new=TRUE)
+#plot(d_3, ylim=c(0,0.06), xlim=c(-80, 70), main="",xaxt="n", xlab="", ylab="")
+#par(new=TRUE)
+#plot(d_4, ylim=c(0,0.06), xlim=c(-80, 70), main="", xlab="", ylab="")
+#polygon(d_1, col=rgb(1, 0, 0,0.3))
+#polygon(d_2, col=rgb(0, 1, 1,0.3))
+#polygon(d_3, col=rgb(1, 1, 0,0.3))
+#polygon(d_4, col=rgb(0, 1, 0,0.3))
+#legend("topleft", ncol=1, c("LR (no regularisation)", "LASSO LR", "Decision Tree (leaf avg)", "Decision Tree (LR in leaves)"), fill=c(rgb(1, 0, 0,0.3), rgb(0, 1, 1,0.3), rgb(1, 1, 0,0.3),rgb(0, 1, 0,0.3)), bty="n", cex=1.5, inset=0.05, xjust = 1, yjust = 1)
 
-title(main="KDE of prediction error")
-mtext(text='Prediction Error',side=1,line=2, cex=1.5)
-mtext(text='Density',side=2,line=2, cex=1.5)
+#title(main="KDE of prediction error")
+#mtext(text='Prediction Error',side=1,line=2, cex=1.5)
+#mtext(text='Density',side=2,line=2, cex=1.5)
 
-plot(d, main="Kernel Density of Error", ylim=c(0,0.1))
-polygon(d, col="red", border="blue")
+#plot(d, main="Kernel Density of Error", ylim=c(0,0.1))
+#polygon(d, col="red", border="blue")
 plot(ecdf(global.pse.lm), main="CDF of Case (0)", xlab="PSE", ylab="CDF")
 plot(ecdf(global.pse.lasso), main="CDF of Case (1)", xlab="PSE", ylab="CDF")
 plot(ecdf(rt.pse.avg), main="CDF of Case (2)", xlab="PSE", ylab="CDF")
@@ -457,7 +457,8 @@ lines(ecdf(rt.pse.avg), col="red")
 lines(ecdf(rt.pse.full), col="blue")
 legend(20, 0.2, c("global.pse.lm", "global.pse.lasso", "rt.pse.avg", "rt.pse.full"),
        lwd=c(5, 2.5), col=c("black", "green", "red", "blue"))
-
+abline(v=-20)
+abline(v=20)
 
 all_errs <- (cbind(pse_all, data.frame(geodata$fhi_12)))
 actual_fhi <-all_errs$geodata.fhi_12

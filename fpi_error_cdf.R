@@ -1,0 +1,15 @@
+oldmai=par("mai")
+par(mai=c(0,0,0,0))
+pdf("~/dev/imc-2016-georouting-paper/error_cdf_comparison.pdf", paper="special", width=16, height=14, pointsize=32)
+all_errs <- (cbind(pse_all, data.frame(geodata$fhi_12)))
+actual_fhi <-all_errs$geodata.fhi_12
+par(mfrow=c(1,1))
+plot(c(0,3), c(0,1),  xlab="Pred/FPI", ylab="CDF")
+lines(ecdf((all_errs$global.pse.lm + actual_fhi)/actual_fhi), col="black")
+lines(ecdf((all_errs$global.pse.lasso + actual_fhi)/actual_fhi), col="green")
+lines(ecdf((all_errs$rt.pse.avg + actual_fhi)/actual_fhi), col="red")
+lines(ecdf((all_errs$rt.pse.full + actual_fhi)/actual_fhi), col="blue")
+legend("bottomright", c("LR", "LASSO LR", "Decision Tree (leaf avg)", "Decision Tree (leaf LR)"),
+       lwd=c(5, 2.5), col=c("black", "green", "red", "blue"), bty="n")
+abline(v=1)
+dev.off()
